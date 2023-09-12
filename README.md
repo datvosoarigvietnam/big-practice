@@ -1,6 +1,6 @@
 # README
 
-This is a repository for storage code of Nhan Nguyen Training
+This is a repository for storage code of Dat Vo Training
 
 ## Note for GIT
 
