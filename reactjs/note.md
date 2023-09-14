@@ -259,3 +259,171 @@ React identifies the differences or "diffs" between the new and old Virtual DOM 
        return <p>Time: {time} seconds</p>;
      }
      ```
+
+## 9. Common Hook:
+
+1. **<span style="font-size: 18px">useCallback</span>:** useCallback is used for memoizing functions, especially when you pass functions as props to child components. It helps in preventing unnecessary re-renders of child components by memoizing the function reference.
+
+- Exam:
+
+  ```js
+  const App = () => {
+    const [count, setCount] = useState(0);
+    const [todos, setTodos] = useState([]);
+
+    const increment = () => {
+      setCount((c) => c + 1);
+    };
+    const addTodo = () => {
+      setTodos((t) => [...t, "New Todo"]);
+    };
+
+    return (
+      <>
+        <Todos todos={todos} addTodo={addTodo} />
+        <hr />
+        <div>
+          Count: {count}
+          <button onClick={increment}>+</button>
+        </div>
+      </>
+    );
+  };
+  ```
+
+  ```js
+  Todos.js;
+
+  import { memo } from "react";
+
+  const Todos = ({ todos, addTodo }) => {
+    console.log("child render");
+    return (
+      <>
+        <h2>My Todos</h2>
+        {todos.map((todo, index) => {
+          return <p key={index}>{todo}</p>;
+        })}
+        <button onClick={addTodo}>Add Todo</button>
+      </>
+    );
+  };
+
+  export default memo(Todos);
+  ```
+
+  - Try running this and click the count increment button.
+
+  - You will notice that the Todos component re-renders even when the todos do not change.
+
+  - Why does this not work? We are using memo, so the Todos component should not re-render since neither the todos state nor the addTodo function are changing when the count is incremented.
+
+  - This is because of something called "referential equality".
+
+  - Every time a component re-renders, its functions get recreated. Because of this, the **addTodo function** has actually changed.
+
+  #### Solution
+
+  - To fix this, we can use the useCallback hook to prevent the function from being recreated unless necessary.
+
+  - Use the useCallback Hook to prevent the Todos component from re-rendering needlessly:
+
+  ```js
+  const addTodo = useCallback(() => {
+    setTodos((t) => [...t, "New Todo"]);
+  }, [todos]);
+  ```
+
+  - Now the Todos component will only re-render when the todos prop changes.
+
+2. **<span style="font-size: 18px">useMemo</span>:** **useMemo** is used to memoize the result of a computation. It's useful when you have expensive calculations that depend on certain values, and you want to avoid recalculating them on every render.
+
+- Exam:
+
+  ```js
+  function ExpensiveComponent({ data }) {
+    const result = useMemo(() => {
+      // Perform an expensive computation using 'data'
+      return data * 2;
+    }, [data]); // Memoize the result
+
+    return <p>Result: {result}</p>;
+  }
+  ```
+
+  - In this example, the result value is only recomputed when the data prop changes.
+
+3.  **<span style="font-size: 18px">useContext</span>:** **useContext** allows we to access data from a context provider in a functional component. It's typically used when we've created a context using React.createContext and want to access its values.
+
+- Exam:
+
+  ```js
+  const MyContext = React.createContext();
+
+  function ParentComponent() {
+    return (
+      <MyContext.Provider value="Hello, from context!">
+        <ChildComponent />
+      </MyContext.Provider>
+    );
+  }
+
+  function ChildComponent() {
+    const contextValue = useContext(MyContext);
+
+    return <p>{contextValue}</p>;
+  }
+  ```
+
+4.  **<span style="font-size: 18px">useRef</span>:** **useRef** hook is used to create a mutable ref object that can hold a reference to a DOM element or a value that persists across renders. useRef is often used for accessing and interacting with DOM elements directly and for preserving values between renders without causing re-renders.
+
+## 10. Rule Of Hook:
+
+1. **Only Call Hooks at the Top Level:** Hooks should only be called at the top level of a functional component or custom hook. They should not be called inside loops, conditions, or nested functions. This rule ensures that React can maintain the proper order and association of hooks between renders.
+
+2. **Call Hooks from React Functions:** Hooks should only be called from React functional components or custom hooks. We should not call them in regular JavaScript functions or class components. This ensures that hooks are used within the React component lifecycle.
+
+3. **Use Hooks in the Same Order:** If you use multiple hooks in a component, make sure to use them in the same order on every render. This ensures that React can correctly associate each hook with its corresponding state variable.
+
+## 11. Rendering:
+
+### 1. Lists and Key:
+
+- Using keys with lists is an important concept in React to ensure efficient rendering and proper handling of dynamic data. When rendering lists, always provide a unique and stable key for each item in the list to help React manage and update the DOM effectively.
+
+### 2. Lifting state:
+
+- **"Lifting state"** is a term used in React to describe the process of managing and sharing state between components by moving the state up the component tree. It involves elevating or lifting the state from a lower-level component to a higher-level component, typically a parent component, so that it can be accessed and shared by other components within the application.
+
+- The main idea behind lifting state is to centralize the management of state in a higher-level component and then pass that state down to child components as props. This allows multiple components to share and interact with the same state, ensuring consistency and synchronization
+
+- Basic example to illustrate the concept of lifting state:
+
+  ```jsx
+  import React, { useState } from "react";
+  import Counter from "./Counter";
+  import Display from "./Display";
+
+  function App() {
+    const [count, setCount] = useState(0);
+
+    return (
+      <div>
+        <Counter count={count} setCount={setCount} />
+        <Display count={count} />
+      </div>
+    );
+  }
+
+  export default App;
+  ```
+
+- In this example:
+
+  - The App component manages the count state using the useState hook.
+  - The count state is passed as a prop to both the Counter and Display components.
+  - The Counter component allows the user to increment or decrement the count, and it receives the setCount function as a prop to update the state.
+  - The Display component simply displays the current count.
+  - By lifting the state (the count value) up to the App component, both Counter and Display can access and interact with the same state. When the state changes in the App component, itautomatically updates both child components, ensuring that they stay in sync.
+
+  - Lifting state is a fundamental concept in React that helps in managing shared data and ensuring consistency across different parts of your application. It promotes reusability and maintainability by centralizing state management in higher-level components.
