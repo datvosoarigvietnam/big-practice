@@ -829,3 +829,258 @@ trigger: (name?: string | string[]) => Promise<boolean>
 
 - React Hook Form **embraces uncontrolled components(ủng hộ sử dụng thành phần không kiểm soát)** and native inputs, however it's hard to avoid working with external controlled component such as React-Select, AntD and MUI.
 - **This wrapper component will make it easier for you to work with them**.
+
+## PROPS
+
+<table>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td style="color: green">name</td>
+      <td style="color: red">FieldPath	✓</td>
+      <td>Unique name of your input.</td>
+    </tr>
+    <tr>
+      <td style="color: green">control</td>
+      <td style="color: red">Contro</td>
+      <td>control object is from invoking useForm. Optional when using FormProvider.</td>
+    </tr>
+    <tr>
+      <td style="color: green">render</td>
+      <td style="color: red">Function</td>
+      <td>This is a render prop. A function that returns a React element and provides the ability to attach events and value into the component. This simplifies integrating with external controlled components with non-standard prop names. Provides onChange, onBlur, name, ref and value to the child component, and also a fieldState object which contains specific input state.</td>
+    </tr>
+    <tr>
+      <td style="color: green">defaultValue</td>
+      <td style="color: red">unknown</td>
+      <td><span style="color: yellow">Important:</span> <span>Can not apply undefined to defaultValue or defaultValues at useForm.</span>
+      </br>
+      <span>You need to either set defaultValue at the field-level or useForm's defaultValues. undefined is not a valid value.</span>
+      </br>
+      <span>If your form will invoke reset with default values, you will need to provide useForm with defaultValues.</span>
+      </br>
+      <span>Calling onChange with undefined is not valid. You should use null or the empty string as your default/cleared value instead.</span>
+      </td>
+    </tr>
+     <tr>
+      <td style="color: green">rules</td>
+      <td style="color: red">Object</td>
+      <td>Validation rules in the same format for register options, which includes:
+          <span style="color: green">required, min, max, minLength, maxLength, pattern, validate  rules={{ required: true }}
+          </span>
+      </td>
+    </tr>
+     <tr>
+      <td style="color: green">shouldUnregister</td>
+      <td style="color: red">boolean = false	</td>
+      <td>Input will be unregistered after unmount and defaultValues will be removed as well.
+      </td>
+    </tr>
+  </table>
+
+Note: this prop should be avoided when using with useFieldArray as unregister function gets called after input unmount/remount and reorder.
+
+Certainly! Here's the continuation of your HTML table with the remaining entries from your provided information:
+
+<!-- fieldState.isTouched -->
+<table>
+<tr>
+  <td style="color: green">fieldState</td>
+  <td>isTouched</td>
+  <td>boolean</td>
+  <td>Touched state for the current controlled input.</td>
+</tr>
+
+<!-- fieldState.isDirty -->
+<tr>
+  <td style="color: green">fieldState</td>
+  <td>isDirty</td>
+  <td>boolean</td>
+  <td>Dirty state for the current controlled input.</td>
+</tr>
+
+<!-- fieldState.error -->
+<tr>
+  <td style="color: green">fieldState</td>
+  <td>error</td>
+  <td>object</td>
+  <td>Error for this specific input.</td>
+</tr>
+
+<!-- formState.isDirty -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>isDirty</td>
+  <td>boolean</td>
+  <td>
+    Set to true after the user modifies any of the inputs. Make sure to provide
+    all inputs' defaultValues at the useForm, so hook form can have a single
+    source of truth to compare whether the form is dirty.
+  </td>
+</tr>
+
+<!-- formState.dirtyFields -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>dirtyFields</td>
+  <td>object</td>
+  <td>
+    An object with the user-modified fields. Make sure to provide all inputs'
+    defaultValues via useForm so the library can compare against the
+    defaultValues. Dirty fields will not represent as isDirty formState, because
+    dirty fields are marked field dirty at the field level rather than the
+    entire form.
+  </td>
+</tr>
+
+<!-- formState.touchedFields -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>touchedFields</td>
+  <td>object</td>
+  <td>An object containing all the inputs the user has interacted with.</td>
+</tr>
+
+<!-- formState.defaultValues -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>defaultValues</td>
+  <td>object</td>
+  <td>
+    The value which has been set at useForm's defaultValues or updated
+    defaultValues via reset API.
+  </td>
+</tr>
+
+<!-- formState.isSubmitted -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>isSubmitted</td>
+  <td>boolean</td>
+  <td>
+    Set to true after the form is submitted. Will remain true until the reset
+    method is invoked.
+  </td>
+</tr>
+
+<!-- formState.isSubmitSuccessful -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>isSubmitSuccessful</td>
+  <td>boolean</td>
+  <td>
+    Indicate the form was successfully submitted without any runtime error.
+  </td>
+</tr>
+
+<!-- formState.isSubmitting -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>isSubmitting</td>
+  <td>boolean</td>
+  <td>True if the form is currently being submitted, false otherwise.</td>
+</tr>
+
+<!-- formState.isLoading -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>isLoading</td>
+  <td>boolean</td>
+  <td>
+    True if the form is currently loading async default values. This prop is
+    only applicable to async defaultValues.
+  </td>
+</tr>
+
+<!-- formState.submitCount -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>submitCount</td>
+  <td>number</td>
+  <td>Number of times the form was submitted.</td>
+</tr>
+
+<!-- formState.isValid -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>isValid</td>
+  <td>boolean</td>
+  <td>
+    Set to true if the form doesn't have any errors. setError has no effect on
+    isValid formState; isValid will always be derived via the entire form
+    validation result.
+  </td>
+</tr>
+
+<!-- formState.isValidating -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>isValidating</td>
+  <td>boolean</td>
+  <td>Set to true during validation.</td>
+</tr>
+
+<!-- formState.errors -->
+<tr>
+  <td style="color: green">formState</td>
+  <td>errors</td>
+  <td>object</td>
+  <td>
+    An object with field errors. There is also an ErrorMessage component to
+    retrieve error messages easily.
+  </td>
+</tr>
+</table>
+
+## useWatch
+
+### React Hook for subscribing to input changes
+
+```properties
+  useWatch: ({ control?: Control, name?: string, defaultValue?: unknown, disabled?: boolean }) => object
+```
+
+- Behaves **similarly to the watch API**, however, t**his will isolate re-rendering at the custom hook level** and **potentially result** in better performance for your application.
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>string | string[] | undefined</td>
+    <td>Name of the field.</td>
+  </tr>
+  <tr>
+    <td>control</td>
+    <td>Object</td>
+    <td>Control object provided by useForm. It's optional if you are using FormContext.</td>
+  </tr>
+  <tr>
+    <td>defaultValue</td>
+    <td>unknown</td>
+    <td>Default value for useWatch to return before the initial render. Note: the first render will always return defaultValue when it's supplied.</td>
+  </tr>
+  <tr>
+    <td>disabled</td>
+    <td>boolean = false</td>
+    <td>Option to disable the subscription.</td>
+  </tr>
+  <tr>
+    <td>exact</td>
+    <td>boolean = false</td>
+    <td>This prop will enable an exact match for input name subscriptions.</td>
+  </tr>
+</table>
+
+### Rules
+
+- The initial return value from **useWatch** will always return what's inside of defaultValue or defaultValues from useForm.
+
+- The only difference between useWatch and watch is **at the root (useForm) level** or **the custom hook level update**.
+
+- **useWatch's** execution order matters, which means if you update a form value before the subscription is in place, then the value updated will be ignored.
