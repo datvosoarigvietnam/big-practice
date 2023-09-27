@@ -1,28 +1,45 @@
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { stringify } from "querystring";
 import React from "react";
 
-const ProductList = () => {
+interface IPost {
+  id: number;
+  title: string;
+}
+interface IPostListPage {
+  posts: IPost[];
+}
+
+const ProductList = ({ posts }: { posts: IPost[] }) => {
   const router = useRouter();
-  console.log("🚀 ~ file: index.tsx:7 ~ ProductList ~ router:", router.query);
 
   return (
     <div>
-      <h1>{`ProductList ${stringify(router.query)}`}</h1>
-      <ul className="flex justify-center items-center gap-4 flex-col">
-        {Array(5)
-          .fill(0)
-          .map((_: any, index: number) => {
-            return (
-              <Link key={index} href={`/products/${index + 1}`}>
-                Product Id: {index + 1}
-              </Link>
-            );
-          })}
+      <ul>
+        {posts.map((post: IPost, index: number) => (
+          <li key={post.id}>
+            <Link href={`products/${post.id}`}>
+              <span>{post.id}</span>
+              <span>{post.title}</span>
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );
 };
 
 export default ProductList;
+
+export const getStaticProps: GetStaticProps<IPostListPage> = async () => {
+  const respone = await fetch(
+    "https://63f57b5a3f99f5855dc218a1.mockapi.io/todolist/"
+  );
+  const data = await respone.json();
+  return {
+    props: {
+      posts: data,
+    },
+  };
+};
