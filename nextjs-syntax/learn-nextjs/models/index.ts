@@ -1,0 +1,1 @@
+import { ILayoutProps } from "./common";
