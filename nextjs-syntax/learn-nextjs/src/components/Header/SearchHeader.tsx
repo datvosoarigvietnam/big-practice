@@ -9,7 +9,7 @@ export default function SearchHeader() {
       <input
         type="text"
         placeholder="Type something to search"
-        className="rounded-l-[8px] bg-inherit border border-white px-2 outline-none text-white md:w-[500px]"
+        className="rounded-l-[8px] bg-inherit border border-white px-2 outline-none text-white  md:w-[500px]"
       />
       <ButtonHeader
         title={
