@@ -391,3 +391,273 @@ getStaticPaths will only run during build in production, it will not be called d
 #### We can fetch data on the client side using the `useEffect` hook.
 
 #### Client-side data fetching with SWR
+
+- The team behind Next.js has created a React hook library for data fetching called `SWR`.
+
+- It is highly recommended if we are fetching data on the client-side.
+
+- It handles `caching, revalidation, focus tracking, refetching on intervals`, and more.
+
+- Exam:
+
+  ```tsx
+  import useSWR from "swr";
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  function Profile() {
+    const { data, error } = useSWR("/api/profile-data", fetcher);
+
+    if (error) return <div>Failed to load</div>;
+    if (!data) return <div>Loading...</div>;
+
+    return (
+      <div>
+        <h1>{data.name}</h1>
+        <p>{data.bio}</p>
+      </div>
+    );
+  }
+  ```
+
+# Styling:
+
+## CSS Modules
+
+- CSS Modules locally scope CSS by automatically creating `a unique class name`.
+
+- This allows we to use the same class name in different files without worrying about collisions.
+
+- This behavior makes CSS Modules the ideal way to include component-level CSS.
+
+- **Exam:**
+
+  - For example, consider a reusable Button component in the components/ folder:
+
+         ..................................................
+
+# Optimizing
+
+- **Image Optimization**
+
+### Usage
+
+`import Image from 'next/image'`
+
+- **Local Images**
+
+- To use a local image, import our `.jpg, .png, or .webp` image files.
+
+- Next.js will `automatically determine` the `width and height of our image` based on the imported file.
+
+- Exam:
+
+`pages/index.js`
+
+```tsx
+import Image from "next/image";
+import profilePic from "../public/me.png";
+
+export default function Page() {
+  return (
+    <Image
+      src={profilePic}
+      alt="Picture of the author"
+      // width={500} automatically provided
+      // height={500} automatically provided
+      // blurDataURL="data:..." automatically provided
+      // placeholder="blur" // Optional blur-up while loading
+    />
+  );
+}
+```
+
+## API Function:
+
+### getInitialProps:
+
+- `getInitialProps` is an **async function** that can be added to the default` exported React component` for the page.
+
+- It will run on both the server-side and again on the client-side during page transitions. The result of the function will be `forwarded to the React component as props`.
+
+- Exam:
+
+`pages/index.tsx`
+
+```tsx
+import { NextPageContext } from "next";
+
+Page.getInitialProps = async (ctx: NextPageContext) => {
+  const res = await fetch("https://api.github.com/repos/vercel/next.js");
+  const json = await res.json();
+  return { stars: json.stargazers_count };
+};
+
+export default function Page({ stars }: { stars: number }) {
+  return stars;
+}
+```
+
+### Context Object
+
+- `getInitialProps` receives a `single argument called context`, which is an object with the following properties:
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td style=" background-color: #2a2828; border-radius: 4px;">pathname</td>
+      <td>Current route, the path of the page in /pages</td>
+      
+    </tr>
+
+    <tr>
+      <td style=" background-color: #2a2828; border-radius: 4px;">query</td>
+      <td>Query string of the URL, parsed as an object</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">asPath</td>
+      <td>String of the actual path (including the query) shown in the browser</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">req</td>
+      <td>HTTP request object (server only)</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">res</td>
+      <td>HTTP response object (server only)</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">err</td>     
+      <td>Error object if any error is encountered during the rendering</td>
+    </tr>
+  </table>
+
+## getServerSideProps:
+
+- When exporting a function called `getServerSideProps (Server-Side Rendering)` from a page, Next.js will `pre-render this page on each request` **using the data returned by getServerSideProps**.
+
+- This is useful if we want to fetch data that changes often, and have the page update to show
+  the most current data.
+
+### Context parameter:
+
+<table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td style=" background-color: #2a2828; border-radius: 4px;">params</td>
+      <td>If this page uses a dynamic route, params contains the route parameters. If the page name is [id].js, then params will look like { id: ... }.</td>
+    </tr>
+    <tr>
+      <td style=" background-color: #2a2828; border-radius: 4px;">req</td>
+      <td>The HTTP IncomingMessage object, with an additional cookies prop, which is an object with string keys mapping to string values of cookies.</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">res</td>
+      <td>The HTTP response object.</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">query</td>
+      <td>An object representing the query string, including dynamic route parameters.</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">preview</td>
+      <td>(Deprecated for draftMode) preview is true if the page is in the Preview Mode and false otherwise.</td>
+    </tr>
+    <tr >
+      <td style=" background-color: #2a2828; border-radius: 4px;">err</td>
+      <td>Error object if any error is encountered during the rendering</td>
+    </tr>
+
+  </table>
+
+## getStaticPaths:
+
+- When exporting a function called `getStaticPaths` from a page that uses `Dynamic Routes`, Next.js will statically `pre-render all the paths` specified by `getStaticPaths`.
+
+### getStaticPaths return values
+
+- `The getStaticPaths function` should return an object with the following required properties:
+
+  - `paths`: The paths key determines which paths will be pre-rendered.
+
+  - Exam:
+
+  ```tsx
+    return {
+
+      paths: [
+        { params: { id: '1' }},
+        {
+        params: { id: '2' },
+        // with i18n configured the locale for the path can be returned as well
+        locale: "en",
+        },
+      ],
+      fallback: ...
+    }
+  ```
+
+### fallback
+
+#### `FALSE`:
+
+- If `fallback` is `false`, then any paths not returned by getStaticPaths will result` in a 404 page`.
+
+#### `TRUE`:
+
+- When `fallback` is set to `true`, Next.js will still generate static pages for the paths specified in `getStaticPaths`, but it will also allow the server to generate new pages on-the-fly for paths that are requested but not pre-generated.
+
+- The first request for an `undefined` path will render a "`fallback`" version of the page while the page is being built in the background. Subsequent requests for the same path will return the statically generated page.
+
+- This option is useful when we have a `large number of dynamic paths`, and we want to build them incrementally.
+
+#### `Blocking`
+
+- With fallback set to 'blocking', Next.js will behave `similarly to true`, generating static pages for the specified paths.
+
+- However, instead of rendering a fallback page immediately, it will wait until the page is built in the background and then serve the statically generated page.
+
+- This option can be beneficial when you want to show a `fully static page` to the user but `don't want to block` the request while the page is being built.
+
+## getStaticProps
+
+- Exporting a function called `getStaticProps` will `pre-render a page at build time` using the props returned from the function
+
+#### Context parameter
+
+- The `context` parameter is an object containing the following keys:
+
+Name Description
+params Contains the route parameters for pages using dynamic routes. For example, if the page name is [id].js, then params will look like { id: ... }. You should use this together with getStaticPaths, which we'll explain later.
+preview (Deprecated for draftMode) preview is true if the page is in the Preview Mode and false otherwise.
+previewData (Deprecated for draftMode) The preview data set by setPreviewData.
+draftMode draftMode is true if the page is in the Draft Mode and false otherwise.
+locale Contains the active locale (if enabled).
+locales Contains all supported locales (if enabled).
+defaultLocale Contains the configured default locale (if enabled).
+
+    ------------------------ Convert to Table-----------------------------
+
+##### getStaticProps return values
+
+- `The getStaticProps` function should return an object containing either `props, redirect, or notFound` followed by an optional `revalidate` property.
+
+  - **`Props`**:
+
+    - The props object is a `key-value pair`, where each value is received by the page component.
+
+    - It should be a serializable object so that any props passed, could be serialized with `JSON.stringify`
+
+  - **`Revalidate`**
+
+    - The revalidate property is the `amount in seconds` after which a `page re-generation can occu`r (defaults to false or no revalidation).
+
+  - **`NotFound`**
+
+    - `The notFound` boolean allows the page to `return a 404 status and 404 Page`.
+    - `With notFound:` `true`, **the page will return a 404** even if there was a successfully generated page before. This is meant to support use cases like user-generated content getting removed by its author.
