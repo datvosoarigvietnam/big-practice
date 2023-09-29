@@ -1,13 +1,13 @@
-import React from "react";
-import { NextPageWithLayout } from "../../models/common";
-import { MainLayout } from "@/components/layout";
+import React from 'react'
+import { NextPageWithLayout } from '../../models/common'
+import { MainLayout } from '@/components/layout'
 
-type Props = {};
+type Props = {}
 
 const Product: NextPageWithLayout = (props: Props) => {
-  return <div>Product</div>;
-};
+  return <div>Product</div>
+}
 
-Product.Layout = MainLayout;
+Product.Layout = MainLayout
 
-export default Product;
+export default Product

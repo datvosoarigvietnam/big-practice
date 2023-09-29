@@ -1,1 +1,1 @@
-import { ILayoutProps } from "./common";
+import { ILayoutProps } from './common'

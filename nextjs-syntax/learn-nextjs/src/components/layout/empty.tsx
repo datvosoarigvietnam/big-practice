@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-type Props = {};
+type Props = {}
 
 export function EmptyLayout({}: Props) {
-  return <div>EmptyLayout</div>;
+  return <div>EmptyLayout</div>
 }
