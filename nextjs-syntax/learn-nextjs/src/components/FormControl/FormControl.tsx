@@ -7,6 +7,8 @@ import { useMutation } from '@tanstack/react-query'
 import { ITodo } from '../TodoList/TodoList'
 import todoApi from '@/apis/todo.api'
 import Spinner from '../Spinner'
+import Toast from '../Toasts'
+import { toast } from 'react-toastify'
 
 export interface IForm {
   title: string
@@ -23,7 +25,7 @@ const initFormData: IForm = {
   status: 'New',
 }
 export const FormControl = ({ todoId }: any) => {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: initFormData,
   })
   const timeNow = formatDate(new Date())
@@ -31,28 +33,27 @@ export const FormControl = ({ todoId }: any) => {
   const addTodoMutation = useMutation({
     mutationFn: (todo: Omit<ITodo, 'id'>) => todoApi.addNewTodo(todo),
   })
-  console.log('is loading', addTodoMutation.isLoading)
+
   const onSubmit = (values: IForm) => {
-    console.log(values)
     if (todoId) {
       try {
         // http.put(`todolist/${todoId}`, { ...values })
-        addTodoMutation.mutate(
-          { ...values },
-          {
-            onSuccess: (data) => {
-              console.log('Data on Success', data)
-            },
-          },
-        )
       } catch (error) {}
     } else {
-      http.post('todolist', { ...values })
+      addTodoMutation.mutate(
+        { ...values },
+        {
+          onSuccess: (data) => {},
+        },
+      )
     }
   }
+  const deleteTodo = (id: number | string) => {}
   return (
     <div>
       {addTodoMutation.isLoading && <Spinner />}
+      {addTodoMutation.isSuccess &&
+        toast.success('Add New Todo Success', { draggablePercent: 60 })}
       <h1 className="text-2xl font-bold text-center mb-16">
         {todoId ? 'Details Todo' : 'Add New Todo'}
       </h1>
@@ -104,12 +105,29 @@ export const FormControl = ({ todoId }: any) => {
           </div>
         )}
         <div className="pt-10 text-center">
-          <button
-            type="submit"
-            className="bg-[#675BF1] px-10 py-5 text-white font-semibold text-lg rounded-lg cursor-poiter tracking-[2px]"
-          >
-            {todoId ? 'Edit' : 'Save'}
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="bg-[#675BF1] px-10 py-5 text-white font-semibold text-lg rounded-lg cursor-poiter tracking-[2px]"
+            >
+              {todoId ? 'Edit' : 'Save'}
+            </button>
+            <div className=" flex gap-2">
+              <button
+                type="button"
+                className="bg-[#675BF1] px-10 py-5 text-white font-semibold text-lg rounded-lg cursor-poiter tracking-[2px]"
+                onClick={() => reset()}
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                className="bg-[#675BF1] px-10 py-5 text-white font-semibold text-lg rounded-lg cursor-poiter tracking-[2px]"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       </form>
     </div>
