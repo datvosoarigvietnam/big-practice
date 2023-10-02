@@ -1,31 +1,28 @@
-import React, { useEffect } from 'react'
-import { NextPageWithLayout } from '../../../models/common'
-import { MainLayout } from '@/components/layout'
-import { useRouter } from 'next/router'
+import todoApi from '@/apis/todo.api'
 import { FormControl } from '@/components/FormControl/FormControl'
-import axios from 'axios'
+import { MainLayout } from '@/components/layout'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
+import { NextPageWithLayout } from '../../../models/common'
+import Spinner from '@/components/Spinner'
 
 interface IProps {}
 const TodoDetails: NextPageWithLayout = (props: IProps) => {
   const router = useRouter()
-  //   console.log('Router', router.query.todoid)
-  const getDetailTodo = async () => {
-    try {
-      const res = axios.get(
-        `https://63f57b5a3f99f5855dc218a1.mockapi.io/todolist/${router.query.todoid}`,
-      )
-      console.log((await res).data)
-    } catch (error) {
-      throw error
-      //   console.log(error)
-    }
-  }
-  useEffect(() => {
-    if (router.query.todoid) getDetailTodo()
-  }, [router.query.todoid])
+  const todoId = Array.isArray(router.query.todoid)
+    ? router.query.todoid[0]
+    : router.query.todoid
+  console.log(router)
+
+  const { data: result } = useQuery({
+    queryKey: ['todos', todoId],
+    queryFn: () => todoApi.getDetailTodo(todoId || ''),
+  })
+  console.log('result', result?.data)
+
   return (
-    <div className="flex-1 flex justify-center items-center translate-y-[-100px] sm:translate-y-[-150px]">
-      <FormControl todoId={router.query.todoid} />
+    <div className="flex-1 flex justify-center items-center ">
+      {!result?.data ? <Spinner /> : <FormControl todoDetail={result?.data} />}
     </div>
   )
 }

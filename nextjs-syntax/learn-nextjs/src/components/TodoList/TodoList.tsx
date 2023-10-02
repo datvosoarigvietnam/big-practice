@@ -9,6 +9,7 @@ export interface ITodo {
   creator: string
   status: string
   desc: string
+  createAt: string
   id: string
 }
 
@@ -19,9 +20,6 @@ const TodoList: React.FC<IProps> = ({ todos }: IProps) => {
   const isMobile = useMobile()
   console.log('todos', todos)
 
-  // if (!todos) {
-  //   return notFound
-  // }
   if (!todos) {
     return <></>
   }
