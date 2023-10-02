@@ -16,7 +16,7 @@ export interface IProps {
   todos?: ITodo[]
 }
 const Product: NextPageWithLayout = (props: IProps) => {
-  console.log("Props", props);
+  console.log('Props', props)
 
   return (
     <div>

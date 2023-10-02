@@ -13,7 +13,7 @@ export interface ITodo {
 }
 
 export interface IProps {
-  todos: ITodo[] | undefined
+  todos?: ITodo[] | undefined
 }
 const TodoList: React.FC<IProps> = ({ todos }: IProps) => {
   const isMobile = useMobile()
@@ -28,8 +28,9 @@ const TodoList: React.FC<IProps> = ({ todos }: IProps) => {
   return (
     <div className="">
       <div
-        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-2 px-3 ${isMobile ? 'w-[calc(100vw-80px)]' : 'w-[calc(100vw-180px)]'
-          } `}
+        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-2 px-3 ${
+          isMobile ? 'w-[calc(100vw-80px)]' : 'w-[calc(100vw-180px)]'
+        } `}
       >
         {todos.map((todo: ITodo) => {
           return <Todo key={todo.id} todo={todo} />
@@ -39,6 +40,5 @@ const TodoList: React.FC<IProps> = ({ todos }: IProps) => {
     </div>
   )
 }
-
 
 export default TodoList
