@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Todo } from './Todo'
-import { useMobile, useTablet } from '@/hooks'
+import { useDesktop, useMobile, useTablet } from '@/hooks'
 import Pagination from '../Pagination'
 import Spinner from '../Spinner'
 // import { notFound } from 'next/navigation'
@@ -20,11 +20,12 @@ export interface IProps {
 const TodoList: React.FC<IProps> = ({ todos }: IProps) => {
   const isMobile = useMobile()
   const isTablet = useTablet()
+  const isDesktop = useDesktop()
   const [currentPage, setCurrentPage] = useState(1)
   if (!todos) {
     return <></>
   }
-  const recordsPerPage = isMobile ? 5 : isTablet ? 10 : 15
+  const recordsPerPage = isMobile ? 5 : isTablet ? 10 : isDesktop ? 15 : 20
   const nPage = Math.ceil(todos.length / recordsPerPage)
   const lastIndex = currentPage * recordsPerPage
   const firstIndex = lastIndex - recordsPerPage
