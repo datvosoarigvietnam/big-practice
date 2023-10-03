@@ -8,7 +8,8 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   name: 'title' | 'creator' | 'createAt' | 'desc'
   title: string
   placeHolder: string
-  value: string
+  value?: string
+  disabled?: boolean
 }
 const InputControl: React.FC<IProps> = ({
   control,
@@ -16,14 +17,22 @@ const InputControl: React.FC<IProps> = ({
   title,
   value,
   placeHolder,
+  disabled,
 }: IProps) => {
   return (
-    <div className="flex  gap-2 flex-col sm:flex-row mb-6">
+    <div className="flex  gap-2 flex-col sm:flex-row mb-3">
       <label htmlFor={name} className="sm:w-[100px]">
         {title}
       </label>
       <Controller
         control={control}
+        rules={{
+          required: 'This field is required.',
+          maxLength: {
+            value: 100,
+            message: 'Maximum length is 100 characters',
+          },
+        }}
         name={name}
         render={({ field }) => {
           return (
@@ -33,6 +42,7 @@ const InputControl: React.FC<IProps> = ({
               placeholder={placeHolder}
               {...field}
               value={field.value || value}
+              disabled={disabled}
             />
           )
         }}
