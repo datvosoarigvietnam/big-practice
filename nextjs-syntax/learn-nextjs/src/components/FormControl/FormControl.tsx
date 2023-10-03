@@ -24,8 +24,7 @@ export const FormControl = ({
   todoDetail?: ITodo | undefined
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  // const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  // const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
   const defaultValues = useMemo<IForm>(() => {
     const values: IForm = {
@@ -90,21 +89,23 @@ export const FormControl = ({
         })
       } catch (error) {}
     } else {
-      addTodoMutation.mutate(
-        {
-          title: todo.title,
-          status: todo.status,
-          createAt: todo.createAt,
-          creator: todo.creator,
-          desc: todo.desc,
-        },
-        {
-          onSuccess: () => {
-            toast.success('Add todo is success')
-            router.push('/todos')
+      if (isAddModalOpen) {
+        addTodoMutation.mutate(
+          {
+            title: todo.title,
+            status: todo.status,
+            createAt: todo.createAt,
+            creator: todo.creator,
+            desc: todo.desc,
           },
-        },
-      )
+          {
+            onSuccess: () => {
+              toast.success('Add todo is success')
+              router.push('/todos')
+            },
+          },
+        )
+      }
     }
   }
 
@@ -189,8 +190,9 @@ export const FormControl = ({
         <div className="pt-10 text-center">
           <div className={`${todoDetail?.id && 'flex gap-2'}`}>
             <button
-              type="submit"
+              type="button"
               className="bg-[#675BF1] px-10 py-5 text-white font-semibold text-lg rounded-lg cursor-poiter tracking-[2px]"
+              onClick={() => setIsAddModalOpen(true)}
             >
               {todoDetail?.id ? 'Edit' : 'Save'}
             </button>
@@ -220,6 +222,14 @@ export const FormControl = ({
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={() => deleteTodo(todoDetail?.id as string)}
         message="Are you sure you want to delete this item?"
+      />
+      <ConfirmationModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onConfirm={() => {
+          handleSubmit(onSubmit)()
+        }}
+        message="Are you sure you want to add this item?"
       />
     </div>
   )
