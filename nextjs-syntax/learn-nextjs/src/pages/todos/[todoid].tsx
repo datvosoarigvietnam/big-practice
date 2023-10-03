@@ -15,8 +15,9 @@ const TodoDetails: NextPageWithLayout = (props: IProps) => {
 
   const { data: result } = useQuery({
     queryKey: ['todos', todoId],
-    queryFn: () => todoApi.getDetailTodo(todoId || ''),
-    staleTime: 30000,
+    queryFn: () => todoApi.getDetailTodo(todoId as string),
+    // staleTime: 3000,
+    cacheTime: 0,
   })
 
   return (

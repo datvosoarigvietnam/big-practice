@@ -45,7 +45,6 @@ export const FormControl = ({
     }
     return values
   }, [todoDetail])
-  console.log('todoDetail', todoDetail)
   const {
     control,
     handleSubmit,
@@ -80,7 +79,6 @@ export const FormControl = ({
   const onSubmit = (todo: ITodo) => {
     if (todoDetail?.id) {
       try {
-        console.log('edit form todo', todo)
         editTodoMutation.mutate(todo, {
           onSuccess: () => {
             toast.success('Edit todo is success')
