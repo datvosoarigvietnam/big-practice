@@ -1,15 +1,17 @@
-interface ISideBarMenu {
-  allTask: string
-  newTask: string
-  doingTask: string
-  doneTask: string
+export interface IMenu {
+  title: string
+  href: string
 }
+export const SideBarListMB = [
+  { title: 'All Task', href: '/todos' },
+  { title: 'New Task', href: '/todos' },
+  { title: 'Doing Task', href: '/todos' },
+  { title: 'Done Task', href: '/todos' },
+]
 
-export const SideBarListMB = ['All', 'New', 'Doing', 'Done']
-
-export const SideBarList = {
-  allTask: 'All',
-  newTask: 'New',
-  doingTask: 'Doing',
-  doneTask: 'Done',
-}
+export const SideBarList = [
+  { title: 'All', href: '/todos' },
+  { title: 'New', href: '/todos' },
+  { title: 'Doing', href: '/todos' },
+  { title: 'Done', href: '/todos' },
+]
