@@ -12,13 +12,12 @@ const TodoDetails: NextPageWithLayout = (props: IProps) => {
   const todoId = Array.isArray(router.query.todoid)
     ? router.query.todoid[0]
     : router.query.todoid
-  console.log(router)
 
   const { data: result } = useQuery({
     queryKey: ['todos', todoId],
     queryFn: () => todoApi.getDetailTodo(todoId || ''),
+    staleTime: 30000,
   })
-  console.log('result', result?.data)
 
   return (
     <div className="flex-1 flex justify-center items-center ">

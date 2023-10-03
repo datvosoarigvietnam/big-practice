@@ -1,101 +1,119 @@
 import React from 'react'
 
-const Pagination = () => {
+interface IProps {
+  page: number
+  currentPage: number
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+}
+
+const RANGE = 2
+
+const Pagination: React.FC<IProps> = ({
+  page: pageSize,
+  currentPage,
+  setCurrentPage,
+}) => {
+  const renderPagination = () => {
+    let dotAfter = false
+    let dotBefore = false
+
+    const renderDotBefore = (index: number) => {
+      if (!dotBefore) {
+        dotBefore = true
+        return (
+          <button
+            className="mx-2 cursor-pointer rounded bg-white px-3 py-2 shadow-sm"
+            key={index}
+          >
+            ...
+          </button>
+        )
+      }
+      return null
+    }
+
+    const renderDotAfter = (index: number) => {
+      if (!dotAfter) {
+        dotAfter = true
+        return (
+          <button
+            className="mx-2 cursor-pointer rounded bg-white px-3 py-2 shadow-sm"
+            key={index}
+          >
+            ...
+          </button>
+        )
+      }
+      return null
+    }
+
+    return Array(pageSize)
+      .fill(0)
+      .map((_, index) => {
+        const pageNumber = index + 1
+        // Render ... button
+        if (
+          currentPage <= RANGE * 2 + 1 &&
+          pageNumber > currentPage + RANGE &&
+          pageNumber < pageSize - RANGE + 1
+        ) {
+          return renderDotBefore(index)
+        } else if (
+          currentPage > RANGE * 2 + 1 &&
+          currentPage < pageSize - RANGE * 2
+        ) {
+          if (pageNumber < currentPage - RANGE && pageNumber > RANGE) {
+            return renderDotBefore(index)
+          } else if (
+            pageNumber > currentPage + RANGE &&
+            pageNumber < pageSize - RANGE + 1
+          ) {
+            return renderDotAfter(index)
+          }
+        } else if (
+          currentPage >= pageSize - RANGE * 2 &&
+          pageNumber > RANGE &&
+          pageNumber < currentPage - RANGE
+        ) {
+          return renderDotBefore(index)
+        }
+
+        return (
+          <button
+            key={index}
+            className={`mx-2 cursor-pointer rounded bg-white px-3 py-2 shadow-sm ${
+              currentPage === pageNumber ? 'bg-gray-500' : ''
+            }`}
+            onClick={() => setCurrentPage(pageNumber)}
+          >
+            {pageNumber}
+          </button>
+        )
+      })
+  }
+
   return (
-    <nav
-      aria-label="Page navigation example"
-      className="flex justify-center pt-[100px]"
-    >
-      <ul className="flex items-center -space-x-px h-8 text-sm">
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Previous</span>
-            <svg
-              className="w-2.5 h-2.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 1 1 5l4 4"
-              />
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            1
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            2
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            aria-current="page"
-            className="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-          >
-            3
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            4
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            5
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Next</span>
-            <svg
-              className="w-2.5 h-2.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 9 4-4-4-4"
-              />
-            </svg>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <div className="mt-6 flex flex-wrap justify-center">
+      <button
+        className={`mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm ${
+          currentPage === 1 ? 'cursor-not-allowed disabled' : ''
+        }`}
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(currentPage - 1)}
+      >
+        Prev
+      </button>
+      {renderPagination()}
+      <button
+        className={`mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm ${
+          currentPage === pageSize ? 'cursor-not-allowed disabled' : ''
+        }`}
+        disabled={currentPage === pageSize}
+        onClick={() => setCurrentPage(currentPage + 1)}
+      >
+        Next
+      </button>
+    </div>
   )
 }
 
