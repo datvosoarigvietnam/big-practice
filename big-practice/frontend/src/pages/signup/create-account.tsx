@@ -11,29 +11,38 @@ export default function CreateAccount() {
       <h1 className="mb-[54px] text-center text-4xl break-keep md:w-[665px] text-[#4F4F4F] font-kumbh-sans font-semibold">
         Welcome, create your school account
       </h1>
-      <div className="container mx-auto w-full md:w-[520px] bg-white ">
-        <div className="md:pt-[71px] md:px-[132px]">
+      <div className="container mx-auto w-full md:w-[520px] bg-white rounded">
+        <div className="pt-[20px] md:pt-[71px] md:px-[132px]">
           <form>
             <h2 className="text-center md:w-[238px] mb-[38px] text-[#667085] font-medium leading-6">
               It is our great pleasure to have you on board!
             </h2>
-            <div className="flex gap-[14px] flex-col">
-              <InputField
-                control={control}
-                name="test"
-                placeholder="Enter the name of admin"
-              />
-              <InputField
-                control={control}
-                name="test"
-                placeholder="Enter the name of admin"
-              />
-              <InputField
-                control={control}
-                name="test"
-                placeholder="Enter the name of admin"
-              />
-              <div className="">
+            <div className="flex gap-[14px] flex-col ">
+              <div className="pl-[10px] pr-[10px] md:p-0">
+                <InputField
+                  control={control}
+                  name="admin_name"
+                  placeholder="Enter the name of admin"
+                  type="text"
+                />
+              </div>
+              <div className="pl-[10px] pr-[10px] md:p-0">
+                <InputField
+                  control={control}
+                  name="school_name"
+                  placeholder="Enter the name of school"
+                  type="text"
+                />
+              </div>
+              <div className="pl-[10px] pr-[10px] md:p-0">
+                <InputField
+                  control={control}
+                  name="test"
+                  placeholder="Enter the school email"
+                  type="text"
+                />
+              </div>
+              <div className="mt-[30px] px-[10px] md:px-[0]">
                 <Button />
               </div>
             </div>

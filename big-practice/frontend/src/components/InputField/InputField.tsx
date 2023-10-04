@@ -1,22 +1,56 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, useState } from 'react';
 import { Control, FieldValues, Controller } from 'react-hook-form';
+import eyeClose from '../../../public/eye_close';
+import eyeOpen from '../../../public/eye_open';
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   control: Control<FieldValues, any>;
   name: string;
   placeholder: string;
 }
 
-export default function InputField({ control, name, placeholder }: IProps) {
+export default function InputField({
+  control,
+  name,
+  placeholder,
+  type,
+  ...props
+}: IProps) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
   return (
     <Controller
       control={control}
       name={name}
       render={({ field }) => (
-        <input
-          {...field}
-          placeholder={placeholder}
-          className="outline-none rounded border-[0.5px] py-3 pl-[13px] pr-[50px] font-medium text-[#8A8A8A] font-[Kumbh Sans] mx-[10px] "
-        />
+        <div className="relative cursor-pointer">
+          <input
+            {...props}
+            {...field}
+            placeholder={placeholder}
+            className="w-full outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-[Kumbh Sans]  md:w-[250px]"
+            type={
+              type === 'password'
+                ? isPasswordVisible
+                  ? 'text'
+                  : 'password'
+                : type
+            }
+          />
+
+          {type === 'password' ? (
+            <div
+              className="absolute right-[15px] top-[30%] cursor-pointer z-50"
+              onClick={togglePasswordVisibility}
+            >
+              {isPasswordVisible ? eyeOpen : eyeClose}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       )}
     />
   );
