@@ -1,12 +1,11 @@
+import Image from 'next/image';
+
 import { NextPageWithLayout } from '@/models/common';
-
 import { MainLayout } from '@/components/layout';
-
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import addStudentIcon from '@/common/icons/addStudentIcon.svg';
 import addProfileIcon from '@/common/icons/addProfileIcon.svg';
 import addAddressIcon from '@/common/icons/addressIcon.svg';
-
 import Button from '@/components/Button';
 const DashBoard: NextPageWithLayout = () => {
   return (
@@ -25,7 +24,7 @@ const DashBoard: NextPageWithLayout = () => {
               </p>
             </div>
             <div className="flex justify-center items-center gap-12 pb-[12px]">
-              <img src={bellIcon.src} alt="" />
+              <Image src={bellIcon} alt="" />
               <Button
                 title="Log out"
                 className="w-32 h-10 rounded-lg font-kumbh-sans "
@@ -45,7 +44,7 @@ const DashBoard: NextPageWithLayout = () => {
         <div className="mt-2 pl-4 pt-10 md:pt-[70px] pl-10 pr-10  lg:pl-20 lg:pr-12 xl:pl-32 xl:pr-32">
           <div className="flex flex-col gap-11">
             <div className="flex items-center md:items-start gap-5">
-              <img src={addProfileIcon.src} alt="" />
+              <Image src={addProfileIcon} alt="" />
               <div className="flex flex-col md:gap-2 lg:gap-4">
                 <p className=" text-[#4F4F4F] font-kumbh-sans font-medium md:text-xl">
                   Add other admins
@@ -58,7 +57,7 @@ const DashBoard: NextPageWithLayout = () => {
               </div>
             </div>
             <div className="flex items-center md:items-start gap-5">
-              <img src={addStudentIcon.src} alt="" />
+              <Image src={addStudentIcon} alt="" />
               <div className="flex flex-col md:gap-2 lg:gap-4">
                 <p className=" text-[#4F4F4F] font-kumbh-sans font-medium md:text-xl">
                   Add other admins
@@ -71,7 +70,7 @@ const DashBoard: NextPageWithLayout = () => {
               </div>
             </div>
             <div className="flex items-center md:items-start gap-5">
-              <img src={addStudentIcon.src} alt="" />
+              <Image src={addStudentIcon} alt="" />
               <div className="flex flex-col md:gap-2 lg:gap-4">
                 <p className=" text-[#4F4F4F] font-kumbh-sans font-medium md:text-xl">
                   Add other admins
