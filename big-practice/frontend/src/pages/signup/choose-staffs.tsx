@@ -1,10 +1,10 @@
-import Button from '@/components/Button';
-import InputField from '@/components/InputField';
-import SelectedField from '@/components/SelectedField';
-import StepperCustom from '@/components/Stepper';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+
+import Button from '@/components/Button';
+import SelectedField from '@/components/SelectedField';
+import StepperCustom from '@/components/Stepper';
 export default function ChooseStaffs() {
   const { control } = useForm({});
   const options = [

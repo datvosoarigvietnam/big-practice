@@ -1,8 +1,9 @@
-import Button from '@/components/Button';
-import InputField from '@/components/InputField';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+
+import InputField from '@/components/InputField';
+import Button from '@/components/Button';
 
 export default function CreateAccount() {
   const { control } = useForm({});

@@ -1,6 +1,6 @@
+import SignIn from './signin';
 import { NextPageWithLayout } from '@/models/common';
 import { SignupLayout } from '@/components/layout';
-import SignIn from './signin';
 
 const Signup: NextPageWithLayout = () => (
   <div className="">

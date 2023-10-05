@@ -1,7 +1,9 @@
 import React, { InputHTMLAttributes, useState } from 'react';
 import { Control, FieldValues, Controller } from 'react-hook-form';
-import eyeClose from '../../../public/eye_close';
-import eyeOpen from '../../../public/eye_open';
+
+import eyeClose from '@/common/icons/eye_close';
+import eyeOpen from '@/common/icons/eye_open';
+
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   control: Control<FieldValues, any>;
   name: string;

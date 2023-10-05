@@ -1,7 +1,7 @@
+import { Stepper } from '@mantine/core';
 import { useState } from 'react';
-import { Stepper, Button, Group } from '@mantine/core';
-import { WaiIcon } from '../../../public';
-// import StyledStepper from './StyledStepper';
+
+import wait_icon from '@/common/icons/wait_icon';
 
 function StepperCustom() {
   const [active, setActive] = useState(1);
@@ -11,7 +11,6 @@ function StepperCustom() {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   return (
-    // <StyledStepper active={active} onStepClick={setActive}>
     <Stepper active={active} onStepClick={setActive} iconSize={24}>
       <Stepper.Step
         label={
@@ -19,13 +18,13 @@ function StepperCustom() {
             <p>Your Details</p>
           </div>
         }
-        icon={WaiIcon}
+        icon={wait_icon}
         description="Name and Email"
       ></Stepper.Step>
       <Stepper.Step
         label={<p>Choose a password</p>}
         description="Choose a secure password"
-        icon={WaiIcon}
+        icon={wait_icon}
       ></Stepper.Step>
       <Stepper.Step
         label={
@@ -34,7 +33,7 @@ function StepperCustom() {
           </div>
         }
         description="Start collaborating"
-        icon={WaiIcon}
+        icon={wait_icon}
       ></Stepper.Step>
       <Stepper.Step
         label={
@@ -43,10 +42,9 @@ function StepperCustom() {
           </div>
         }
         description="For account verification"
-        icon={WaiIcon}
+        icon={wait_icon}
       />
     </Stepper>
-    // {/* </StyledStepper> */}
   );
 }
 export default StepperCustom;
