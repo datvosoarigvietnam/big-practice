@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
-import { ReactElement, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export interface ILayoutProps {
   children: ReactNode;

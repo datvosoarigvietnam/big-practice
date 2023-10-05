@@ -1,5 +1,5 @@
 import { NextPageWithLayout } from '@/models/common';
-import { MainLayout } from '@/components';
+import { MainLayout } from '@/components/layout';
 
 const Home: NextPageWithLayout = () => {
   return (
