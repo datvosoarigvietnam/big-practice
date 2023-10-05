@@ -22,6 +22,7 @@ export default function InputField({
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+  const coppyType = type;
   return (
     <Controller
       control={control}
@@ -51,7 +52,7 @@ export default function InputField({
                   : type
               }
             />
-            {type === 'password' ? (
+            {coppyType === 'password' ? (
               <div
                 className="absolute right-[15px] top-[30%] cursor-pointer z-50"
                 onClick={togglePasswordVisibility}

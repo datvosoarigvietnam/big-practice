@@ -25,7 +25,7 @@ export default function SelectedField({
           {...rest}
           className="w-full outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans  md:w-[250px]"
         >
-          <option value="" selected>
+          <option value={options[0]} defaultValue={defaultOption}>
             {defaultOption}
           </option>
           {options.map((option) => (

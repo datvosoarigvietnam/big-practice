@@ -35,7 +35,7 @@ export default function ChoosePassword() {
                   />
                 </div>
                 <div className="mt-[30px] px-[10px] md:px-[0]">
-                  <Button />
+                  <Button title="Next" />
                 </div>
               </div>
             </form>
@@ -43,9 +43,9 @@ export default function ChoosePassword() {
           <div className="text-center pt-[14px] pb-[58px]">
             <p className="font-normal text-xs text-[#667085] font-sans leading-6">
               Already have an account?{' '}
-              <Link href="/">
+              <Link href="/signin">
                 <span className="text-[#2D88D4] font-bold text-xs">
-                  Sign up
+                  Sign in
                 </span>
               </Link>
             </p>
