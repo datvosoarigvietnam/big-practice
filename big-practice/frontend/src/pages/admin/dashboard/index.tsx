@@ -41,9 +41,9 @@ const DashBoard: NextPageWithLayout = () => {
         <p className="mt-6 text-[#4F4F4F] font-kumbh-sans font-semibold pl-2 text-center md:pl-20 md:text-center md:text-2xl lg:pl-20 lg:text-left ">
           Uyo/school/@teachable.com
         </p>
-        <div className="mt-2 pl-4 pt-10 md:pt-[70px] pl-10 pr-10  lg:pl-20 lg:pr-12 xl:pl-32 xl:pr-32">
-          <div className="flex flex-col gap-11">
-            <div className="flex items-center md:items-start gap-5">
+        <div className="mt-2 x pt-10 md:pt-[70px] pl-10 pr-10  lg:pl-20 lg:pr-12 xl:pl-32 xl:pr-32">
+          <div className="flex flex-col gap-10">
+            <div className="flex items-center md:items-start gap-5 hover:cursor-pointer">
               <Image src={addProfileIcon} alt="" />
               <div className="flex flex-col md:gap-2 lg:gap-4">
                 <p className=" text-[#4F4F4F] font-kumbh-sans font-medium md:text-xl">
@@ -56,7 +56,7 @@ const DashBoard: NextPageWithLayout = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center md:items-start gap-5">
+            <div className="flex items-center md:items-start gap-5  hover:cursor-pointer">
               <Image src={addStudentIcon} alt="" />
               <div className="flex flex-col md:gap-2 lg:gap-4">
                 <p className=" text-[#4F4F4F] font-kumbh-sans font-medium md:text-xl">
@@ -69,7 +69,7 @@ const DashBoard: NextPageWithLayout = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center md:items-start gap-5">
+            <div className="flex items-center md:items-start gap-5  hover:cursor-pointer">
               <Image src={addStudentIcon} alt="" />
               <div className="flex flex-col md:gap-2 lg:gap-4">
                 <p className=" text-[#4F4F4F] font-kumbh-sans font-medium md:text-xl">

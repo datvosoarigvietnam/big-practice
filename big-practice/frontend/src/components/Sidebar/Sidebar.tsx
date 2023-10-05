@@ -11,12 +11,16 @@ import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
 export default function Sidebar() {
   const menuList = [
-    { icon: homeIcon, title: 'Dashboard', href: '/dashboard' },
-    { icon: homeIcon, title: 'Teachers', href: '/teachers' },
-    { icon: studentIcon, title: 'Students/ classes', href: '/students' },
-    { icon: billIcon, title: 'Billing', href: '/billing' },
-    { icon: settingIcon, title: 'Settings and profile', href: '/settings' },
-    { icon: examIcon, title: 'Exams', href: '/exams' },
+    { icon: homeIcon, title: 'Dashboard', href: '/admin/dashboard' },
+    { icon: homeIcon, title: 'Teachers', href: '/admin/teachers' },
+    { icon: studentIcon, title: 'Students/ classes', href: '/admin/students' },
+    { icon: billIcon, title: 'Billing', href: '/admin/billing' },
+    {
+      icon: settingIcon,
+      title: 'Settings and profile',
+      href: '/admin/settings',
+    },
+    { icon: examIcon, title: 'Exams', href: '/admin/exams' },
   ];
   return (
     <div className="w-[240px] h-[100vh] bg-[#152259]">
@@ -24,7 +28,6 @@ export default function Sidebar() {
         {/* Header */}
         <div className="border-b-[0.5px] border-[#BDBDBD] flex flex-col justify-center items-center mb-4">
           <div className="">
-            {/* <img src={avatar.src} alt="avatar" className="pb-[22px] " /> */}
             <Image src={avatar} alt="avatar" className="pb-[22px] " />
           </div>
           <div className="pb-[40px] font-kumbh-sans font-semibold text-[#FFFFFF] leading-4">
