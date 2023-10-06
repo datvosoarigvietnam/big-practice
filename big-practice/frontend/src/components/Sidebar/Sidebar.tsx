@@ -23,7 +23,7 @@ export default function Sidebar() {
     { icon: examIcon, title: 'Exams', href: '/admin/exams' },
   ];
   return (
-    <div className="w-[240px] h-[100vh] bg-[#152259]">
+    <div className="hidden md:block w-[240px] h-[100vh] bg-[#152259]">
       <div className="pt-[26px] ">
         {/* Header */}
         <div className="border-b-[0.5px] border-[#BDBDBD] flex flex-col justify-center items-center mb-4">

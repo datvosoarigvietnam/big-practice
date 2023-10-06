@@ -34,7 +34,7 @@ export default function InputField({
           {label && (
             <label
               htmlFor={name}
-              className="font-kumbh-sans text-[#667085] leading-6 font-normal -tracking-tighter pl-3"
+              className="font-kumbh-sans text-[#667085] leading-6 font-normal -tracking-tighter "
             >
               {label}
             </label>
@@ -45,7 +45,7 @@ export default function InputField({
               {...props}
               {...field}
               placeholder={placeholder}
-              className="w-full outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-[Kumbh Sans]  md:w-[250px]"
+              className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px]  font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
               type={
                 type === 'password'
                   ? isPasswordVisible

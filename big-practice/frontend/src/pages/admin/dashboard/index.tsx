@@ -27,7 +27,7 @@ const DashBoard: NextPageWithLayout = () => {
               <Image src={bellIcon} alt="" />
               <Button
                 title="Log out"
-                className="w-32 h-10 rounded-lg font-kumbh-sans "
+                className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
               />
             </div>
           </div>
