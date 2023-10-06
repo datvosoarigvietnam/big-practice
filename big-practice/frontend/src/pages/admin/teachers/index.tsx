@@ -1,12 +1,98 @@
 import Image from 'next/image';
+import { useState } from 'react';
 
 import { NextPageWithLayout } from '@/models/common';
 import { MainLayout } from '@/components/layout';
-import { useState } from 'react';
 import Button from '@/components/Button';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
 import AddTeacherPopup from './AddTeacherPopup';
+import TableV2, { IStudent } from '@/components/Table/TableV2';
+import NotData from '@/components/NotData';
+
+export interface User {
+  name: string;
+  subject: string;
+  email: string;
+  class: string;
+  gender: 'Male' | 'Female';
+}
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+export interface Column {
+  key: keyof User | keyof IStudent;
+  header: string;
+}
+const columns: Column[] = [
+  { key: 'name', header: 'Name' },
+  { key: 'class', header: 'Class' },
+  { key: 'subject', header: 'Jubject' },
+  { key: 'email', header: 'Email' },
+  { key: 'gender', header: 'Gender' },
+];
+
+// const users: User[] = [
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     subject: 'Math',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     subject: 'Math',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     subject: 'Math',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     subject: 'Math',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     subject: 'Math',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     subject: 'Math',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     subject: 'Math',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+// ];
+const users: User[] = [];
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
 
@@ -16,7 +102,7 @@ const TeacherPage: NextPageWithLayout = () => {
   const handleClosePopup = () => {
     setShowTeacherPopup(false);
   };
-
+  const headers = ['asdasd', 'ASdasdas', 'ASdasdasd'];
   return (
     <div className="container mx-auto px-3">
       {/* Header */}
@@ -63,7 +149,8 @@ const TeacherPage: NextPageWithLayout = () => {
           </div>
         </div>
       </div>
-      <div className="md:pl-10 mt-8">
+      {/* No data table */}
+      {/* <div className="md:pl-10 mt-8">
         <div className="w-full h-[420px] bg-gray-200 flex flex-col justify-end items-center gap-1 px-4">
           <h1 className="text-[#4F4F4F] font-kumbh-sans text-3xl font-semibold">
             No Teachers at this time
@@ -72,7 +159,9 @@ const TeacherPage: NextPageWithLayout = () => {
             Teachers will appear here after they enroll in your school.
           </p>
         </div>
-      </div>
+      </div> */}
+      {/* <TableV2 columns={columns} data={users} /> */}
+      {users.length ? <TableV2 columns={columns} data={users} /> : <NotData />}
       {showTeacherPopup && <AddTeacherPopup onClose={handleClosePopup} />}
     </div>
   );
