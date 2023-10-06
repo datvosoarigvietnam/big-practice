@@ -1,7 +1,8 @@
-import InputField from '@/components/InputField';
-import SelectedField from '@/components/SelectedField';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import InputField from '@/components/InputField';
+import SelectedField from '@/components/SelectedField';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
@@ -24,15 +25,13 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({ onClose }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log(formData);
-    // Reset form data if needed
   };
   const handleClose = () => {
     onClose();
   };
   return (
-    <div className="fixed  inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 overflow-scroll sm:overscroll-none">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 overflow-scroll sm:overscroll-none">
       <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-28 pt-[400px]">
         <span
           className="text-gray-600 text-2xl cursor-pointer absolute top-2 right-2"

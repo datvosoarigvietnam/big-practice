@@ -11,16 +11,12 @@ import TableV2, { IStudent } from '@/components/Table/TableV2';
 import NotData from '@/components/NotData';
 
 export interface User {
+  id: number;
   name: string;
   subject: string;
   email: string;
   class: string;
   gender: 'Male' | 'Female';
-}
-export interface User {
-  id: number;
-  name: string;
-  email: string;
 }
 export interface Column {
   key: keyof User | keyof IStudent;
@@ -34,65 +30,64 @@ const columns: Column[] = [
   { key: 'gender', header: 'Gender' },
 ];
 
-// const users: User[] = [
-//   {
-//     id: 1,
-//     name: 'Alice',
-//     class: 'J20',
-//     subject: 'Math',
-//     email: 'alice@example.com',
-//     gender: 'Female',
-//   },
-//   {
-//     id: 1,
-//     name: 'Alice',
-//     class: 'J20',
-//     subject: 'Math',
-//     email: 'alice@example.com',
-//     gender: 'Female',
-//   },
-//   {
-//     id: 1,
-//     name: 'Alice',
-//     class: 'J20',
-//     subject: 'Math',
-//     email: 'alice@example.com',
-//     gender: 'Female',
-//   },
-//   {
-//     id: 1,
-//     name: 'Alice',
-//     class: 'J20',
-//     subject: 'Math',
-//     email: 'alice@example.com',
-//     gender: 'Female',
-//   },
-//   {
-//     id: 1,
-//     name: 'Alice',
-//     class: 'J20',
-//     subject: 'Math',
-//     email: 'alice@example.com',
-//     gender: 'Female',
-//   },
-//   {
-//     id: 1,
-//     name: 'Alice',
-//     class: 'J20',
-//     subject: 'Math',
-//     email: 'alice@example.com',
-//     gender: 'Female',
-//   },
-//   {
-//     id: 1,
-//     name: 'Alice',
-//     class: 'J20',
-//     subject: 'Math',
-//     email: 'alice@example.com',
-//     gender: 'Female',
-//   },
-// ];
-const users: User[] = [];
+const users: User[] = [
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    subject: 'Math',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    subject: 'Math',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    subject: 'Math',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    subject: 'Math',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    subject: 'Math',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    subject: 'Math',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    subject: 'Math',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+];
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
 

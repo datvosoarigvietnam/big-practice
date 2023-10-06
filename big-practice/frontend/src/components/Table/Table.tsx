@@ -1,8 +1,8 @@
 // import { User } from '@/pages/admin/teachers';
 import React from 'react';
+import Image from 'next/image';
 
 import avatar from '@/common/icons/avatar.png';
-import Image from 'next/image';
 import { User } from '@/pages/admin/teachers';
 interface IProps {
   headers: string[];
@@ -22,6 +22,7 @@ const Table: React.FC<IProps> = ({ headers, data }) => {
                     item === 'Name' &&
                     'sticky left-0 z-10 bg-white sm:bg-inherit'
                   }`}
+                  key={item}
                 >
                   {item}
                 </th>

@@ -1,5 +1,6 @@
-import { Column, User } from '@/pages/admin/teachers';
 import React from 'react';
+
+import { Column, User } from '@/pages/admin/teachers';
 
 // interface User {
 //   id: number;
