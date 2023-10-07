@@ -11,13 +11,19 @@ import { Column, User } from '@/pages/admin/teachers';
 interface DataTableProps<T> {
   data: T[];
   columns: Column[];
+  onRowClick?: (id: number) => void;
 }
 export interface IStudent {
   id: string;
   name: string;
   gender: string;
 }
-const DataTable: React.FC<DataTableProps<User>> = ({ data, columns }) => {
+const DataTable: React.FC<DataTableProps<User>> = ({ data, columns, onRowClick }) => {
+  const handleClickRow = (id: number) => {
+    if (onRowClick) {
+      onRowClick(id)
+    }
+  }
   return (
     <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[50px]">
       <table className=" w-full">
@@ -26,10 +32,9 @@ const DataTable: React.FC<DataTableProps<User>> = ({ data, columns }) => {
             {columns.map((column) => (
               <th
                 key={column.key}
-                className={`p-2 text-left ${
-                  column.header === 'Name' &&
+                className={`p-2 text-left ${column.header === 'Name' &&
                   'sticky left-0 z-10 bg-white sm:bg-inherit'
-                }`}
+                  }`}
               >
                 {column.header}
               </th>
@@ -41,9 +46,9 @@ const DataTable: React.FC<DataTableProps<User>> = ({ data, columns }) => {
             return (
               <tr
                 key={row.id}
-                className={`${
-                  index % 2 === 0 ? 'bg-[#f0f8ff]' : 'bg-white'
-                } py-6 px-4 hover:bg-[#81afd7] transition duration-150 hover:rounded`}
+                className={`${index % 2 === 0 ? 'bg-[#f0f8ff]' : 'bg-white'
+                  } py-6 px-4 hover:bg-[#81afd7] transition duration-150 hover:rounded`}
+                onClick={() => handleClickRow(row.id)}
               >
                 {columns.map((column) => (
                   <td

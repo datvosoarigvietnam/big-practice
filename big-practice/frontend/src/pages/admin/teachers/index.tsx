@@ -9,6 +9,7 @@ import finIcon from '@/common/icons/findIcon.svg';
 import AddTeacherPopup from './AddTeacherPopup';
 import TableV2, { IStudent } from '@/components/Table/TableV2';
 import NotData from '@/components/NotData';
+import { useRouter } from 'next/router';
 
 export interface User {
   id: number;
@@ -40,7 +41,7 @@ const users: User[] = [
     gender: 'Female',
   },
   {
-    id: 1,
+    id: 2,
     name: 'Alice',
     class: 'J20',
     subject: 'Math',
@@ -48,7 +49,7 @@ const users: User[] = [
     gender: 'Female',
   },
   {
-    id: 1,
+    id: 3,
     name: 'Alice',
     class: 'J20',
     subject: 'Math',
@@ -56,7 +57,7 @@ const users: User[] = [
     gender: 'Female',
   },
   {
-    id: 1,
+    id: 4,
     name: 'Alice',
     class: 'J20',
     subject: 'Math',
@@ -64,7 +65,7 @@ const users: User[] = [
     gender: 'Female',
   },
   {
-    id: 1,
+    id: 5,
     name: 'Alice',
     class: 'J20',
     subject: 'Math',
@@ -72,7 +73,7 @@ const users: User[] = [
     gender: 'Female',
   },
   {
-    id: 1,
+    id: 6,
     name: 'Alice',
     class: 'J20',
     subject: 'Math',
@@ -80,7 +81,7 @@ const users: User[] = [
     gender: 'Female',
   },
   {
-    id: 1,
+    id: 7,
     name: 'Alice',
     class: 'J20',
     subject: 'Math',
@@ -90,16 +91,18 @@ const users: User[] = [
 ];
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
-
+  const router = useRouter()
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
   };
   const handleClosePopup = () => {
     setShowTeacherPopup(false);
   };
-  const headers = ['asdasd', 'ASdasdas', 'ASdasdasd'];
+  const handleRowClick = (id: number) => {
+    router.push(`/${router.pathname}/${id}`)
+  }
   return (
-    <div className="container mx-auto px-3">
+    <div className="container mx-auto md:px-4 lg:px-20">
       {/* Header */}
       <div className="pt-5">
         <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
@@ -156,7 +159,7 @@ const TeacherPage: NextPageWithLayout = () => {
         </div>
       </div> */}
       {/* <TableV2 columns={columns} data={users} /> */}
-      {users.length ? <TableV2 columns={columns} data={users} /> : <NotData />}
+      {users.length ? <TableV2 columns={columns} data={users} onRowClick={handleRowClick} /> : <NotData />}
       {showTeacherPopup && <AddTeacherPopup onClose={handleClosePopup} />}
     </div>
   );

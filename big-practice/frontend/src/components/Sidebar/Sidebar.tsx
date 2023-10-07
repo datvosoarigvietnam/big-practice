@@ -9,6 +9,7 @@ import billIcon from '@/common/icons/billIcon.svg';
 import settingIcon from '@/common/icons/settingIcon.svg';
 import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
+import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 export default function Sidebar() {
   const menuList = [
     { icon: homeIcon, title: 'Dashboard', href: '/admin/dashboard' },
@@ -30,7 +31,7 @@ export default function Sidebar() {
           <div className="">
             <Image src={avatar} alt="avatar" className="pb-[22px] " />
           </div>
-          <div className="pb-[40px] font-kumbh-sans font-semibold text-[#FFFFFF] leading-4">
+          <div className="hidden md:block pb-[40px] font-kumbh-sans font-semibold text-[#FFFFFF] leading-4">
             <p>Udemy Inter. school</p>
           </div>
         </div>
@@ -69,6 +70,9 @@ export default function Sidebar() {
             New
           </span>
         </div>
+      </div>
+      <div className="pt-[26px] md:hidden">
+        <SidebarMobile />
       </div>
     </div>
   );
