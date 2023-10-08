@@ -102,7 +102,7 @@ const TeacherPage: NextPageWithLayout = () => {
     router.push(`/${router.pathname}/${id}`)
   }
   return (
-    <div className="container mx-auto md:px-4 lg:px-20">
+    <div className="container mx-auto md:px-4 lg:px-20 flex-1">
       {/* Header */}
       <div className="pt-5">
         <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">

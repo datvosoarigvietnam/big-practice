@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -10,7 +10,11 @@ import settingIcon from '@/common/icons/settingIcon.svg';
 import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
+import { useRouter } from 'next/router';
 export default function Sidebar() {
+  const { pathname } = useRouter()
+  const lastPathSegment = pathname.split('/').pop();
+  const [activeTab, setActiveTab] = useState(lastPathSegment || "Dashboard");
   const menuList = [
     { icon: homeIcon, title: 'Dashboard', href: '/admin/dashboard' },
     { icon: homeIcon, title: 'Teachers', href: '/admin/teachers' },
@@ -23,6 +27,11 @@ export default function Sidebar() {
     },
     { icon: examIcon, title: 'Exams', href: '/admin/exams' },
   ];
+  const handleActiveTab = (title: string) => {
+    setActiveTab(title)
+  }
+
+
   return (
     <div className="hidden md:block w-[240px] h-[100vh] bg-[#152259]">
       <div className="pt-[26px] ">
@@ -42,11 +51,14 @@ export default function Sidebar() {
               return (
                 <li
                   key={menuItem.title}
-                  className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
+                  // className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
+                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${activeTab.toLowerCase() === menuItem.title.toLowerCase() ? 'bg-[#509CDB]' : ''
+                    }`}
                 >
                   <Link
                     href={menuItem.href}
                     className="flex gap-[16px] py-3 items-center"
+                    onClick={() => handleActiveTab(menuItem.title)}
                   >
                     <div className="pl-2">
                       <Image src={menuItem.icon} alt="avatar" />

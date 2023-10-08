@@ -14,7 +14,7 @@ const TeacherDetail: NextPageWithLayout = () => {
     const router = useRouter()
     console.log("Teacher Id", router.query.teacherId)
     return (
-        <div className="w-full px-5 md:px-10">
+        <div className="w-full px-5 md:px-10 flex-1">
             <div className="pt-5 flex flex-col-reverse justify-between items-center md:flex-row">
                 <div className="flex justify-center items-center gap-4">
                     <Button
