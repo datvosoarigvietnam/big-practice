@@ -31,8 +31,8 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({ onClose }) => {
     onClose();
   };
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 overflow-scroll sm:overscroll-none">
-      <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-28 pt-[400px]">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
+      <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-28 overflow-y-scroll h-[80vh] sm:overflow-hidden">
         <span
           className="text-gray-600 text-2xl cursor-pointer absolute top-2 right-2"
           onClick={handleClose}
