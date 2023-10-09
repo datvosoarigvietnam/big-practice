@@ -6,8 +6,74 @@ import Button from '@/components/Button';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
 import NotData from '@/components/NotData';
+import TableV2 from '@/components/Table/TableV2';
 import AddStudentPopup from './AddStudentPopup';
+import { Column } from '@/@types/Table.type';
 
+export interface IStudent {
+  id: number;
+  name: string;
+  email: string;
+  class: string;
+  gender: 'Male' | 'Female';
+}
+const columns: Column[] = [
+  { key: 'name', header: 'Name' },
+  { key: 'class', header: 'Class' },
+  { key: 'email', header: 'Email' },
+  { key: 'gender', header: 'Gender' },
+];
+const students: IStudent[] = [
+  {
+    id: 1,
+    name: 'Alice',
+    class: 'J20',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 2,
+    name: 'Alice',
+    class: 'J20',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 3,
+    name: 'Alice',
+    class: 'J20',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 4,
+    name: 'Alice',
+    class: 'J20',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 5,
+    name: 'Alice',
+    class: 'J20',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 6,
+    name: 'Alice',
+    class: 'J20',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+  {
+    id: 7,
+    name: 'Alice',
+    class: 'J20',
+    email: 'alice@example.com',
+    gender: 'Female',
+  },
+];
 const StudentPage: NextPageWithLayout = () => {
   const [showStudentPopup, setShowStudentPopup] = useState(false);
 
@@ -63,8 +129,8 @@ const StudentPage: NextPageWithLayout = () => {
           </div>
         </div>
       </div>
-      <NotData />
-      {/* <TableV2 columns={columns} data={users} /> */}
+      {/* <NotData /> */}
+      <TableV2 columns={columns} data={students} />
       {/* {users.length ? (
         <TableV2 columns={columns} data={users} onRowClick={handleRowClick} />
       ) : (

@@ -12,13 +12,13 @@ import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 export default function Sidebar() {
-  const { pathname } = useRouter()
+  const { pathname } = useRouter();
   const lastPathSegment = pathname.split('/').pop();
-  const [activeTab, setActiveTab] = useState(lastPathSegment || "Dashboard");
+  const [activeTab, setActiveTab] = useState(lastPathSegment || 'Dashboard');
   const menuList = [
     { icon: homeIcon, title: 'Dashboard', href: '/admin/dashboard' },
     { icon: homeIcon, title: 'Teachers', href: '/admin/teachers' },
-    { icon: studentIcon, title: 'Students/ classes', href: '/admin/students' },
+    { icon: studentIcon, title: 'Students', href: '/admin/students' },
     { icon: billIcon, title: 'Billing', href: '/admin/billing' },
     {
       icon: settingIcon,
@@ -28,9 +28,8 @@ export default function Sidebar() {
     { icon: examIcon, title: 'Exams', href: '/admin/exams' },
   ];
   const handleActiveTab = (title: string) => {
-    setActiveTab(title)
-  }
-
+    setActiveTab(title);
+  };
 
   return (
     <div className="hidden md:block w-[240px] h-[100vh] bg-[#152259]">
@@ -52,8 +51,11 @@ export default function Sidebar() {
                 <li
                   key={menuItem.title}
                   // className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
-                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${activeTab.toLowerCase() === menuItem.title.toLowerCase() ? 'bg-[#509CDB]' : ''
-                    }`}
+                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${
+                    activeTab.toLowerCase() === menuItem.title.toLowerCase()
+                      ? 'bg-[#509CDB]'
+                      : ''
+                  }`}
                 >
                   <Link
                     href={menuItem.href}

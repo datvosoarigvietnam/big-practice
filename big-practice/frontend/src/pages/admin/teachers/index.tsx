@@ -8,8 +8,9 @@ import Button from '@/components/Button';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
 import AddTeacherPopup from './AddTeacherPopup';
-import TableV2, { IStudent } from '@/components/Table/TableV2';
+import TableV2 from '@/components/Table/TableV2';
 import NotData from '@/components/NotData';
+import { Column } from '@/@types/Table.type';
 
 export interface User {
   id: number;
@@ -19,10 +20,7 @@ export interface User {
   class: string;
   gender: 'Male' | 'Female';
 }
-export interface Column {
-  key: keyof User | keyof IStudent;
-  header: string;
-}
+
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'class', header: 'Class' },
