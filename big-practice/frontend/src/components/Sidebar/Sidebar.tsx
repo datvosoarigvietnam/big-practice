@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import avatar from '@/common/imgs/avatar.svg';
 import homeIcon from '@/common/icons/home-2.svg';
@@ -9,25 +10,37 @@ import billIcon from '@/common/icons/billIcon.svg';
 import settingIcon from '@/common/icons/settingIcon.svg';
 import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
+import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 export default function Sidebar() {
+  const { pathname } = useRouter()
+  const lastPathSegment = pathname.split('/').pop();
+  const [activeTab, setActiveTab] = useState(lastPathSegment || "Dashboard");
   const menuList = [
-    { icon: homeIcon, title: 'Dashboard', href: '/dashboard' },
-    { icon: homeIcon, title: 'Teachers', href: '/teachers' },
-    { icon: studentIcon, title: 'Students/ classes', href: '/students' },
-    { icon: billIcon, title: 'Billing', href: '/billing' },
-    { icon: settingIcon, title: 'Settings and profile', href: '/settings' },
-    { icon: examIcon, title: 'Exams', href: '/exams' },
+    { icon: homeIcon, title: 'Dashboard', href: '/admin/dashboard' },
+    { icon: homeIcon, title: 'Teachers', href: '/admin/teachers' },
+    { icon: studentIcon, title: 'Students/ classes', href: '/admin/students' },
+    { icon: billIcon, title: 'Billing', href: '/admin/billing' },
+    {
+      icon: settingIcon,
+      title: 'Settings and profile',
+      href: '/admin/settings',
+    },
+    { icon: examIcon, title: 'Exams', href: '/admin/exams' },
   ];
+  const handleActiveTab = (title: string) => {
+    setActiveTab(title)
+  }
+
+
   return (
-    <div className="w-[240px] h-[100vh] bg-[#152259]">
+    <div className="hidden md:block w-[240px] h-[100vh] bg-[#152259]">
       <div className="pt-[26px] ">
         {/* Header */}
         <div className="border-b-[0.5px] border-[#BDBDBD] flex flex-col justify-center items-center mb-4">
           <div className="">
-            {/* <img src={avatar.src} alt="avatar" className="pb-[22px] " /> */}
             <Image src={avatar} alt="avatar" className="pb-[22px] " />
           </div>
-          <div className="pb-[40px] font-kumbh-sans font-semibold text-[#FFFFFF] leading-4">
+          <div className="hidden md:block pb-[40px] font-kumbh-sans font-semibold text-[#FFFFFF] leading-4">
             <p>Udemy Inter. school</p>
           </div>
         </div>
@@ -38,11 +51,14 @@ export default function Sidebar() {
               return (
                 <li
                   key={menuItem.title}
-                  className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
+                  // className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
+                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${activeTab.toLowerCase() === menuItem.title.toLowerCase() ? 'bg-[#509CDB]' : ''
+                    }`}
                 >
                   <Link
                     href={menuItem.href}
                     className="flex gap-[16px] py-3 items-center"
+                    onClick={() => handleActiveTab(menuItem.title)}
                   >
                     <div className="pl-2">
                       <Image src={menuItem.icon} alt="avatar" />
@@ -66,6 +82,9 @@ export default function Sidebar() {
             New
           </span>
         </div>
+      </div>
+      <div className="pt-[26px] md:hidden">
+        <SidebarMobile />
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   options?: any[];
   control: Control<FieldValues, any>;
   defaultOption?: string;
+  isFullWith?: boolean;
 }
 
 export default function SelectedField({
@@ -13,6 +14,7 @@ export default function SelectedField({
   control,
   options = [],
   defaultOption,
+  isFullWith,
   ...rest
 }: IProps) {
   return (
@@ -23,7 +25,9 @@ export default function SelectedField({
         <select
           {...field}
           {...rest}
-          className="w-full outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans  md:w-[250px]"
+          className={`${
+            isFullWith ? 'w-full' : 'w-[250px]'
+          } outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans md:w-[250px] `}
         >
           <option value={options[0]} defaultValue={defaultOption}>
             {defaultOption}

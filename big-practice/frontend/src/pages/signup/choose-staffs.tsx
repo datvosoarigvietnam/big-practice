@@ -28,6 +28,7 @@ export default function ChooseStaffs() {
                     name="numberStaff"
                     options={options}
                     defaultOption="Number of staff"
+                    isFullWith={true}
                   />
                 </div>
                 <div className="pl-[10px] pr-[10px] md:p-0">
@@ -36,6 +37,7 @@ export default function ChooseStaffs() {
                     name="schoolAddress"
                     options={options}
                     defaultOption="School address"
+                    isFullWith={true}
                   />
                 </div>
               </div>
