@@ -5,7 +5,7 @@ interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   options?: any[];
   control: Control<FieldValues, any>;
-  defaultOption?: string;
+  defaultOption: string;
   isFullWith?: boolean;
 }
 
@@ -29,7 +29,7 @@ export default function SelectedField({
             isFullWith ? 'w-full' : 'w-[250px]'
           } outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans md:w-[250px] `}
         >
-          <option value={options[0]} defaultValue={defaultOption}>
+          <option value="" selected>
             {defaultOption}
           </option>
           {options.map((option) => (

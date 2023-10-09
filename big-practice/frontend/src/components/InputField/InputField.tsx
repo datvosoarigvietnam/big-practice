@@ -39,7 +39,7 @@ export default function InputField({
               {label}
             </label>
           )}
-          <div className="relative cursor-pointer">
+          <div className="relative cursor-pointer inline-block">
             <input
               id={name}
               {...props}

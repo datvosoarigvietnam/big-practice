@@ -91,7 +91,7 @@ const users: User[] = [
 ];
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
   };
@@ -99,8 +99,8 @@ const TeacherPage: NextPageWithLayout = () => {
     setShowTeacherPopup(false);
   };
   const handleRowClick = (id: number) => {
-    router.push(`/${router.pathname}/${id}`)
-  }
+    router.push(`/${router.pathname}/${id}`);
+  };
   return (
     <div className="container mx-auto md:px-4 lg:px-20 flex-1">
       {/* Header */}
@@ -159,7 +159,11 @@ const TeacherPage: NextPageWithLayout = () => {
         </div>
       </div> */}
       {/* <TableV2 columns={columns} data={users} /> */}
-      {users.length ? <TableV2 columns={columns} data={users} onRowClick={handleRowClick} /> : <NotData />}
+      {users.length ? (
+        <TableV2 columns={columns} data={users} onRowClick={handleRowClick} />
+      ) : (
+        <NotData />
+      )}
       {showTeacherPopup && <AddTeacherPopup onClose={handleClosePopup} />}
     </div>
   );

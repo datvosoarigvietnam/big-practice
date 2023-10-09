@@ -78,20 +78,22 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({ onClose }) => {
             />
             <div className="flex flex-col flex-1 gap-5  md:gap-2 lg:flex-row ">
               <SelectedField
-                name="email"
+                name="class"
                 control={control}
                 placeholder=""
                 isFullWith={false}
+                defaultOption="Class"
               />
               <SelectedField
-                name="email"
+                name="gender"
                 control={control}
                 placeholder=""
                 isFullWith={false}
+                defaultOption="Gender"
               />
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-5 justify-between mt-8">
+          <div className="flex flex-col md:flex-row sm:items-center gap-5 justify-between mt-8  lg:justify-start">
             <InputField
               name="password"
               control={control}
@@ -105,11 +107,15 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({ onClose }) => {
               label="Phone number"
               placeholder=""
               type="tel"
-              pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
             />
           </div>
-          <div className="mt-12">
-            <SelectedField name="Subject" control={control} placeholder="" />
+          <div className="mt-12 text-center">
+            <SelectedField
+              name="subject"
+              control={control}
+              placeholder=""
+              defaultOption="Subject"
+            />
           </div>
           {/* Add other form fields similarly */}
 
