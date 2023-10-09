@@ -9,6 +9,8 @@ import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
 import AddStudentPopup from './AddStudentPopup';
 import { Column } from '@/@types/Table.type';
+import { useRouter } from 'next/router';
+import DetailStudent from './[studentId]';
 
 export interface IStudent {
   id: number;
@@ -23,6 +25,7 @@ const columns: Column[] = [
   { key: 'email', header: 'Email' },
   { key: 'gender', header: 'Gender' },
 ];
+// const students: IStudent[] = [];
 const students: IStudent[] = [
   {
     id: 1,
@@ -76,12 +79,15 @@ const students: IStudent[] = [
 ];
 const StudentPage: NextPageWithLayout = () => {
   const [showStudentPopup, setShowStudentPopup] = useState(false);
-
+  const router = useRouter();
   const handleShowPopup = () => {
     setShowStudentPopup(true);
   };
   const handleClosePopup = () => {
     setShowStudentPopup(false);
+  };
+  const handleRowClick = (id: number) => {
+    router.push(`/${router.pathname}/${id}`);
   };
   return (
     <div className="container mx-auto md:px-4 lg:px-20 flex-1">
@@ -130,13 +136,16 @@ const StudentPage: NextPageWithLayout = () => {
         </div>
       </div>
       {/* <NotData /> */}
-      <TableV2 columns={columns} data={students} />
-      {/* {users.length ? (
-        <TableV2 columns={columns} data={users} onRowClick={handleRowClick} />
+      {/* <TableV2 columns={columns} data={students} onRowClick={handleRowClick} /> */}
+      {students.length ? (
+        <TableV2
+          columns={columns}
+          data={students}
+          onRowClick={handleRowClick}
+        />
       ) : (
         <NotData />
       )}
-      */}
       {showStudentPopup && <AddStudentPopup onClose={handleClosePopup} />}
     </div>
   );
