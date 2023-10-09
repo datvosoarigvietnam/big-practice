@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { NextPageWithLayout } from '@/models/common';
 import { MainLayout } from '@/components/layout';
@@ -9,7 +10,6 @@ import finIcon from '@/common/icons/findIcon.svg';
 import AddTeacherPopup from './AddTeacherPopup';
 import TableV2, { IStudent } from '@/components/Table/TableV2';
 import NotData from '@/components/NotData';
-import { useRouter } from 'next/router';
 
 export interface User {
   id: number;

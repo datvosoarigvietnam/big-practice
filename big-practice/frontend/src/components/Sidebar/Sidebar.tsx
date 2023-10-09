@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import avatar from '@/common/imgs/avatar.svg';
 import homeIcon from '@/common/icons/home-2.svg';
@@ -10,7 +11,6 @@ import settingIcon from '@/common/icons/settingIcon.svg';
 import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
-import { useRouter } from 'next/router';
 export default function Sidebar() {
   const { pathname } = useRouter()
   const lastPathSegment = pathname.split('/').pop();
