@@ -1,17 +1,13 @@
 import { Stepper } from '@mantine/core';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import wait_icon from '@/common/icons/wait_icon';
+import { LabelContext } from '@/store/StepperDataContenxt';
 
 function StepperCustom() {
-  const [active, setActive] = useState(1);
-  const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
-
+  const { page, setPage } = useContext(LabelContext)
   return (
-    <Stepper active={active} onStepClick={setActive} iconSize={24}>
+    <Stepper active={page} onStepClick={setPage} iconSize={24}>
       <Stepper.Step
         label={
           <div>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Control, FieldValues, useForm } from 'react-hook-form';
 
 import InputField from '@/components/InputField';
@@ -19,11 +19,11 @@ export default function CreateAccount() {
       emailSchool: '',
     },
   });
-  const btnDisbaled =
-    value.infor.name.adminName.length > 0 &&
-    value.infor.name.emailSchool.length > 0 &&
-    value.infor.name.schoolName.length > 0;
-  console.log(btnDisbaled);
+  const btnDisbaled = useMemo(() => {
+    return value.infor.name.adminName.length > 0 &&
+      value.infor.name.emailSchool.length > 0 &&
+      value.infor.name.schoolName.length > 0;
+  }, [value])
 
   return (
     <div className="pt-[100px] flex justify-center items-center flex-col">
@@ -34,7 +34,8 @@ export default function CreateAccount() {
         <div className="pt-[20px] md:pt-[71px] md:px-[132px]">
           <form
             onSubmit={handleSubmit((values) => {
-              console.log(values);
+              value.nextPage()
+
             })}
           >
             <h2 className="text-center md:w-[238px] mb-[38px] text-[#667085] font-medium leading-6">
@@ -66,7 +67,8 @@ export default function CreateAccount() {
                 />
               </div>
               <div className="mt-[30px] px-[10px] md:px-[0]">
-                <Button title="Next" />
+                <Button title="Next" disable={btnDisbaled} onClick={() => console.log("asdasdasdas")
+                } />
               </div>
             </div>
           </form>

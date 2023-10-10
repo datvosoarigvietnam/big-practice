@@ -1,12 +1,31 @@
+// @ts-nocheck
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import StepperCustom from '@/components/Stepper';
+import { LabelContext } from '@/store/StepperDataContenxt';
 export default function ChoosePassword() {
-  const { control } = useForm({});
+  const { control, handleSubmit, watch, formState: { errors }, setError } = useForm({});
+  const { nextPage } = useContext(LabelContext)
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
+
+  const onSubmit = () => {
+    if (password === confirmPassword) {
+      // Passwords match, proceed to the next step
+      nextPage();
+    } else {
+      // Passwords don't match, set an error for confirmPassword field
+      setError("confirmPassword", {
+        type: "manual",
+        message: "Passwords do not match"
+      });
+    }
+  }
+
   return (
     <div>
       <div className="pt-[100px] flex justify-center items-center flex-col">
@@ -15,13 +34,13 @@ export default function ChoosePassword() {
         </h1>
         <div className="container mx-auto w-full md:w-[520px] bg-white rounded">
           <div className="pt-[20px] md:pt-[71px] md:px-[132px]">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex gap-[14px] flex-col ">
                 <div className="pl-[10px] pr-[10px] md:p-0">
                   <InputField
                     control={control}
-                    name="admin_name"
-                    placeholder="Enter the name of admin"
+                    name="password"
+                    placeholder="Enter your password"
                     type="password"
                     label="Choose a password"
                   />
@@ -29,12 +48,13 @@ export default function ChoosePassword() {
                 <div className="pl-[10px] pr-[10px] md:p-0">
                   <InputField
                     control={control}
-                    name="school_name"
-                    placeholder="Enter the name of school"
+                    name="confirmPassword"
+                    placeholder="Confirm password"
                     type="password"
                     label="Confirm password"
                   />
                 </div>
+                {errors.confirmPassword && <span className="text-red-500">{errors.confirmPassword.message}</span>}
                 <div className="mt-[30px] px-[10px] md:px-[0]">
                   <Button title="Next" />
                 </div>

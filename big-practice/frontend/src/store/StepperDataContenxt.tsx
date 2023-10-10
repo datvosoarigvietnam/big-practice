@@ -36,6 +36,7 @@ interface LabelContextProps {
   nextPage: () => void;
   prevPage: () => void;
   page: number;
+  setPage: Dispatch<SetStateAction<number>>;
   handleChange: (name: string) => (e: ChangeEvent<HTMLInputElement>) => void;
   setSenderInfo: (name: string) => (e: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -43,12 +44,13 @@ interface LabelContextProps {
 // Define initial context state
 const defaultValuesContext: LabelContextProps = {
   infor: defaultvalues,
-  setInfor: () => {},
-  nextPage: () => {},
-  prevPage: () => {},
+  setInfor: () => { },
+  nextPage: () => { },
+  prevPage: () => { },
   page: 0,
-  handleChange: (name: string) => (e: ChangeEvent<HTMLInputElement>) => {},
-  setSenderInfo: (name: string) => (e: ChangeEvent<HTMLInputElement>) => {},
+  setPage: () => { },
+  handleChange: (name: string) => (e: ChangeEvent<HTMLInputElement>) => { },
+  setSenderInfo: (name: string) => (e: ChangeEvent<HTMLInputElement>) => { },
 };
 
 export const LabelContext = createContext(defaultValuesContext);
@@ -66,11 +68,22 @@ export const LabelProvider = (props: IProps) => {
   };
   const setSenderInfo =
     (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      setInfor({
-        ...infor,
-        name: { ...infor.name, [name]: event.target.value },
-      });
+
+      if (name === 'password') {
+        setInfor({
+          ...infor,
+          [name]: event.target.value
+        })
+      }
+      else {
+        setInfor({
+          ...infor,
+          name: { ...infor.name, [name]: event.target.value },
+        });
+      }
     };
+  console.log("page", page)
+  console.log("inFor", infor)
   return (
     <LabelContext.Provider
       value={{
@@ -79,6 +92,7 @@ export const LabelProvider = (props: IProps) => {
         nextPage,
         prevPage,
         page,
+        setPage,
         handleChange,
         setSenderInfo,
       }}
