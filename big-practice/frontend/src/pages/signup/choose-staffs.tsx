@@ -8,8 +8,8 @@ import StepperCustom from '@/components/Stepper';
 import axios from 'axios';
 import { LabelContext } from '@/store/StepperDataContenxt';
 export default function ChooseStaffs() {
-  const { control } = useForm({});
-  const { infor } = useContext(LabelContext);
+  const { control, handleSubmit } = useForm({});
+  const { infor, nextPage } = useContext(LabelContext);
   const optionStaff = [10, 20, 30, 40];
   const [options, setOptions] = useState([]);
   const getCitys = async () => {
@@ -25,6 +25,9 @@ export default function ChooseStaffs() {
   useEffect(() => {
     getCitys();
   }, []);
+  const onSubmit = () => {
+    nextPage();
+  };
   return (
     <div>
       <div className="pt-[100px] flex justify-center items-center flex-col">
@@ -33,7 +36,7 @@ export default function ChooseStaffs() {
         </h1>
         <div className="container mx-auto w-full md:w-[520px] bg-white rounded">
           <div className="pt-[20px] md:pt-[71px] md:px-[132px]">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex gap-[20px] flex-col ">
                 <div className="pl-[10px] pr-[10px] md:p-0">
                   <SelectedField

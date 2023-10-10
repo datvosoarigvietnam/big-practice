@@ -3,11 +3,11 @@ import { Control, Controller, FieldValues } from 'react-hook-form';
 
 import eyeClose from '@/common/icons/eye_close';
 import eyeOpen from '@/common/icons/eye_open';
-import { LabelContext } from '@/store/StepperDataContenxt';
+import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 import { IFormValues } from '@/pages/signup/create-account';
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
-  control: Control<IFormValues>;
+  control: Control<IFormValues | any>;
   name: string;
   placeholder: string;
   label?: string;
@@ -31,7 +31,6 @@ export default function InputField({
   const coppyType = type;
 
   const customOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Use the context value directly inside customOnChange
     if (e.target.name !== 'confirmPassword') {
       valueContext.setSenderInfo(name)(e);
     }
@@ -42,8 +41,6 @@ export default function InputField({
       control={control}
       name={name}
       render={({ field }) => {
-        // console.log(`${field.name}: ${field.value}`);
-
         return (
           <div className="flex flex-col gap-2">
             {label && (

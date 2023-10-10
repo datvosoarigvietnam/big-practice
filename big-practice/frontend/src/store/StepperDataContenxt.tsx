@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-interface IInfor {
+export interface IInfor {
   name: {
     adminName: string;
     schoolName: string;
