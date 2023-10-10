@@ -1,17 +1,37 @@
 // @ts-nocheck
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import StepperCustom from '@/components/Stepper';
 import { LabelContext } from '@/store/StepperDataContenxt';
+import { info } from 'console';
 export default function ChoosePassword() {
-  const { control, handleSubmit, watch, formState: { errors }, setError } = useForm({});
-  const { nextPage } = useContext(LabelContext)
-  const password = watch("password");
-  const confirmPassword = watch("confirmPassword");
+  const { infor, nextPage } = useContext(LabelContext);
+
+  const defaultValues = useMemo(() => {
+    const values = {
+      password: '',
+    };
+    if (infor.password !== '') {
+      values.password = infor.password;
+    }
+
+    return values;
+  }, [infor.password]);
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setError,
+  } = useForm({
+    defaultValues,
+  });
+  const password = watch('password');
+  const confirmPassword = watch('confirmPassword');
 
   const onSubmit = () => {
     if (password === confirmPassword) {
@@ -19,12 +39,12 @@ export default function ChoosePassword() {
       nextPage();
     } else {
       // Passwords don't match, set an error for confirmPassword field
-      setError("confirmPassword", {
-        type: "manual",
-        message: "Passwords do not match"
+      setError('confirmPassword', {
+        type: 'manual',
+        message: 'Passwords do not match',
       });
     }
-  }
+  };
 
   return (
     <div>
@@ -43,6 +63,7 @@ export default function ChoosePassword() {
                     placeholder="Enter your password"
                     type="password"
                     label="Choose a password"
+                    value={infor.password}
                   />
                 </div>
                 <div className="pl-[10px] pr-[10px] md:p-0">
@@ -54,7 +75,11 @@ export default function ChoosePassword() {
                     label="Confirm password"
                   />
                 </div>
-                {errors.confirmPassword && <span className="text-red-500">{errors.confirmPassword.message}</span>}
+                {errors.confirmPassword && (
+                  <span className="text-red-500">
+                    {errors.confirmPassword.message}
+                  </span>
+                )}
                 <div className="mt-[30px] px-[10px] md:px-[0]">
                   <Button title="Next" />
                 </div>

@@ -11,6 +11,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   placeholder: string;
   label?: string;
+  value?: string;
 }
 
 export default function InputField({
@@ -19,10 +20,11 @@ export default function InputField({
   placeholder,
   type,
   label,
+  value,
   ...props
 }: IProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const value = useContext(LabelContext);
+  const valueContext = useContext(LabelContext);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -30,7 +32,9 @@ export default function InputField({
 
   const customOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Use the context value directly inside customOnChange
-    value.setSenderInfo(name)(e);
+    if (e.target.name !== 'confirmPassword') {
+      valueContext.setSenderInfo(name)(e);
+    }
   };
 
   return (
@@ -64,6 +68,7 @@ export default function InputField({
                       : 'password'
                     : type
                 }
+                value={value}
                 onChange={(e) => {
                   field.onChange(e);
                   customOnChange(e); // Call your custom onChange logic

@@ -37,20 +37,20 @@ interface LabelContextProps {
   prevPage: () => void;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
-  handleChange: (name: string) => (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (name: string) => (e: ChangeEvent<HTMLSelectElement>) => void;
   setSenderInfo: (name: string) => (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 // Define initial context state
 const defaultValuesContext: LabelContextProps = {
   infor: defaultvalues,
-  setInfor: () => { },
-  nextPage: () => { },
-  prevPage: () => { },
+  setInfor: () => {},
+  nextPage: () => {},
+  prevPage: () => {},
   page: 0,
-  setPage: () => { },
-  handleChange: (name: string) => (e: ChangeEvent<HTMLInputElement>) => { },
-  setSenderInfo: (name: string) => (e: ChangeEvent<HTMLInputElement>) => { },
+  setPage: () => {},
+  handleChange: (name: string) => (e: ChangeEvent<HTMLSelectElement>) => {},
+  setSenderInfo: (name: string) => (e: ChangeEvent<HTMLInputElement>) => {},
 };
 
 export const LabelContext = createContext(defaultValuesContext);
@@ -63,27 +63,27 @@ export const LabelProvider = (props: IProps) => {
   const prevPage = () => {
     setPage(page - 1);
   };
-  const handleChange = (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    setInfor({ ...infor, [name]: e.target.value });
-  };
+  const handleChange =
+    (name: string) => (e: ChangeEvent<HTMLSelectElement>) => {
+      console.log('Heare');
+
+      setInfor({ ...infor, [name]: e.target.value });
+    };
   const setSenderInfo =
     (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
-
       if (name === 'password') {
         setInfor({
           ...infor,
-          [name]: event.target.value
-        })
-      }
-      else {
+          [name]: event.target.value,
+        });
+      } else {
         setInfor({
           ...infor,
           name: { ...infor.name, [name]: event.target.value },
         });
       }
     };
-  console.log("page", page)
-  console.log("inFor", infor)
+  console.log('inFor', infor);
   return (
     <LabelContext.Provider
       value={{
