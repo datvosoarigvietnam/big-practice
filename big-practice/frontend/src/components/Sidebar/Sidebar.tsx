@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import avatar from '@/common/imgs/avatar.svg';
-import homeIcon from '@/common/icons/home-2.svg';
-import studentIcon from '@/common/icons/studentIcon.svg';
 import billIcon from '@/common/icons/billIcon.svg';
-import settingIcon from '@/common/icons/settingIcon.svg';
 import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
+import homeIcon from '@/common/icons/home-2.svg';
+import settingIcon from '@/common/icons/settingIcon.svg';
+import studentIcon from '@/common/icons/studentIcon.svg';
+import avatar from '@/common/imgs/avatar.svg';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 export default function Sidebar() {
-  const { pathname } = useRouter()
+  const { pathname } = useRouter();
   const lastPathSegment = pathname.split('/').pop();
-  const [activeTab, setActiveTab] = useState(lastPathSegment || "Dashboard");
+  const [activeTab, setActiveTab] = useState(lastPathSegment || 'Dashboard');
   const menuList = [
     { icon: homeIcon, title: 'Dashboard', href: '/admin/dashboard' },
     { icon: homeIcon, title: 'Teachers', href: '/admin/teachers' },
@@ -28,9 +28,8 @@ export default function Sidebar() {
     { icon: examIcon, title: 'Exams', href: '/admin/exams' },
   ];
   const handleActiveTab = (title: string) => {
-    setActiveTab(title)
-  }
-
+    setActiveTab(title);
+  };
 
   return (
     <div className="hidden md:block w-[240px] h-[100vh] bg-[#152259]">
@@ -47,13 +46,16 @@ export default function Sidebar() {
         {/* Menu */}
         <div className="flex flex-col justify-center items-center pt-[4] px-3">
           <ul className="flex flex-col gap-2 ">
-            {menuList.map((menuItem, index) => {
+            {menuList.map((menuItem) => {
               return (
                 <li
                   key={menuItem.title}
                   // className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
-                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${activeTab.toLowerCase() === menuItem.title.toLowerCase() ? 'bg-[#509CDB]' : ''
-                    }`}
+                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${
+                    activeTab.toLowerCase() === menuItem.title.toLowerCase()
+                      ? 'bg-[#509CDB]'
+                      : ''
+                  }`}
                 >
                   <Link
                     href={menuItem.href}

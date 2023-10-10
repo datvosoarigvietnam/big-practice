@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import Button from '@/components/Button';
-import InputField from '@/components/InputField';
 import { useForm } from 'react-hook-form';
 import { useContext } from 'react';
+
+import Button from '@/components/Button';
+import InputField from '@/components/InputField';
 import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 import StepperCustom from '@/components/Stepper';
 

@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 import Button from '@/components/Button';
 import SelectedField from '@/components/SelectedField';
 import StepperCustom from '@/components/Stepper';
-import axios from 'axios';
-import { LabelContext } from '@/store/StepperDataContenxt';
+import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 export default function ChooseStaffs() {
   const { control, handleSubmit } = useForm({});
   const { infor, nextPage } = useContext(LabelContext);
@@ -16,7 +16,7 @@ export default function ChooseStaffs() {
     try {
       const res = await axios.get('https://provinces.open-api.vn/api/?depth=1');
       console.log(res.data);
-      const option = res.data.map((item: any) => item.name);
+      const option = res.data.map((item: IInfor) => item.name);
       setOptions(option);
     } catch (error) {
       throw error;

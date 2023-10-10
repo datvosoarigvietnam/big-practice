@@ -1,12 +1,11 @@
 import Image from 'next/image';
 
-import { NextPageWithLayout } from '@/models/common';
-import { MainLayout } from '@/components/layout';
-import bellIcon from '@/common/icons/bell-notifi-icon.svg';
-import addStudentIcon from '@/common/icons/addStudentIcon.svg';
 import addProfileIcon from '@/common/icons/addProfileIcon.svg';
-import addAddressIcon from '@/common/icons/addressIcon.svg';
+import addStudentIcon from '@/common/icons/addStudentIcon.svg';
+import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import Button from '@/components/Button';
+import { MainLayout } from '@/components/layout';
+import { NextPageWithLayout } from '@/models/common';
 const DashBoard: NextPageWithLayout = () => {
   return (
     <div className="flex-1">

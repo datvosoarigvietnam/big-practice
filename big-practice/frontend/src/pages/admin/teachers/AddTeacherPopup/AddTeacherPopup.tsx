@@ -12,7 +12,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({ onClose }) => {
   const { control, watch } = useForm();
   console.log('Data', watch());
 
-  const [formData, setFormData] = useState({
+  const [formData] = useState({
     designation: '',
     fullName: '',
     email: '',

@@ -6,7 +6,7 @@ export interface ILayoutProps {
   children: ReactNode;
 }
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = unknown, IP = P> = NextPage<P, IP> & {
   Layout?: (page: ILayoutProps) => ReactNode;
 };
 

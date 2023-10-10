@@ -49,8 +49,8 @@ const defaultValuesContext: LabelContextProps = {
   prevPage: () => {},
   page: 0,
   setPage: () => {},
-  handleChange: (name: string) => (e: ChangeEvent<HTMLSelectElement>) => {},
-  setSenderInfo: (name: string) => (e: ChangeEvent<HTMLInputElement>) => {},
+  handleChange: () => () => {},
+  setSenderInfo: () => () => {},
 };
 
 export const LabelContext = createContext(defaultValuesContext);

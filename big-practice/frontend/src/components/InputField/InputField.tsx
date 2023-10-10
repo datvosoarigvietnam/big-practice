@@ -1,10 +1,10 @@
 import { ChangeEvent, InputHTMLAttributes, useContext, useState } from 'react';
-import { Control, Controller, FieldValues } from 'react-hook-form';
+import { Control, Controller } from 'react-hook-form';
 
 import eyeClose from '@/common/icons/eye_close';
 import eyeOpen from '@/common/icons/eye_open';
-import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 import { IFormValues } from '@/pages/signup/create-account';
+import { LabelContext } from '@/store/StepperDataContenxt';
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   control: Control<IFormValues | any>;
