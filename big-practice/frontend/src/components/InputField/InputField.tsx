@@ -1,6 +1,10 @@
-import { ChangeEvent, InputHTMLAttributes, useContext, useState } from 'react';
+import React, {
+  ChangeEvent,
+  InputHTMLAttributes,
+  useContext,
+  useState,
+} from 'react';
 import { Control, Controller } from 'react-hook-form';
-
 import eyeClose from '@/common/icons/eye_close';
 import eyeOpen from '@/common/icons/eye_open';
 import { IFormValues } from '@/pages/signup/create-account';
@@ -28,7 +32,6 @@ export default function InputField({
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-  const coppyType = type;
 
   const customOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name !== 'confirmPassword') {
@@ -56,7 +59,7 @@ export default function InputField({
               {...props}
               {...field}
               placeholder={placeholder}
-              className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px]  font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
+              className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px] font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
               type={
                 type === 'password'
                   ? isPasswordVisible
@@ -64,49 +67,22 @@ export default function InputField({
                     : 'password'
                   : type
               }
+              onChange={(e) => {
+                field.onChange(e);
+                customOnChange(e);
+              }}
             />
-            {coppyType === 'password' ? (
+            {type === 'password' && (
               <div
                 className="absolute right-[15px] top-[30%] cursor-pointer z-50"
                 onClick={togglePasswordVisibility}
               >
-                {label}
-              </label>
+                {isPasswordVisible ? eyeOpen : eyeClose}
+              </div>
             )}
-            <div className="relative cursor-pointer">
-              <input
-                id={name}
-                {...props}
-                {...field}
-                placeholder={placeholder}
-                className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px]  font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
-                type={
-                  type === 'password'
-                    ? isPasswordVisible
-                      ? 'text'
-                      : 'password'
-                    : type
-                }
-                value={value}
-                onChange={(e) => {
-                  field.onChange(e);
-                  customOnChange(e); // Call your custom onChange logic
-                }}
-              />
-              {coppyType === 'password' ? (
-                <div
-                  className="absolute right-[15px] top-[30%] cursor-pointer z-50"
-                  onClick={togglePasswordVisibility}
-                >
-                  {isPasswordVisible ? eyeOpen : eyeClose}
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
           </div>
-        );
-      }}
+        </div>
+      )}
     />
   );
 }
