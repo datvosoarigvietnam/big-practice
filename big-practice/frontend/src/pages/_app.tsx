@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { SignupLayout } from '@/components/layout';
 import { AppPropsWithLayout } from '@/models/common';
+import { LabelProvider } from '@/store/StepperDataContenxt';
 
 const queryClient = new QueryClient();
 
@@ -14,9 +15,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <LabelProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </LabelProvider>
       </MantineProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>

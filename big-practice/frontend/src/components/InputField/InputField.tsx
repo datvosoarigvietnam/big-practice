@@ -1,14 +1,17 @@
-import React, { InputHTMLAttributes, useState } from 'react';
-import { Control, FieldValues, Controller } from 'react-hook-form';
+import { ChangeEvent, InputHTMLAttributes, useContext, useState } from 'react';
+import { Control, Controller } from 'react-hook-form';
 
 import eyeClose from '@/common/icons/eye_close';
 import eyeOpen from '@/common/icons/eye_open';
+import { IFormValues } from '@/pages/signup/create-account';
+import { LabelContext } from '@/store/StepperDataContenxt';
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
-  control: Control<FieldValues, any>;
+  control: Control<IFormValues | any>;
   name: string;
   placeholder: string;
   label?: string;
+  value?: string;
 }
 
 export default function InputField({
@@ -17,14 +20,22 @@ export default function InputField({
   placeholder,
   type,
   label,
+  value,
   ...props
 }: IProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const valueContext = useContext(LabelContext);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
   const coppyType = type;
+
+  const customOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.name !== 'confirmPassword') {
+      valueContext.setSenderInfo(name)(e);
+    }
+  };
+
   return (
     <Controller
       control={control}
@@ -59,14 +70,43 @@ export default function InputField({
                 className="absolute right-[15px] top-[30%] cursor-pointer z-50"
                 onClick={togglePasswordVisibility}
               >
-                {isPasswordVisible ? eyeOpen : eyeClose}
-              </div>
-            ) : (
-              <></>
+                {label}
+              </label>
             )}
+            <div className="relative cursor-pointer">
+              <input
+                id={name}
+                {...props}
+                {...field}
+                placeholder={placeholder}
+                className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px]  font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
+                type={
+                  type === 'password'
+                    ? isPasswordVisible
+                      ? 'text'
+                      : 'password'
+                    : type
+                }
+                value={value}
+                onChange={(e) => {
+                  field.onChange(e);
+                  customOnChange(e); // Call your custom onChange logic
+                }}
+              />
+              {coppyType === 'password' ? (
+                <div
+                  className="absolute right-[15px] top-[30%] cursor-pointer z-50"
+                  onClick={togglePasswordVisibility}
+                >
+                  {isPasswordVisible ? eyeOpen : eyeClose}
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      }}
     />
   );
 }

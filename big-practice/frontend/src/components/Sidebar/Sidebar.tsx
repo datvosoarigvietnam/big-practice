@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import avatar from '@/common/imgs/avatar.svg';
-import homeIcon from '@/common/icons/home-2.svg';
-import studentIcon from '@/common/icons/studentIcon.svg';
 import billIcon from '@/common/icons/billIcon.svg';
-import settingIcon from '@/common/icons/settingIcon.svg';
 import examIcon from '@/common/icons/examIcon.svg';
 import featureIcon from '@/common/icons/featureIcon.svg';
+import homeIcon from '@/common/icons/home-2.svg';
+import settingIcon from '@/common/icons/settingIcon.svg';
+import studentIcon from '@/common/icons/studentIcon.svg';
+import avatar from '@/common/imgs/avatar.svg';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 export default function Sidebar() {
   const { pathname } = useRouter();
@@ -46,7 +46,7 @@ export default function Sidebar() {
         {/* Menu */}
         <div className="flex flex-col justify-center items-center pt-[4] px-3">
           <ul className="flex flex-col gap-2 ">
-            {menuList.map((menuItem, index) => {
+            {menuList.map((menuItem) => {
               return (
                 <li
                   key={menuItem.title}
