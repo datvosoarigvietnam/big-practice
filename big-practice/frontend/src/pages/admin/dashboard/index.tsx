@@ -1,12 +1,11 @@
 import Image from 'next/image';
 
-import { NextPageWithLayout } from '@/models/common';
-import { MainLayout } from '@/components/layout';
-import bellIcon from '@/common/icons/bell-notifi-icon.svg';
-import addStudentIcon from '@/common/icons/addStudentIcon.svg';
 import addProfileIcon from '@/common/icons/addProfileIcon.svg';
-import addAddressIcon from '@/common/icons/addressIcon.svg';
+import addStudentIcon from '@/common/icons/addStudentIcon.svg';
+import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import Button from '@/components/Button';
+import { MainLayout } from '@/components/layout';
+import { NextPageWithLayout } from '@/models/common';
 const DashBoard: NextPageWithLayout = () => {
   return (
     <div className="flex-1">
@@ -35,7 +34,7 @@ const DashBoard: NextPageWithLayout = () => {
       </div>
       {/* Body */}
       <div className="mt-14 pl-10 pr-10  lg:pl-20 lg:pr-12 xl:pl-32 xl:pr-32 ">
-        <h1 className="font-kumbh-sans text-base text-center md:text-center  font-bold md:font-semibold md:text-2xl lg:text-4xl lg:text-left">
+        <h1 className="font-kumbh-sans text-base text-center md:text-center  font-bold md:font-semibold md:text-2xl lg:text-4xl lg:text-left text-[#4F4F4F]">
           Welcome to your dashboard, Udemy school
         </h1>
         <p className="mt-6 text-[#4F4F4F] font-kumbh-sans font-semibold pl-2 text-center md:pl-20 md:text-center md:text-2xl lg:pl-20 lg:text-left ">

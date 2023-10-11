@@ -8,8 +8,9 @@ import Button from '@/components/Button';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
 import AddTeacherPopup from './AddTeacherPopup';
-import TableV2, { IStudent } from '@/components/Table/TableV2';
+import TableV2 from '@/components/Table/TableV2';
 import NotData from '@/components/NotData';
+import { Column } from '@/@types/Table.type';
 
 export interface User {
   id: number;
@@ -19,10 +20,7 @@ export interface User {
   class: string;
   gender: 'Male' | 'Female';
 }
-export interface Column {
-  key: keyof User | keyof IStudent;
-  header: string;
-}
+
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'class', header: 'Class' },
@@ -91,7 +89,7 @@ const users: User[] = [
 ];
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
   };
@@ -99,8 +97,8 @@ const TeacherPage: NextPageWithLayout = () => {
     setShowTeacherPopup(false);
   };
   const handleRowClick = (id: number) => {
-    router.push(`/${router.pathname}/${id}`)
-  }
+    router.push(`/${router.pathname}/${id}`);
+  };
   return (
     <div className="container mx-auto md:px-4 lg:px-20 flex-1">
       {/* Header */}
@@ -159,7 +157,11 @@ const TeacherPage: NextPageWithLayout = () => {
         </div>
       </div> */}
       {/* <TableV2 columns={columns} data={users} /> */}
-      {users.length ? <TableV2 columns={columns} data={users} onRowClick={handleRowClick} /> : <NotData />}
+      {users.length ? (
+        <TableV2 columns={columns} data={users} onRowClick={handleRowClick} />
+      ) : (
+        <NotData />
+      )}
       {showTeacherPopup && <AddTeacherPopup onClose={handleClosePopup} />}
     </div>
   );

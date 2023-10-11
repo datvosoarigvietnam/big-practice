@@ -10,9 +10,9 @@ const eyeOpen = (
   >
     <g
       stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
     >
       <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
       <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z" />
