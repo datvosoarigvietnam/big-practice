@@ -1,9 +1,10 @@
 import express from 'express'
-import { loginController } from '~/controllers/users.controllers'
-import { testLogin } from '~/middlewares/login.middlewares'
+import { loginController, registerController } from '~/controllers/admin.controllers'
+import { registerValidator, testLogin } from '~/middlewares/login.middlewares'
 
 const adminRouter = express.Router()
 
 adminRouter.get('/', testLogin, loginController)
+adminRouter.post('/', registerValidator, registerController)
 
 export default adminRouter
