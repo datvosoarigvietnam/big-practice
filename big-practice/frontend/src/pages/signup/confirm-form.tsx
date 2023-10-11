@@ -12,7 +12,7 @@ export default function ConfirmForm() {
   const { infor } = useContext(LabelContext);
 
   const onSubmit = () => {
-    console.log(infor);
+    // console.log(infor);
   };
 
   return (

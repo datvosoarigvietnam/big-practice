@@ -67,6 +67,7 @@ export default function InputField({
                     : 'password'
                   : type
               }
+              value={value}
               onChange={(e) => {
                 field.onChange(e);
                 customOnChange(e);

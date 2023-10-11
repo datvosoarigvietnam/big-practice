@@ -5,6 +5,7 @@ import { Control, FieldValues, useForm } from 'react-hook-form';
 import InputField from '@/components/InputField';
 import Button from '@/components/Button';
 import { LabelContext } from '@/store/StepperDataContenxt';
+import axios from 'axios';
 export interface IFormValues extends FieldValues {
   adminName: string;
   schoolName: string;
@@ -49,7 +50,7 @@ export default function CreateAccount() {
   //     value.infor.name.schoolName.length > 0
   //   );
   // }, [valueContenxt]);
-  const onSubmit = (values: IFormValues) => {
+  const onSubmit = async (values: IFormValues) => {
     if (values.adminName === '') {
       setError('adminName', {
         type: 'required',
@@ -65,8 +66,16 @@ export default function CreateAccount() {
         type: 'required',
         message: 'This field is required',
       });
-    } else {
-      valueContenxt.nextPage();
+    }
+    try {
+      const checkEmail = await axios.post('http://localhost:8080/admin/checkemail', { emailSchool: valueContenxt.infor.name.emailSchool })
+      if (checkEmail.status === 200) {
+        valueContenxt.nextPage()
+      }
+    } catch (error) {
+      setError("emailSchool", {
+        message: "Email already exists"
+      })
     }
   };
   return (
