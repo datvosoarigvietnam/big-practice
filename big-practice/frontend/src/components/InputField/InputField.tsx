@@ -40,13 +40,35 @@ export default function InputField({
     <Controller
       control={control}
       name={name}
-      render={({ field }) => {
-        return (
-          <div className="flex flex-col gap-2">
-            {label && (
-              <label
-                htmlFor={name}
-                className="font-kumbh-sans text-[#667085] leading-6 font-normal -tracking-tighter "
+      render={({ field }) => (
+        <div className="flex flex-col gap-2">
+          {label && (
+            <label
+              htmlFor={name}
+              className="font-kumbh-sans text-[#667085] leading-6 font-normal -tracking-tighter "
+            >
+              {label}
+            </label>
+          )}
+          <div className="relative cursor-pointer inline-block">
+            <input
+              id={name}
+              {...props}
+              {...field}
+              placeholder={placeholder}
+              className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px]  font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
+              type={
+                type === 'password'
+                  ? isPasswordVisible
+                    ? 'text'
+                    : 'password'
+                  : type
+              }
+            />
+            {coppyType === 'password' ? (
+              <div
+                className="absolute right-[15px] top-[30%] cursor-pointer z-50"
+                onClick={togglePasswordVisibility}
               >
                 {label}
               </label>

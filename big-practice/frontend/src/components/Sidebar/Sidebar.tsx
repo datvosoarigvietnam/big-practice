@@ -18,7 +18,7 @@ export default function Sidebar() {
   const menuList = [
     { icon: homeIcon, title: 'Dashboard', href: '/admin/dashboard' },
     { icon: homeIcon, title: 'Teachers', href: '/admin/teachers' },
-    { icon: studentIcon, title: 'Students/ classes', href: '/admin/students' },
+    { icon: studentIcon, title: 'Students', href: '/admin/students' },
     { icon: billIcon, title: 'Billing', href: '/admin/billing' },
     {
       icon: settingIcon,
