@@ -30,10 +30,13 @@ export class AdminService {
         number_staff: parseInt(numberOfStaff)
       })
     )
-    // return true
-    console.log('result in admin service', result)
-
     return result
+  }
+  async checkEmailExist(email: string) {
+    console.log('email', email)
+    const user = await databaseService.admin.findOne({ school_email: email })
+    console.log('user', user)
+    return Boolean(user)
   }
 }
 const adminService = new AdminService()

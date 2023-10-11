@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import adminService from '~/services/admin.services'
-import { registerValidator } from '~/middlewares/login.middlewares'
+import { registerValidator } from '~/middlewares/register.middlewares'
 
 export const registerController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -18,8 +18,6 @@ export const registerController = async (req: Request, res: Response, next: Next
       schoolAddress
     })
 
-    console.log('check', result)
-
     return res.json({
       message: 'Register Success',
       data: result
@@ -30,4 +28,9 @@ export const registerController = async (req: Request, res: Response, next: Next
       message: 'Register Error'
     })
   }
+}
+export const checkemailController = (req: Request, res: Response) => {
+  return res.json({
+    message: 'Email is already'
+  })
 }
