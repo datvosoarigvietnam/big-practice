@@ -10,9 +10,10 @@ import finIcon from '@/common/icons/findIcon.svg';
 import avatarIcon from '@/common/icons/avatar.png';
 import studentIcon from '@/common/icons/studentIcon.svg';
 import AvatarList from '@/components/AvatarList';
-const TeacherDetail: NextPageWithLayout = () => {
+
+const StudentDetails: NextPageWithLayout = () => {
   const router = useRouter();
-  console.log('Teacher Id', router.query.teacherId);
+  console.log('StudentId', router.query.studentId);
   return (
     <div className="w-full px-5 md:px-10 flex-1">
       <div className="pt-5 flex flex-col-reverse justify-between items-center md:flex-row">
@@ -22,7 +23,7 @@ const TeacherDetail: NextPageWithLayout = () => {
             className="w-32 h-10 rounded-lg font-kumbh-sans"
           />
           <Button
-            title="Add Teachers"
+            title="Add Students"
             className="w-32 h-10 rounded-lg font-kumbh-sans"
           />
         </div>
@@ -124,7 +125,7 @@ const TeacherDetail: NextPageWithLayout = () => {
           </div>
           <div className="pb-6 sm:pb-0 mt-4 text-center">
             <h4 className="text-[#1A1A1A] text-xs font-semibold">
-              Teachers from the same class
+              People from the same class
             </h4>
             <AvatarList />
           </div>
@@ -134,6 +135,6 @@ const TeacherDetail: NextPageWithLayout = () => {
   );
 };
 
-TeacherDetail.Layout = MainLayout;
+StudentDetails.Layout = MainLayout;
 
-export default TeacherDetail;
+export default StudentDetails;
