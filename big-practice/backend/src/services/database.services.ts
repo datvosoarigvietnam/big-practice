@@ -20,7 +20,7 @@ class DatabaseService {
       console.log('Pinged your deployment. You successfully connected to MongoDB!')
     } catch {
       // Ensures that the client will close when you finish/error
-      await this.client.close()
+      // await this.client.close()
     }
   }
   get admin(): Collection<IAdmin> {

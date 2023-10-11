@@ -1,5 +1,5 @@
 import express from 'express'
-import { body, validationResult, ValidationChain } from 'express-validator'
+import { ValidationChain, validationResult } from 'express-validator'
 import { RunnableValidationChains } from 'express-validator/src/middlewares/schema'
 // can be reused by many routes
 
@@ -13,7 +13,6 @@ export const validate = (validation: RunnableValidationChains<ValidationChain>) 
     if (errors.isEmpty()) {
       return next()
     }
-
     res.status(400).json({ errors: errors.mapped() })
   }
 }

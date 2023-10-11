@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import adminRouter from './routes/admin.router'
+import adminRouter from './routes/admin.routers'
 import databaseService from './services/database.services'
 
 const app = express()
@@ -14,6 +14,7 @@ app.use(
 app.use(bodyParser.json())
 
 app.use('/admin', adminRouter)
+
 app.get('/', (req, res) => {
   res.send('asdasdasdsd')
 })

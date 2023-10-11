@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { checkSchema } from 'express-validator'
+import adminService from '~/services/admin.services'
 import databaseService from '~/services/database.services'
 import { validate } from '~/utils/validation'
 
@@ -13,33 +14,51 @@ export const testLogin = (req: Request, res: Response, next: NextFunction) => {
   }
   next()
 }
+
 export const registerValidator = validate(
   checkSchema({
-    email: {
-      notEmpty: true,
-      trim: true,
-      isEmail: true,
-      errorMessage: 'Invalid Email',
+    'name.adminName': {
+      notEmpty: {
+        errorMessage: 'Admin Name is required'
+      }
+    },
+    'name.emailSchool': {
+      isEmail: {
+        errorMessage: 'Invalid Email'
+      },
       custom: {
-        options: (value) => {
+        options: async (value) => {
           return databaseService.admin.findOne({ school_email: value }).then((user) => {
             if (user) {
+              console.log('Is Here??')
               return Promise.reject('Email already in use')
             }
           })
         }
       }
     },
+    'name.schoolName': {
+      notEmpty: {
+        errorMessage: 'School Name is required'
+      }
+    },
+    numberOfStaff: {
+      isNumeric: {
+        errorMessage: 'Number of Staff must be numeric'
+      }
+    },
     password: {
       notEmpty: {
-        errorMessage: 'Password field is required!'
+        errorMessage: 'Password is required'
       },
       isLength: {
-        options: {
-          min: 6,
-          max: 20
-        },
-        errorMessage: 'Min,Max length are 6,20'
+        options: { min: 6, max: 20 },
+        errorMessage: 'Password must be between 6 and 20 characters'
+      }
+    },
+    schoolAddress: {
+      notEmpty: {
+        errorMessage: 'School Address is required'
       }
     }
   })
