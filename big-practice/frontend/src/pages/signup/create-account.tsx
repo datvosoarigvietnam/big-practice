@@ -6,6 +6,9 @@ import InputField from '@/components/InputField';
 import Button from '@/components/Button';
 import { LabelContext } from '@/store/StepperDataContenxt';
 import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import adminApi from '@/apis/admin.api';
+import Spinner from '@/components/Spinner';
 export interface IFormValues extends FieldValues {
   adminName: string;
   schoolName: string;
@@ -34,6 +37,9 @@ export default function CreateAccount() {
     valueContenxt.infor.name.emailSchool,
     valueContenxt.infor.name.schoolName,
   ]);
+  const checkEmail = useMutation({
+    mutationFn: (email: string) => adminApi.checkEmail(email),
+  });
 
   const {
     control,
@@ -68,14 +74,27 @@ export default function CreateAccount() {
       });
     }
     try {
-      const checkEmail = await axios.post('http://localhost:8080/admin/checkemail', { emailSchool: valueContenxt.infor.name.emailSchool })
-      if (checkEmail.status === 200) {
-        valueContenxt.nextPage()
-      }
+      // const checkEmail = await axios.post(
+      //   'http://localhost:8080/admin/checkemail',
+      //   { emailSchool: valueContenxt.infor.name.emailSchool },
+      // );
+      // if (checkEmail.status === 200) {
+      //   valueContenxt.nextPage();
+      // }
+      checkEmail.mutate(values.emailSchool, {
+        onSuccess: () => {
+          valueContenxt.nextPage();
+        },
+        onError: () => {
+          setError('emailSchool', {
+            message: 'Email already exists',
+          });
+        },
+      });
     } catch (error) {
-      setError("emailSchool", {
-        message: "Email already exists"
-      })
+      // setError('emailSchool', {
+      //   message: 'Email already exists',
+      // });
     }
   };
   return (
@@ -114,7 +133,7 @@ export default function CreateAccount() {
                   value={valueContenxt.infor.name.schoolName}
                 />
                 {errors.schoolName?.message && (
-                  <p className="text-red-500 text-center">
+                  <p className="text-red-500 text-center ">
                     {errors.schoolName?.message}
                   </p>
                 )}
@@ -152,6 +171,7 @@ export default function CreateAccount() {
           </p>
         </div>
       </div>
+      {checkEmail.isLoading && <Spinner />}
     </div>
   );
 }

@@ -6,13 +6,27 @@ import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 import StepperCustom from '@/components/Stepper';
+import { useMutation } from '@tanstack/react-query';
+import adminApi from '@/apis/admin.api';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import Spinner from '@/components/Spinner';
 
 export default function ConfirmForm() {
   const { control, handleSubmit } = useForm<IInfor>();
   const { infor } = useContext(LabelContext);
-
+  const router = useRouter();
+  const registerMutation = useMutation({
+    mutationFn: (infor: IInfor) => adminApi.register(infor),
+  });
   const onSubmit = () => {
     // console.log(infor);
+    registerMutation.mutate(infor, {
+      onSuccess: () => {
+        toast.success('Register Success!');
+        router.push('/signin');
+      },
+    });
   };
 
   return (
@@ -131,6 +145,7 @@ export default function ConfirmForm() {
       <div className="container mx-auto mt-[110px]">
         <StepperCustom />
       </div>
+      {registerMutation.isLoading && <Spinner />}
     </div>
   );
 }
