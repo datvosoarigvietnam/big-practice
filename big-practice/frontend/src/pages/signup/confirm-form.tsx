@@ -6,13 +6,31 @@ import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 import StepperCustom from '@/components/Stepper';
+import axios from 'axios';
 
 export default function ConfirmForm() {
   const { control, handleSubmit } = useForm<IInfor>();
   const { infor } = useContext(LabelContext);
 
-  const onSubmit = () => {
-    console.log(infor);
+  const onSubmit = async () => {
+    try {
+      const result = await axios.post('http://localhost:8080/admin', infor);
+      if (result.data) {
+        console.log('Register sucesss');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const registerAmin = async () => {
+    try {
+      const result = await axios.post('http://localhost:8080/admin', infor);
+      if (result.data) {
+        console.log('Register sucesss');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
