@@ -1,5 +1,6 @@
 import { MongoClient, Db, Collection } from 'mongodb'
 import { IAdmin } from '~/models/schemas/Admin.schema'
+import { IRefreshToken } from '~/models/schemas/RefreshToken.schema'
 import { ITeacher } from '~/models/schemas/Teacher.schema'
 const uri = 'mongodb+srv://datvodat288:chamlohochanh123@bigpractice.ywve0xf.mongodb.net/?retryWrites=true&w=majority'
 
@@ -23,6 +24,9 @@ class DatabaseService {
   }
   get admin(): Collection<IAdmin> {
     return this.db.collection('admin')
+  }
+  get refreshToken(): Collection<IRefreshToken> {
+    return this.db.collection('refresh_token')
   }
 }
 const databaseService = new DatabaseService()

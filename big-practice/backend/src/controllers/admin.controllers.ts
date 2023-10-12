@@ -30,3 +30,15 @@ export const checkemailController = (req: Request, res: Response) => {
     message: 'Email is already'
   })
 }
+
+export const loginController = async (req: Request, res: Response) => {
+  const { user } = req as any
+  // console.log('user', user)
+  const result = await adminService.login(user._id)
+  console.log('result', result)
+
+  return res.json({
+    message: 'Login Success',
+    result
+  })
+}
