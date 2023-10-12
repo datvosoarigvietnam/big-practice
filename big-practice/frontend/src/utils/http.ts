@@ -8,6 +8,7 @@ class Http {
       timeout: 3000,
       headers: {
         'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer'
       },
     })),
       this.instance.interceptors.response.use((response) => {

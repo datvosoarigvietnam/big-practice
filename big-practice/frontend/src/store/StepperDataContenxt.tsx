@@ -65,8 +65,6 @@ export const LabelProvider = (props: IProps) => {
   };
   const handleChange =
     (name: string) => (e: ChangeEvent<HTMLSelectElement>) => {
-      console.log('Heare');
-
       setInfor({ ...infor, [name]: e.target.value });
     };
   const setSenderInfo =
@@ -83,7 +81,6 @@ export const LabelProvider = (props: IProps) => {
         });
       }
     };
-  console.log('inFor', infor);
   return (
     <LabelContext.Provider
       value={{

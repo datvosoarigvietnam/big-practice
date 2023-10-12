@@ -6,7 +6,24 @@ import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import Button from '@/components/Button';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 const DashBoard: NextPageWithLayout = () => {
+  const router = useRouter();
+  const handleResetCookies = () => {
+    // Get all cookie keys
+    const cookieKeys = Object.keys(Cookies.get());
+
+    // Remove each cookie by its key
+    cookieKeys.forEach((key) => {
+      Cookies.remove(key);
+    });
+
+    console.log('All cookies have been reset.');
+  };
+
   return (
     <div className="flex-1">
       <div className="bg-[#FCFAFA]   ">
@@ -27,6 +44,18 @@ const DashBoard: NextPageWithLayout = () => {
               <Button
                 title="Log out"
                 className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
+                onClick={async () => {
+                  const result = await axios.post(
+                    'https://9nblpfpj-8000.asse.devtunnels.ms/auth/logout/',
+                  );
+                  if (result.status === 200) {
+                    toast.success('Logout Success');
+                    handleResetCookies();
+                    // window.re
+                    router.push('/signin');
+                    // window.location.reload();
+                  }
+                }}
               />
             </div>
           </div>
