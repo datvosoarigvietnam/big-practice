@@ -12,8 +12,8 @@ export interface ITeacher {
   email: string
   password: string
   gender: EGender
-  class: string[]
-  subject: string
+  class: string
+  subject: string[]
   phone_number: string
 }
 
@@ -23,8 +23,8 @@ class Teacher {
   email: string
   password: string
   gender: EGender
-  class: string[]
-  subject: string
+  class: string
+  subject: string[]
   phone_number: string
   constructor(user: ITeacher) {
     this._id = user._id

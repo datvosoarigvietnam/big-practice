@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import adminService from '~/services/admin.services'
-import { registerValidator } from '~/middlewares/register.middlewares'
 
 export const registerController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -23,10 +22,7 @@ export const registerController = async (req: Request, res: Response, next: Next
       data: result
     })
   } catch (error) {
-    console.error(error)
-    res.status(400).json({
-      message: 'Register Error'
-    })
+    next(error)
   }
 }
 export const checkemailController = (req: Request, res: Response) => {

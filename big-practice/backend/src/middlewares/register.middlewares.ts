@@ -18,7 +18,7 @@ export const registerValidator = validate(
           const result = await adminService.checkEmailExist(value)
           console.log(result)
 
-          if (!result) {
+          if (result) {
             throw new Error('Email already exits')
           }
           return true
