@@ -6,7 +6,8 @@ import { registerValidator, emailValidator } from '~/middlewares/register.middle
 const adminRouter = express.Router()
 
 // adminRouter.get('/', testLogin, loginController)
-adminRouter.post('/register', registerValidator, registerController)
-adminRouter.post('/login', loginValidator, loginController)
+adminRouter.post('/signup', registerValidator, registerController)
+adminRouter.post('/signin', loginValidator, loginController)
 adminRouter.post('/checkemail', emailValidator, checkemailController)
+adminRouter.post('/logout', emailValidator, checkemailController)
 export default adminRouter

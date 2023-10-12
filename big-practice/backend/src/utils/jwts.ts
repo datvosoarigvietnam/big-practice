@@ -20,3 +20,14 @@ export const signToken = ({
     })
   })
 }
+
+export const verifyToken = ({ token, privateKey = '@hihihehe@' }: { token: string; privateKey: string }) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, privateKey, (error, decode) => {
+      if (error) {
+        throw reject(error)
+      }
+      resolve(decode as string)
+    })
+  })
+}
