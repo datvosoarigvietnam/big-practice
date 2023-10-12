@@ -8,6 +8,15 @@ const adminApi = {
   },
   register(infor: IInfor) {
     return http.post(`${URL}`, { ...infor });
+    // return http.post(`https://9nblpfpj-8000.asse.devtunnels.ms/register/`, {
+    //   username: infor.name.adminName,
+    //   email: infor.name.emailSchool,
+    //   name_of_school: infor.name.schoolName,
+    //   password1: infor.password,
+    //   password2: infor.password,
+    //   num_of_staff: infor.numberOfStaff,
+    //   address_of_school: infor.schoolAddress,
+    // });
   },
   // deleteTodo(id: string) {
   //   return http.delete(`${URL}/${id}`)
