@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
 import InputField from '@/components/InputField';
@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import adminApi from '@/apis/admin.api';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import { AppContext } from '@/store/AppContext';
 
 interface ILoginForm {
   emailSchool: string;
@@ -19,12 +20,14 @@ export default function SignIn() {
   const signinMutation = useMutation({
     mutationFn: (values: ILoginForm) => adminApi.login(values),
   });
+  const { setAuthenticated } = useContext(AppContext)
   const onSubmit = (values: ILoginForm) => {
-    console.log('Values', values);
     signinMutation.mutate(values, {
-      onSuccess: () => {
+      onSuccess: (value) => {
+        localStorage.setItem('access_token', value.data?.result.access_token)
+        setAuthenticated(value.data?.result.access_token)
         toast.success('Login Success');
-        router.push('/admin/dashboard');
+        router.replace('/admin/dashboard');
       },
       onError: (error: any) => {
         toast.error(error?.response?.data.errors.emailSchool.msg);

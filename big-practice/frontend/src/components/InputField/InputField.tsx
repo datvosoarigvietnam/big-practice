@@ -59,7 +59,7 @@ export default function InputField({
               {...props}
               {...field}
               placeholder={placeholder}
-              className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px] font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
+              className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px] font-medium text-[#8A8A8A] font-[Kumbh Sans] lg:w-[250px] w-full"
               type={
                 type === 'password'
                   ? isPasswordVisible

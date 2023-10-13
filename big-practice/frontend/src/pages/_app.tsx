@@ -9,6 +9,7 @@ import { AppPropsWithLayout } from '@/models/common';
 import { LabelProvider } from '@/store/StepperDataContenxt';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import AppProvider, { AppContext } from '@/store/AppContext';
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
@@ -16,11 +17,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
-        <LabelProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </LabelProvider>
+        <AppProvider>
+          <LabelProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </LabelProvider>
+        </AppProvider>
         <ToastContainer
           position="top-center"
           autoClose={5000}

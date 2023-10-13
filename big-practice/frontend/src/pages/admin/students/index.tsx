@@ -1,16 +1,15 @@
-import Image from 'next/image';
-import { NextPageWithLayout } from '@/models/common';
-import { MainLayout } from '@/components/layout';
-import { useState } from 'react';
-import Button from '@/components/Button';
+import { Column } from '@/@types/Table.type';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
+import Button from '@/components/Button';
 import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
-import AddStudentPopup from './AddStudentPopup';
-import { Column } from '@/@types/Table.type';
+import { MainLayout } from '@/components/layout';
+import { NextPageWithLayout } from '@/models/common';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import DetailStudent from './[studentId]';
+import { useState } from 'react';
+import AddStudentPopup from './AddStudentPopup';
 
 export interface IStudent {
   id: number;
@@ -79,6 +78,7 @@ const students: IStudent[] = [
 ];
 const StudentPage: NextPageWithLayout = () => {
   const [showStudentPopup, setShowStudentPopup] = useState(false);
+
   const router = useRouter();
   const handleShowPopup = () => {
     setShowStudentPopup(true);
@@ -89,6 +89,7 @@ const StudentPage: NextPageWithLayout = () => {
   const handleRowClick = (id: number) => {
     router.push(`/${router.pathname}/${id}`);
   };
+
   return (
     <div className="container mx-auto md:px-4 lg:px-20 flex-1">
       {/* Header */}

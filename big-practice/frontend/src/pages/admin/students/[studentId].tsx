@@ -1,19 +1,15 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import React from 'react';
 
-import bellIcon from '@/common/icons/bell-notifi-icon.svg';
-import Button from '@/components/Button';
-import { NextPageWithLayout } from '@/models/common';
-import { MainLayout } from '@/components/layout';
-import finIcon from '@/common/icons/findIcon.svg';
 import avatarIcon from '@/common/icons/avatar.png';
+import bellIcon from '@/common/icons/bell-notifi-icon.svg';
+import finIcon from '@/common/icons/findIcon.svg';
 import studentIcon from '@/common/icons/studentIcon.svg';
 import AvatarList from '@/components/AvatarList';
+import Button from '@/components/Button';
+import { MainLayout } from '@/components/layout';
+import { NextPageWithLayout } from '@/models/common';
 
 const StudentDetails: NextPageWithLayout = () => {
-  const router = useRouter();
-  console.log('StudentId', router.query.studentId);
   return (
     <div className="w-full px-5 md:px-10 flex-1">
       <div className="pt-5 flex flex-col-reverse justify-between items-center md:flex-row">
