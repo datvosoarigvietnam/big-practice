@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import Link from 'next/link';
 import { useContext, useMemo } from 'react';
@@ -17,27 +18,25 @@ export default function ChoosePassword() {
     if (infor.password !== '') {
       values.password = infor.password;
     }
+    if (infor.confirmPassword !== '') {
+      values.confirmPassword = infor.confirmPassword;
+    }
 
     return values;
-  }, [infor.password]);
+  }, [infor.password, infor.confirmPassword]);
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
     setError,
   } = useForm({
     defaultValues,
   });
-  const password = watch('password');
-  const confirmPassword = watch('confirmPassword');
 
   const onSubmit = () => {
-    if (password === confirmPassword) {
-      // Passwords match, proceed to the next step
+    if (infor.password === infor.confirmPassword) {
       nextPage();
     } else {
-      // Passwords don't match, set an error for confirmPassword field
       setError('confirmPassword', {
         type: 'manual',
         message: 'Passwords do not match',
@@ -72,6 +71,7 @@ export default function ChoosePassword() {
                     placeholder="Confirm password"
                     type="password"
                     label="Confirm password"
+                    value={infor.confirmPassword}
                   />
                 </div>
                 {errors.confirmPassword && (

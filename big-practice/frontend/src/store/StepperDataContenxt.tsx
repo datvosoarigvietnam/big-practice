@@ -14,6 +14,7 @@ export interface IInfor {
     emailSchool: string;
   };
   password: string;
+  confirmPassword: string;
   schoolAddress: string;
   numberOfStaff: number;
 }
@@ -24,6 +25,7 @@ const defaultvalues: IInfor = {
     schoolName: '',
   },
   password: '',
+  confirmPassword: '',
   numberOfStaff: 0,
   schoolAddress: '',
 };
@@ -69,7 +71,7 @@ export const LabelProvider = (props: IProps) => {
     };
   const setSenderInfo =
     (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      if (name === 'password') {
+      if (name === 'password' || name === 'confirmPassword') {
         setInfor({
           ...infor,
           [name]: event.target.value,

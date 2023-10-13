@@ -6,7 +6,7 @@ import { LabelContext } from '@/store/StepperDataContenxt';
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   options?: any[];
-  control: Control<FieldValues, any>;
+  control: Control<FieldValues>;
   defaultOption?: string | number;
   isFullWith?: boolean;
 }
@@ -32,13 +32,12 @@ export default function SelectedField({
           className={`${
             isFullWith ? 'w-full' : 'w-[250px]'
           } outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans md:w-[250px] `}
-          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-            value.handleChange(name)(e)
-          }
+          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+            field.onChange(e);
+            value.handleChange(name)(e);
+          }}
         >
-          <option value="" selected>
-            {defaultOption}
-          </option>
+          <option value="">{defaultOption}</option>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}

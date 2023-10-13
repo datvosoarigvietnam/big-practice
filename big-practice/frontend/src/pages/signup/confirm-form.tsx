@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useContext } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 import StepperCustom from '@/components/Stepper';
-import { useMutation } from '@tanstack/react-query';
 import adminApi from '@/apis/admin.api';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 import Spinner from '@/components/Spinner';
 
 export default function ConfirmForm() {
@@ -20,11 +20,14 @@ export default function ConfirmForm() {
     mutationFn: (infor: IInfor) => adminApi.register(infor),
   });
   const onSubmit = () => {
-    // console.log(infor);
     registerMutation.mutate(infor, {
       onSuccess: () => {
         toast.success('Register Success!');
         router.push('/signin');
+      },
+      onError: (error: any) => {
+        console.log('error confirm form', error);
+        toast.error(error.response.data.message);
       },
     });
   };

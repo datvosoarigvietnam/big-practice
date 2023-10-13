@@ -1,14 +1,13 @@
+import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { Control, FieldValues, useForm } from 'react-hook-form';
 
-import InputField from '@/components/InputField';
-import Button from '@/components/Button';
-import { LabelContext } from '@/store/StepperDataContenxt';
-import axios from 'axios';
-import { useMutation } from '@tanstack/react-query';
 import adminApi from '@/apis/admin.api';
+import Button from '@/components/Button';
+import InputField from '@/components/InputField';
 import Spinner from '@/components/Spinner';
+import { LabelContext } from '@/store/StepperDataContenxt';
 export interface IFormValues extends FieldValues {
   adminName: string;
   schoolName: string;
@@ -73,29 +72,30 @@ export default function CreateAccount() {
         message: 'This field is required',
       });
     }
-    try {
-      // const checkEmail = await axios.post(
-      //   'http://localhost:8080/admin/checkemail',
-      //   { emailSchool: valueContenxt.infor.name.emailSchool },
-      // );
-      // if (checkEmail.status === 200) {
-      //   valueContenxt.nextPage();
-      // }
-      checkEmail.mutate(values.emailSchool, {
-        onSuccess: () => {
-          valueContenxt.nextPage();
-        },
-        onError: () => {
-          setError('emailSchool', {
-            message: 'Email already exists',
-          });
-        },
-      });
-    } catch (error) {
-      // setError('emailSchool', {
-      //   message: 'Email already exists',
-      // });
-    }
+    valueContenxt.nextPage();
+    // try {
+    //   // const checkEmail = await axios.post(
+    //   //   'http://localhost:8080/admin/checkemail',
+    //   //   { emailSchool: valueContenxt.infor.name.emailSchool },
+    //   // );
+    //   // if (checkEmail.status === 200) {
+    //   //   valueContenxt.nextPage();
+    //   // }
+    //   checkEmail.mutate(values.emailSchool, {
+    //     onSuccess: () => {
+    //       valueContenxt.nextPage();
+    //     },
+    //     onError: () => {
+    //       setError('emailSchool', {
+    //         message: 'Email already exists',
+    //       });
+    //     },
+    //   });
+    // } catch (error) {
+    //   // setError('emailSchool', {
+    //   //   message: 'Email already exists',
+    //   // });
+    // }
   };
   return (
     <div className="pt-[100px] flex justify-center items-center flex-col">
