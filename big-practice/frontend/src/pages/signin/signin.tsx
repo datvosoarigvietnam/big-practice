@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 import InputField from '@/components/InputField';
 import Button from '@/components/Button';
-import { useMutation } from '@tanstack/react-query';
 import adminApi from '@/apis/admin.api';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 import { AppContext } from '@/store/AppContext';
+import Spinner from '@/components/Spinner';
 
 interface ILoginForm {
   emailSchool: string;
@@ -20,17 +21,19 @@ export default function SignIn() {
   const signinMutation = useMutation({
     mutationFn: (values: ILoginForm) => adminApi.login(values),
   });
-  const { setAuthenticated } = useContext(AppContext)
+  const { setAuthenticated } = useContext(AppContext);
   const onSubmit = (values: ILoginForm) => {
     signinMutation.mutate(values, {
       onSuccess: (value) => {
-        localStorage.setItem('access_token', value.data?.result.access_token)
-        setAuthenticated(value.data?.result.access_token)
-        toast.success('Login Success');
+        console.log(value);
+
+        localStorage.setItem('access_token', value.data?.data.accessToken);
+        setAuthenticated(value.data?.data.accessToken);
+        toast.success(value.data.message);
         router.replace('/admin/dashboard');
       },
       onError: (error: any) => {
-        toast.error(error?.response?.data.errors.emailSchool.msg);
+        toast.error(error.response.data.message);
       },
     });
   };
@@ -78,6 +81,7 @@ export default function SignIn() {
           </p>
         </div>
       </div>
+      {signinMutation.isLoading && <Spinner />}
     </div>
   );
 }

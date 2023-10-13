@@ -5,6 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { Control, Controller } from 'react-hook-form';
+
 import eyeClose from '@/common/icons/eye_close';
 import eyeOpen from '@/common/icons/eye_open';
 import { IFormValues } from '@/pages/signup/create-account';
@@ -34,9 +35,9 @@ export default function InputField({
   };
 
   const customOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name !== 'confirmPassword') {
-      valueContext.setSenderInfo(name)(e);
-    }
+    // if (e.target.name !== 'confirmPassword') {
+    valueContext.setSenderInfo(name)(e);
+    // }
   };
 
   return (

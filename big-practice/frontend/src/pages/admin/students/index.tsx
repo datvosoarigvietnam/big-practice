@@ -1,3 +1,7 @@
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+
 import { Column } from '@/@types/Table.type';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
@@ -6,9 +10,6 @@ import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
 import AddStudentPopup from './AddStudentPopup';
 
 export interface IStudent {

@@ -12,8 +12,7 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({ onClose }) => {
   const { control, watch } = useForm();
   console.log('Data', watch());
 
-  const [formData, setFormData] = useState({
-    designation: '',
+  const [formData] = useState({
     fullName: '',
     email: '',
     password: '',
@@ -32,7 +31,7 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({ onClose }) => {
   };
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded shadow-lg pt-10 pb-5 px-3 sm:p-6 md:px-28 lg:py-20">
+      <div className="bg-white rounded shadow-lg pt-10 pb-5 px-3 sm:p-6 md:px-28 lg:py-20 relative">
         <span
           className="text-gray-600 text-2xl cursor-pointer absolute top-2 right-2"
           onClick={handleClose}

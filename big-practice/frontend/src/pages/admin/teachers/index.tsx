@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 
 import { NextPageWithLayout } from '@/models/common';
@@ -11,6 +11,9 @@ import AddTeacherPopup from './AddTeacherPopup';
 import TableV2 from '@/components/Table/TableV2';
 import NotData from '@/components/NotData';
 import { Column } from '@/@types/Table.type';
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import adminApi from '@/apis/admin.api';
 
 export interface User {
   id: number;
@@ -18,7 +21,7 @@ export interface User {
   subject: string;
   email: string;
   class: string;
-  gender: 'Male' | 'Female';
+  gender: 'Male' | 'Female' | 'Other';
 }
 
 const columns: Column[] = [
@@ -29,64 +32,6 @@ const columns: Column[] = [
   { key: 'gender', header: 'Gender' },
 ];
 
-const users: User[] = [
-  {
-    id: 1,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 2,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 3,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 4,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 5,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 6,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 7,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-];
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
   const router = useRouter();
@@ -99,6 +44,33 @@ const TeacherPage: NextPageWithLayout = () => {
   const handleRowClick = (id: number) => {
     router.push(`/${router.pathname}/${id}`);
   };
+  const { data: teacherList } = useQuery({
+    queryKey: ['teachers'],
+    queryFn: () => adminApi.getTeachers(),
+  });
+  const teacherData: User[] = useMemo(() => {
+    return teacherList?.data?.map((item: any) => ({
+      name: item.fullName,
+      class: item.classSchool.name,
+      subject: 'Math',
+      email: item.email,
+      gender: item.gender,
+    }));
+  }, [teacherList]);
+  const { data: classList } = useQuery({
+    queryKey: ['classes'],
+    queryFn: () => adminApi.getClasses(),
+  });
+  const { data: subjectList } = useQuery({
+    queryKey: ['subjects'],
+    queryFn: () => adminApi.getSubjects(),
+  });
+  const classOption = classList?.data?.map(
+    (className: { name: string }) => className.name,
+  );
+  const subjectOption = subjectList?.data.map(
+    (subjectName: { name: string }) => subjectName.name,
+  );
   return (
     <div className="container mx-auto md:px-4 lg:px-20 flex-1">
       {/* Header */}
@@ -106,7 +78,7 @@ const TeacherPage: NextPageWithLayout = () => {
         <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
           <Image src={bellIcon} alt="" />
           <Button
-            title="Log out"
+            title="Logout"
             className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
           />
         </div>
@@ -145,24 +117,22 @@ const TeacherPage: NextPageWithLayout = () => {
           </div>
         </div>
       </div>
-      {/* No data table */}
-      {/* <div className="md:pl-10 mt-8">
-        <div className="w-full h-[420px] bg-gray-200 flex flex-col justify-end items-center gap-1 px-4">
-          <h1 className="text-[#4F4F4F] font-kumbh-sans text-3xl font-semibold">
-            No Teachers at this time
-          </h1>
-          <p className="pb-20 text-sm font-normal">
-            Teachers will appear here after they enroll in your school.
-          </p>
-        </div>
-      </div> */}
-      {/* <TableV2 columns={columns} data={users} /> */}
-      {users.length ? (
-        <TableV2 columns={columns} data={users} onRowClick={handleRowClick} />
+      {teacherData?.length ? (
+        <TableV2
+          columns={columns}
+          data={teacherData}
+          onRowClick={handleRowClick}
+        />
       ) : (
         <NotData />
       )}
-      {showTeacherPopup && <AddTeacherPopup onClose={handleClosePopup} />}
+      {showTeacherPopup && (
+        <AddTeacherPopup
+          onClose={handleClosePopup}
+          classOption={classOption}
+          subjectOption={subjectOption}
+        />
+      )}
     </div>
   );
 };

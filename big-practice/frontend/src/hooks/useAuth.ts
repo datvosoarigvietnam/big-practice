@@ -1,7 +1,6 @@
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-const getAccessTokenFromLS = () => {
+export const getAccessTokenFromLS = () => {
   if (typeof window !== 'undefined') {
     return localStorage.getItem('access_token') || '';
   }
@@ -9,7 +8,6 @@ const getAccessTokenFromLS = () => {
 };
 
 export const useAuth = () => {
-  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(
     Boolean(getAccessTokenFromLS()),
   );
@@ -19,7 +17,7 @@ export const useAuth = () => {
     if (accessToken === '') {
       localStorage.removeItem('access_token');
     } else {
-      localStorage.setItem('access_token', accessToken);
+      // localStorage.setItem('access_token', accessToken);
     }
   };
 

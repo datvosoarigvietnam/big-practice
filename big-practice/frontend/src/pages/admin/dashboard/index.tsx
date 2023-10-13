@@ -1,4 +1,7 @@
 import Image from 'next/image';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 import addProfileIcon from '@/common/icons/addProfileIcon.svg';
 import addStudentIcon from '@/common/icons/addStudentIcon.svg';
@@ -6,9 +9,6 @@ import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import Button from '@/components/Button';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 const DashBoard: NextPageWithLayout = () => {
   const router = useRouter();
   // const handleResetCookies = () => {
@@ -39,16 +39,9 @@ const DashBoard: NextPageWithLayout = () => {
                 title="Log out"
                 className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
                 onClick={async () => {
-                  const result = await axios.post(
-                    'https://9nblpfpj-8000.asse.devtunnels.ms/auth/logout/',
-                  );
-                  if (result.status === 200) {
-                    toast.success('Logout Success');
-                    // handleResetCookies();
-                    // window.re
-                    router.push('/signin');
-                    // window.location.reload();
-                  }
+                  localStorage.removeItem('access_token');
+                  toast.success('Logout Success');
+                  router.push('/signin');
                 }}
               />
             </div>
