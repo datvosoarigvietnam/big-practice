@@ -46,13 +46,13 @@ interface LabelContextProps {
 // Define initial context state
 const defaultValuesContext: LabelContextProps = {
   infor: defaultvalues,
-  setInfor: () => {},
-  nextPage: () => {},
-  prevPage: () => {},
+  setInfor: () => { },
+  nextPage: () => { },
+  prevPage: () => { },
   page: 0,
-  setPage: () => {},
-  handleChange: () => () => {},
-  setSenderInfo: () => () => {},
+  setPage: () => { },
+  handleChange: () => () => { },
+  setSenderInfo: () => () => { },
 };
 
 export const LabelContext = createContext(defaultValuesContext);
@@ -67,6 +67,9 @@ export const LabelProvider = (props: IProps) => {
   };
   const handleChange =
     (name: string) => (e: ChangeEvent<HTMLSelectElement>) => {
+      if (name === 'subject') {
+        // setInfor({ ...infor, [name]: e.target.value })
+      }
       setInfor({ ...infor, [name]: e.target.value });
     };
   const setSenderInfo =

@@ -1,39 +1,41 @@
 import Image from 'next/image';
-import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
 
-import { NextPageWithLayout } from '@/models/common';
-import { MainLayout } from '@/components/layout';
-import Button from '@/components/Button';
+import { Column } from '@/@types/Table.type';
+import adminApi from '@/apis/admin.api';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
-import AddTeacherPopup from './AddTeacherPopup';
-import TableV2 from '@/components/Table/TableV2';
+import Button from '@/components/Button';
 import NotData from '@/components/NotData';
-import { Column } from '@/@types/Table.type';
-import axios from 'axios';
+import TableV2 from '@/components/Table/TableV2';
+import { MainLayout } from '@/components/layout';
+import { NextPageWithLayout } from '@/models/common';
 import { useQuery } from '@tanstack/react-query';
-import adminApi from '@/apis/admin.api';
+import AddTeacherPopup from './AddTeacherPopup';
+import Spinner from '@/components/Spinner';
+import { ITeacher } from '@/@types/teacher.type';
 
-export interface User {
-  id: number;
-  name: string;
-  subject: string;
-  email: string;
-  class: string;
-  gender: 'Male' | 'Female' | 'Other';
-}
+// export interface ITeacher {
+//   _id: number;
+//   name: string;
+//   subject: string;
+//   email: string;
+//   class: string;
+//   gender: 'Male' | 'Female' | 'Other';
+// }
 
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'class', header: 'Class' },
-  { key: 'subject', header: 'Jubject' },
+  { key: 'subjects', header: 'Subjects' },
   { key: 'email', header: 'Email' },
   { key: 'gender', header: 'Gender' },
 ];
 
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
+  const [detailTeacher, setDetailTeacher] = useState<ITeacher>()
   const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
@@ -41,18 +43,18 @@ const TeacherPage: NextPageWithLayout = () => {
   const handleClosePopup = () => {
     setShowTeacherPopup(false);
   };
-  const handleRowClick = (id: number) => {
-    router.push(`/${router.pathname}/${id}`);
-  };
-  const { data: teacherList } = useQuery({
+
+  const { data: teacherList, isLoading } = useQuery({
     queryKey: ['teachers'],
     queryFn: () => adminApi.getTeachers(),
   });
-  const teacherData: User[] = useMemo(() => {
+
+  const teacherData: ITeacher[] = useMemo(() => {
     return teacherList?.data?.map((item: any) => ({
+      id: item._id,
       name: item.fullName,
       class: item.classSchool.name,
-      subject: 'Math',
+      subject: item.subjects,
       email: item.email,
       gender: item.gender,
     }));
@@ -65,14 +67,23 @@ const TeacherPage: NextPageWithLayout = () => {
     queryKey: ['subjects'],
     queryFn: () => adminApi.getSubjects(),
   });
+  const handleRowClick = (id: string) => {
+    // router.push(`/${router.pathname}/${id}`);
+    console.log("Teacher iD", id);
+    const teacher = teacherList?.data.find((teacher: ITeacher) => teacher._id === id)
+    console.log("teacher", teacher);
+
+
+  };
   const classOption = classList?.data?.map(
     (className: { name: string }) => className.name,
   );
   const subjectOption = subjectList?.data.map(
     (subjectName: { name: string }) => subjectName.name,
   );
+
   return (
-    <div className="container mx-auto md:px-4 lg:px-20 flex-1">
+    <div className="container mx-auto md:px-4 lg:px-10 flex-1">
       {/* Header */}
       <div className="pt-5">
         <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
@@ -99,7 +110,7 @@ const TeacherPage: NextPageWithLayout = () => {
           />
         </div>
       </div>
-      <div className="flex mt-7 md:pl-10">
+      <div className="flex mt-7  lg:pl-8">
         {/* Fillter */}
         <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row">
           <select
@@ -117,11 +128,13 @@ const TeacherPage: NextPageWithLayout = () => {
           </div>
         </div>
       </div>
+      {isLoading && <Spinner />}
       {teacherData?.length ? (
         <TableV2
           columns={columns}
           data={teacherData}
           onRowClick={handleRowClick}
+          isLoading={isLoading}
         />
       ) : (
         <NotData />
@@ -131,6 +144,7 @@ const TeacherPage: NextPageWithLayout = () => {
           onClose={handleClosePopup}
           classOption={classOption}
           subjectOption={subjectOption}
+          teacherDetail={detailTeacher}
         />
       )}
     </div>

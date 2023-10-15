@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
 import adminApi from '@/apis/admin.api';
@@ -10,45 +10,67 @@ import { ITeacher } from '@/@types/teacher.type';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { queryClient } from '@/pages/_app';
+import Spinner from '@/components/Spinner';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
   classOption: string[];
   subjectOption: string[];
+  teacherDetail?: ITeacher
 }
 
 const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   onClose,
   classOption,
   subjectOption,
+  teacherDetail
 }) => {
   const router = useRouter();
-  const { control, handleSubmit } = useForm<ITeacher | any>({
+  const defaultValues = useMemo(() => {
+
+  }, [teacherDetail])
+  const { control, handleSubmit, setError, formState: { errors } } = useForm<ITeacher | any>({
     defaultValues: {
       fullName: '',
       email: '',
       password: '',
       phoneNumber: '',
       selectedClass: '',
-      selectedGender: 'male',
-      subject: '',
+      selectedGender: 'Male',
+      subjects: [],
     },
   });
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const teacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) => adminApi.addTeacher(teacherInfor),
   });
   const onSubmit = (values: ITeacher) => {
-    console.log('values', values);
-    // teacherMutate.mutate(values, {
-    //   onSuccess: () => {
-    //     toast.success('Add new teacher success');
-    //     queryClient.invalidateQueries({
-    //       queryKey: ['teachers'],
-    //     });
-    //     onClose();
-    //     router.push('/admin/teachers');
-    //   },
-    // });
+    // console.log("Vaules of teacher", values);
+    const teacherInfo = {
+      ...values,
+      subjects: selectedSubjects.map(selected => ({ name: selected })),
+    };
+
+    console.log("Vaules of teacher", teacherInfo);
+
+    teacherMutate.mutate(teacherInfo, {
+      onSuccess: () => {
+        toast.success('Add new teacher success');
+        queryClient.invalidateQueries({
+          queryKey: ['teachers'],
+        });
+        onClose();
+        router.push('/admin/teachers');
+      },
+      onError: (error: any) => {
+        if (error.response) {
+          setError('fullName', {
+            type: 'manual',
+            message: error.response.data.message || 'Some field is wrong!',
+          });
+        }
+      }
+    })
   };
 
   const handleClose = () => {
@@ -57,6 +79,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const optionGender = ['Male', 'Female', 'Other'];
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
+      {teacherMutate.isLoading && <Spinner />}
       <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-28 overflow-y-scroll h-[80vh] relative">
         <span
           className="text-gray-600 text-2xl cursor-pointer absolute top-2 right-2"
@@ -69,14 +92,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F]">
               Add Teachers
             </h2>
-            {/* <InputField
-              className="mb-4"
-              name="designation"
-              label="Designation"
-              control={control}
-              placeholder=""
-              type="text"
-            /> */}
           </div>
           <div className="mt-6 flex gap-11 justify-center ">
             <p className="text-lg text-[#4F4F4F]">Manually</p>
@@ -84,7 +99,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
           </div>
           <div className="mt-12 sm:mt-[75px] flex items-center justify-center md:block">
             <InputField
-              name="fullName"
+              name="name"
               control={control}
               label="Full Name"
               placeholder=""
@@ -99,11 +114,11 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               label="Email Address"
               placeholder=""
               type="text"
-              // className="w-full"
+            // className="w-full"
             />
-            <div className="flex flex-col flex-1 gap-5  md:gap-2 lg:flex-row ">
+            <div className="flex flex-col flex-1 gap-5  md:gap-2 md:flex-row md:items-stretch">
               <SelectedField
-                name="class"
+                name="selectedClass"
                 control={control}
                 placeholder=""
                 isFullWith={false}
@@ -111,7 +126,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 options={classOption}
               />
               <SelectedField
-                name="gender"
+                name="selectedGender"
                 control={control}
                 placeholder=""
                 isFullWith={false}
@@ -136,26 +151,24 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               type="tel"
             />
             <SelectedField
-              name="subject"
+              name="subjects"
               control={control}
               placeholder=""
               defaultOption="Subject"
               options={subjectOption}
+              onUpdateSelectedSubjects={(selectedSubjects) => {
+                // Handle selected subjects in the parent component if needed
+                console.log('Selected Subjects:', selectedSubjects);
+                setSelectedSubjects(selectedSubjects)
+              }}
             />
           </div>
-          {/* <div className="mt-12 text-center md:text-left">
-            
-          </div> */}
-          {/* Add other form fields similarly */}
+          {/* <p></p> */}
+          <div className=" mt-5 mb-6 h-5">
+            {errors.fullName && <p className='text-center text-red-700'>{errors?.fullName.message + ''}</p>}
 
-          <div className="mt-7 pb-4">
-            {/* <button
-              type="submit"
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300"
-              onClick={handleClose}
-            >
-              Add Teacher
-            </button> */}
+          </div>
+          <div className="mt-10 pb-4">
             <Button title="Add teacher" />
           </div>
         </form>

@@ -41,8 +41,8 @@ const adminApi = {
   addTeacher(teacherInfor: ITeacher) {
     const newTeacher = {
       // avatar: '',
-      fullName: teacherInfor.fullName,
-      subjects: [],
+      fullName: teacherInfor.name,
+      subjects: teacherInfor.subjects,
       classSchool: 'JSS3',
       email: teacherInfor.email,
       password: teacherInfor.password,

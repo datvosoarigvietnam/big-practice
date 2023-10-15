@@ -1,9 +1,16 @@
 export interface ITeacher {
-  fullName: string;
+  _id: string;
+  name: string;
   email: string;
   password: string;
   phoneNumber: string;
   selectedClass: string;
-  selectedGender: string;
-  subject: string;
+  selectedGender: 'Male' | 'Female' | 'Other';
+  subjects: { name: string }[];
 }
+// _id: number;
+//   name: string;
+//   subject: string;
+//   email: string;
+//   class: string;
+//   gender: 'Male' | 'Female' | 'Other';

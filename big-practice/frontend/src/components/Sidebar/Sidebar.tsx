@@ -11,7 +11,7 @@ import settingIcon from '@/common/icons/settingIcon.svg';
 import studentIcon from '@/common/icons/studentIcon.svg';
 import avatar from '@/common/imgs/avatar.svg';
 import SidebarMobile from '@/components/Sidebar/SidebarMobile';
-export default function Sidebar() {
+export default function Sidebar({ showSidebar }: { showSidebar: boolean }) {
   const { pathname } = useRouter();
   const lastPathSegment = pathname.split('/').pop();
   const [activeTab, setActiveTab] = useState(lastPathSegment || 'Dashboard');
@@ -33,6 +33,7 @@ export default function Sidebar() {
 
   return (
     <div className="hidden md:block w-[240px] h-[100vh] bg-[#152259]">
+
       <div className="pt-[26px] ">
         {/* Header */}
         <div className="border-b-[0.5px] border-[#BDBDBD] flex flex-col justify-center items-center mb-4">
@@ -51,11 +52,10 @@ export default function Sidebar() {
                 <li
                   key={menuItem.title}
                   // className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
-                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${
-                    activeTab.toLowerCase() === menuItem.title.toLowerCase()
-                      ? 'bg-[#509CDB]'
-                      : ''
-                  }`}
+                  className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${activeTab.toLowerCase() === menuItem.title.toLowerCase()
+                    ? 'bg-[#509CDB]'
+                    : ''
+                    }`}
                 >
                   <Link
                     href={menuItem.href}
@@ -84,9 +84,6 @@ export default function Sidebar() {
             New
           </span>
         </div>
-      </div>
-      <div className="pt-[26px] md:hidden">
-        <SidebarMobile />
       </div>
     </div>
   );

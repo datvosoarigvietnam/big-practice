@@ -16,13 +16,14 @@ interface ILoginForm {
   password: string;
 }
 export default function SignIn() {
-  const { control, handleSubmit } = useForm<ILoginForm>({});
+  const { control, handleSubmit, setError, formState: { errors } } = useForm<ILoginForm>({});
   const router = useRouter();
   const signinMutation = useMutation({
     mutationFn: (values: ILoginForm) => adminApi.login(values),
   });
   const { setAuthenticated } = useContext(AppContext);
   const onSubmit = (values: ILoginForm) => {
+
     signinMutation.mutate(values, {
       onSuccess: (value) => {
         console.log(value);
@@ -33,11 +34,15 @@ export default function SignIn() {
         router.replace('/admin/dashboard');
       },
       onError: (error: any) => {
-        toast.error(error.response.data.message);
+        console.log(error.response.data.message);
+
+        setError('emailSchool', {
+          type: 'validate',
+          message: error.response.data.message || 'An error occurred during login.'
+        })
       },
     });
   };
-
   return (
     <div className="pt-[100px] flex justify-center items-center flex-col">
       <h1 className="mb-[54px] text-center text-4xl break-keep md:w-[665px] text-[#4F4F4F] font-kumbh-sans font-semibold">
@@ -66,6 +71,8 @@ export default function SignIn() {
                   type="password"
                 />
               </div>
+              {errors.emailSchool && <p className='text-red-400 text-center'>{errors.emailSchool.message}</p>}
+              {/* {errors.password && <p className='text-red-400'>{errors.password.message}</p>} */}
               <div className="mt-[30px] px-[10px] md:px-[0]">
                 <Button title="Login" />
               </div>
