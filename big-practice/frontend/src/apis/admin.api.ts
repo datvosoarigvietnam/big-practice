@@ -43,13 +43,28 @@ const adminApi = {
       // avatar: '',
       fullName: teacherInfor.name,
       subjects: teacherInfor.subjects,
-      classSchool: 'JSS3',
+      classSchool: teacherInfor.selectedClass,
       email: teacherInfor.email,
       password: teacherInfor.password,
       phone: teacherInfor.phoneNumber,
       gender: teacherInfor.selectedGender,
     };
     return http.post('/api/teachers', {
+      ...newTeacher,
+    });
+  },
+  editTeacher(teacherInfor: ITeacher, id: string) {
+    const newTeacher = {
+      // avatar: '',
+      fullName: teacherInfor.name,
+      subjects: teacherInfor.subjects,
+      classSchool: teacherInfor.selectedClass,
+      email: teacherInfor.email,
+      password: teacherInfor.password,
+      phone: teacherInfor.phoneNumber,
+      gender: teacherInfor.selectedGender,
+    };
+    return http.patch(`/api/teachers/${id}`, {
       ...newTeacher,
     });
   },

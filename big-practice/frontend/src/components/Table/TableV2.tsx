@@ -16,6 +16,7 @@ interface DataTableProps<T> {
   onEditClick?: (id: string) => void;
   onDeleteClick?: (id: string) => void;
   isLoading?: boolean;
+  handleEdit: (id: string) => void;
 }
 
 const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
@@ -25,25 +26,21 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   onEditClick,
   onDeleteClick,
   isLoading,
+  handleEdit,
 }) => {
   const handleClickRow = (id: number) => {
     if (onRowClick) {
       onRowClick(id);
     }
   };
-
-  const handleEditClick = (id: number) => {
-    if (onEditClick) {
-      onEditClick(id);
-    }
-  };
-
   const handleDeleteClick = (id: number) => {
     if (onDeleteClick) {
       onDeleteClick(id);
     }
   };
-
+  const handleEditClick = (id: string) => {
+    handleEdit && handleEdit(id);
+  };
   const isUser = (data: User | IStudent): data is User => {
     return 'subject' in data;
   };

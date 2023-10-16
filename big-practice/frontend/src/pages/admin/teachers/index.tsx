@@ -36,7 +36,7 @@ const columns: Column[] = [
 
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
-  const [detailTeacher, setDetailTeacher] = useState<ITeacher>();
+  const [detailTeacher, setDetailTeacher] = useState<ITeacher | null>();
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const handleShowPopup = () => {
@@ -44,6 +44,7 @@ const TeacherPage: NextPageWithLayout = () => {
   };
   const handleClosePopup = () => {
     setShowTeacherPopup(false);
+    setDetailTeacher(null);
   };
 
   const { data: teacherList, isLoading } = useQuery({
@@ -61,6 +62,7 @@ const TeacherPage: NextPageWithLayout = () => {
       gender: item.gender,
     }));
   }, [teacherList]);
+
   const { data: classList } = useQuery({
     queryKey: ['classes'],
     queryFn: () => adminApi.getClasses(),
@@ -71,11 +73,14 @@ const TeacherPage: NextPageWithLayout = () => {
   });
   const handleRowClick = (id: string) => {
     // router.push(`/${router.pathname}/${id}`);
-    console.log('Teacher iD', id);
+  };
+  const handleEdit = (id: string) => {
     const teacher = teacherList?.data.find(
       (teacher: ITeacher) => teacher._id === id,
     );
-    console.log('teacher', teacher);
+    setDetailTeacher(teacher);
+    console.log('teacher in edit', teacher);
+    setShowTeacherPopup(true);
   };
   const classOption = classList?.data?.map(
     (className: { name: string }) => className.name,
@@ -142,6 +147,7 @@ const TeacherPage: NextPageWithLayout = () => {
           data={records}
           onRowClick={handleRowClick}
           isLoading={isLoading}
+          handleEdit={handleEdit}
         />
       ) : (
         <NotData />

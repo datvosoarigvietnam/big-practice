@@ -35,9 +35,7 @@ export default function InputField({
   };
 
   const customOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // if (e.target.name !== 'confirmPassword') {
     valueContext.setSenderInfo(name)(e);
-    // }
   };
 
   return (
@@ -68,7 +66,7 @@ export default function InputField({
                     : 'password'
                   : type
               }
-              value={value}
+              value={field.value}
               onChange={(e) => {
                 field.onChange(e);
                 customOnChange(e);

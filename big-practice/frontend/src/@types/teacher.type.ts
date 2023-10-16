@@ -4,7 +4,7 @@ export interface ITeacher {
   email: string;
   password: string;
   phoneNumber: string;
-  selectedClass: string;
+  selectedClass: { name: string };
   selectedGender: 'Male' | 'Female' | 'Other';
   subjects: { name: string }[];
 }
