@@ -15,7 +15,6 @@ export default function ChooseStaffs() {
   const getCitys = async () => {
     try {
       const res = await axios.get('https://provinces.open-api.vn/api/?depth=1');
-      console.log(res.data);
       const option = res.data.map((item: IInfor) => item.name);
       setOptions(option);
     } catch (error) {

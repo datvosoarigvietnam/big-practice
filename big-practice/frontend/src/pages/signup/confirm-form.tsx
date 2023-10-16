@@ -1,36 +1,45 @@
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useContext } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 import StepperCustom from '@/components/Stepper';
-import axios from 'axios';
+import adminApi from '@/apis/admin.api';
+import Spinner from '@/components/Spinner';
 
 export default function ConfirmForm() {
-  const { control, handleSubmit } = useForm<IInfor>();
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<IInfor>();
   const { infor } = useContext(LabelContext);
-
-  const onSubmit = async () => {
-    try {
-      const result = await axios.post('http://localhost:8080/admin', infor);
-      if (result.data) {
-        console.log('Register sucesss');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const registerAmin = async () => {
-    try {
-      const result = await axios.post('http://localhost:8080/admin', infor);
-      if (result.data) {
-        console.log('Register sucesss');
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const router = useRouter();
+  const registerMutation = useMutation({
+    mutationFn: (infor: IInfor) => adminApi.register(infor),
+  });
+  const onSubmit = () => {
+    registerMutation.mutate(infor, {
+      onSuccess: () => {
+        toast.success('Register Success!');
+        router.push('/signin');
+      },
+      onError: (error: any) => {
+        setError('password', {
+          type: 'validate',
+          message:
+            error.response.data.messages ||
+            'An error occurred during register.',
+        });
+        toast.error(error.response.data.message);
+      },
+    });
   };
 
   return (
@@ -99,6 +108,7 @@ export default function ConfirmForm() {
                   value={infor.password}
                   disabled
                   placeholder=""
+                  fullWith="w-full"
                 />
               </div>
               <div className="pl-[10px] pr-[10px] md:p-0">
@@ -130,6 +140,12 @@ export default function ConfirmForm() {
                 />
               </div>
             </div>
+
+            {errors.password && (
+              <p className="text-center text-red-500 mt-4">
+                {errors.password?.message}
+              </p>
+            )}
             <div className="text-center pt-[14px] pb-[58px]">
               <p className="font-normal text-xs text-[#667085] font-sans leading-6">
                 Already have an account?{' '}
@@ -149,6 +165,7 @@ export default function ConfirmForm() {
       <div className="container mx-auto mt-[110px]">
         <StepperCustom />
       </div>
+      {registerMutation.isLoading && <Spinner />}
     </div>
   );
 }

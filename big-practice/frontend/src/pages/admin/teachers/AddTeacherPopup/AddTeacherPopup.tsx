@@ -1,132 +1,290 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
+import adminApi from '@/apis/admin.api';
 import InputField from '@/components/InputField';
 import SelectedField from '@/components/SelectedField';
-
+import { useMutation, useQuery } from '@tanstack/react-query';
+import Button from '@/components/Button';
+import { ITeacher } from '@/@types/teacher.type';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import { queryClient } from '@/pages/_app';
+import Spinner from '@/components/Spinner';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 interface AddTeacherPopupProps {
   onClose: () => void;
+  classOption: string[];
+  subjectOption: string[];
+  teacherDetail?: any;
 }
+interface IForm {
+  name: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  selectedClass: string;
+  selectedGender: string;
+  subjects: { name: string }[];
+}
+const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
+  onClose,
+  classOption,
+  subjectOption,
+  teacherDetail,
+}) => {
+  const router = useRouter();
+  const defaultValues = useMemo<IForm>(() => {
+    const values: IForm = {
+      email: '',
+      name: '',
+      password: '',
+      phoneNumber: '',
+      selectedClass: '',
+      selectedGender: '',
+      subjects: [],
+    };
 
-const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({ onClose }) => {
-  const { control, watch } = useForm();
-  console.log('Data', watch());
+    if (teacherDetail) {
+      values.email = teacherDetail.email;
+      values.name = teacherDetail.fullName;
+      values.password = teacherDetail.password;
+      values.phoneNumber = teacherDetail.phone;
+      values.selectedClass = teacherDetail.classSchool?.name;
+      values.selectedGender = teacherDetail.gender;
+      values.subjects = teacherDetail.subjects;
+    }
+    return values;
+  }, [teacherDetail]);
 
-  const [formData] = useState({
-    designation: '',
-    fullName: '',
-    email: '',
-    password: '',
-    phoneNumber: '',
-    selectedClass: '',
-    selectedGender: 'male',
-    subject: '',
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Full name is required'),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Email is required'),
+    phoneNumber: Yup.string().required('Phone number is required'),
+    selectedClass: Yup.string().required('Class is required'),
+    selectedGender: Yup.string().required('Gender is required'),
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
+  const {
+    control,
+    handleSubmit,
+    setError,
+    clearErrors,
+    reset,
+    formState: { errors },
+  } = useForm<ITeacher | any>({
+    defaultValues,
+    resolver: yupResolver(validationSchema),
+  });
+  console.log('Error by yup', errors);
+
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const addTeacherMutate = useMutation({
+    mutationFn: (teacherInfor: ITeacher) => adminApi.addTeacher(teacherInfor),
+  });
+
+  const editTeacherMutate = useMutation({
+    mutationFn: (teacherInfor: ITeacher) =>
+      adminApi.editTeacher(teacherInfor, teacherInfor?._id),
+  });
+  const onSubmit = (values: ITeacher) => {
+    const teacherInfo = {
+      ...values,
+      // _id: teacherDetail._id,
+      subjects: selectedSubjects.map((selected) => ({ name: selected })),
+    };
+    if (teacherDetail) {
+      const teacherInfo = {
+        ...values,
+        _id: teacherDetail._id,
+        subjects: selectedSubjects.map((selected) => ({ name: selected })),
+      };
+      editTeacherMutate.mutate(teacherInfo as ITeacher, {
+        onSuccess: () => {
+          toast.success('Add new teacher success');
+          queryClient.invalidateQueries({
+            queryKey: ['teachers'],
+          });
+          onClose();
+          router.push('/admin/teachers');
+        },
+        onError: (error: any) => {
+          if (error.response) {
+            setError('fullName', {
+              type: 'manual',
+              message: error.response.data.message || 'Some field is wrong!',
+            });
+          }
+        },
+      });
+    } else {
+      addTeacherMutate.mutate(teacherInfo, {
+        onSuccess: () => {
+          toast.success('Add new teacher success');
+          queryClient.invalidateQueries({
+            queryKey: ['teachers'],
+          });
+          onClose();
+          router.push('/admin/teachers');
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message || 'Some field is wrong!');
+        },
+      });
+    }
   };
+
   const handleClose = () => {
     onClose();
   };
+  const optionGender = ['Male', 'Female', 'Other'];
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
-      <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-28 overflow-y-scroll h-[80vh] md:overflow-hidden">
+      {addTeacherMutate.isLoading && <Spinner />}
+      {editTeacherMutate.isLoading && <Spinner />}
+      <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-20 overflow-y-scroll h-[80vh] relative">
         <span
           className="text-gray-600 text-2xl cursor-pointer absolute top-2 right-2"
           onClick={handleClose}
         >
           &times;
         </span>
-        <form onSubmit={handleSubmit}>
-          <div className="flex justify-center items-center flex-col sm:flex-row sm:gap-36">
-            <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F]">
-              Add Teachers
-            </h2>
-            <InputField
-              className="mb-4"
-              name="designation"
-              label="Designation"
-              control={control}
-              placeholder=""
-              type="text"
-            />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* <div className="flex justify-center items-center flex-col sm:flex-row sm:gap-36"> */}
+          <div className="flex flex-row justify-between">
+            <div className="flex justify-center items-start flex-col ">
+              <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F]">
+                {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
+              </h2>
+              <div className="mt-6 flex gap-11 justify-center ">
+                <p className="text-lg text-[#4F4F4F]">Manually</p>
+                <p className="text-lg text-[#4F4F4F]">Import CSV</p>
+              </div>
+            </div>
+            {/* <div className="">
+              <InputField
+                name="name"
+                control={control}
+                label="Full Name"
+                placeholder=""
+                type="text"
+                value={teacherDetail?.fullName}
+                fullWith="w-full"
+              />
+            </div> */}
           </div>
-          <div className="mt-6 flex gap-11 justify-center md:justify-start">
-            <p className="text-lg text-[#4F4F4F]">Manually</p>
-            <p className="text-lg text-[#4F4F4F]">Import CSV</p>
-          </div>
+
           <div className="mt-12 sm:mt-[75px] flex items-center justify-center md:block">
             <InputField
-              name="fullName"
+              name="name"
               control={control}
               label="Full Name"
               placeholder=""
               type="text"
-              className="w-full"
+              value={teacherDetail?.fullName}
+              fullWith="w-full"
             />
+            {errors.name && (
+              <p className="text-center text-red-700 mt-2">
+                {errors?.name.message + ''}
+              </p>
+            )}
           </div>
-          <div className="mt-14 flex gap-5 md:gap-7 flex-col items-center md:items-start lg:flex-row lg:items-end">
-            <InputField
-              name="email"
-              control={control}
-              label="Email Address"
-              placeholder=""
-              type="text"
-              // className="w-full"
-            />
-            <div className="flex flex-col flex-1 gap-5  md:gap-2 lg:flex-row ">
-              <SelectedField
-                name="class"
+          <div className="mt-8 flex gap-5 md:gap-7  lg:gap-12 flex-col items-center md:items-start lg:flex-row lg:items-end">
+            <div className="">
+              <InputField
+                name="email"
                 control={control}
+                label="Email Address"
                 placeholder=""
-                isFullWith={false}
-                defaultOption="Class"
+                type="text"
+                // className="w-full"
               />
-              <SelectedField
-                name="gender"
-                control={control}
-                placeholder=""
-                isFullWith={false}
-                defaultOption="Gender"
-              />
+              <div className=" ">
+                {errors.email && (
+                  <p className="text-center text-red-700">
+                    {errors?.email.message + ''}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col flex-1 gap-5  md:gap-2 md:flex-row md:items-stretch lg:gap-7">
+              <div className="">
+                <SelectedField
+                  name="selectedClass"
+                  control={control}
+                  placeholder=""
+                  isFullWith={false}
+                  defaultOption={teacherDetail?.classSchool?.name || 'Class'}
+                  options={classOption}
+                />
+                <div className=" ">
+                  {errors.email && (
+                    <p className="text-center text-red-700">
+                      {errors?.email.message + ''}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="">
+                <SelectedField
+                  name="selectedGender"
+                  control={control}
+                  placeholder=""
+                  isFullWith={false}
+                  defaultOption="Gender"
+                  options={optionGender}
+                />
+                <div className=" ">
+                  {errors.email && (
+                    <p className="text-center text-red-700">
+                      {errors?.email.message + ''}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row sm:items-center gap-5 justify-between mt-8  lg:justify-start">
-            <InputField
-              name="password"
-              control={control}
-              label="Password"
-              placeholder=""
-              type="password"
-            />
+          <div className="flex flex-col md:flex-row sm:items-end gap-5 lg:gap-12 justify-between mt-8  lg:justify-start ">
+            {!teacherDetail?._id && (
+              <InputField
+                name="password"
+                control={control}
+                label="Password"
+                placeholder=""
+                type="password"
+              />
+            )}
             <InputField
               name="phoneNumber"
               control={control}
               label="Phone number"
               placeholder=""
               type="tel"
+              value={teacherDetail?.phoneNumber}
             />
           </div>
-          <div className="mt-12 text-center">
+          <div className="mt-10">
             <SelectedField
-              name="subject"
+              name="subjects"
               control={control}
               placeholder=""
-              defaultOption="Subject"
+              defaultOption={teacherDetail?.subjects[0]?.name || 'Subject'}
+              options={subjectOption}
+              onUpdateSelectedSubjects={(selectedSubjects) => {
+                setSelectedSubjects(selectedSubjects);
+              }}
             />
           </div>
-          {/* Add other form fields similarly */}
+          {/* <p></p> */}
 
-          <div className="mt-7">
-            <button
-              type="submit"
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300"
-              onClick={handleClose}
-            >
-              Register
-            </button>
+          <div className="mt-10 pb-4">
+            <Button
+              title={teacherDetail?._id ? 'Eidt Teacher' : 'Add Teacher'}
+            />
           </div>
         </form>
       </div>

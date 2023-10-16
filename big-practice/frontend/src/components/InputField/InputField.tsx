@@ -5,6 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { Control, Controller } from 'react-hook-form';
+
 import eyeClose from '@/common/icons/eye_close';
 import eyeOpen from '@/common/icons/eye_open';
 import { IFormValues } from '@/pages/signup/create-account';
@@ -16,6 +17,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
   label?: string;
   value?: string;
+  fullWith?: string;
 }
 
 export default function InputField({
@@ -25,6 +27,7 @@ export default function InputField({
   type,
   label,
   value,
+  fullWith,
   ...props
 }: IProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -34,9 +37,7 @@ export default function InputField({
   };
 
   const customOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name !== 'confirmPassword') {
-      valueContext.setSenderInfo(name)(e);
-    }
+    valueContext.setSenderInfo(name)(e);
   };
 
   return (
@@ -59,7 +60,9 @@ export default function InputField({
               {...props}
               {...field}
               placeholder={placeholder}
-              className="outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px] font-medium text-[#8A8A8A] font-[Kumbh Sans] sm:w-[250px] w-full"
+              className={`outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px] font-medium text-[#8A8A8A] font-[Kumbh Sans]  ${
+                fullWith ? 'w-full' : 'lg:w-[250px]'
+              }`}
               type={
                 type === 'password'
                   ? isPasswordVisible
@@ -67,6 +70,7 @@ export default function InputField({
                     : 'password'
                   : type
               }
+              value={field.value}
               onChange={(e) => {
                 field.onChange(e);
                 customOnChange(e);

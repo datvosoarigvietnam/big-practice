@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
+
 import nodata from '@/common/icons/NodataStudent.svg';
 export default function NotData() {
   return (

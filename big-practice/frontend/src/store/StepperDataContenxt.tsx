@@ -14,6 +14,7 @@ export interface IInfor {
     emailSchool: string;
   };
   password: string;
+  confirmPassword: string;
   schoolAddress: string;
   numberOfStaff: number;
 }
@@ -24,6 +25,7 @@ const defaultvalues: IInfor = {
     schoolName: '',
   },
   password: '',
+  confirmPassword: '',
   numberOfStaff: 0,
   schoolAddress: '',
 };
@@ -44,13 +46,13 @@ interface LabelContextProps {
 // Define initial context state
 const defaultValuesContext: LabelContextProps = {
   infor: defaultvalues,
-  setInfor: () => {},
-  nextPage: () => {},
-  prevPage: () => {},
+  setInfor: () => { },
+  nextPage: () => { },
+  prevPage: () => { },
   page: 0,
-  setPage: () => {},
-  handleChange: () => () => {},
-  setSenderInfo: () => () => {},
+  setPage: () => { },
+  handleChange: () => () => { },
+  setSenderInfo: () => () => { },
 };
 
 export const LabelContext = createContext(defaultValuesContext);
@@ -65,13 +67,14 @@ export const LabelProvider = (props: IProps) => {
   };
   const handleChange =
     (name: string) => (e: ChangeEvent<HTMLSelectElement>) => {
-      console.log('Heare');
-
+      if (name === 'subject') {
+        // setInfor({ ...infor, [name]: e.target.value })
+      }
       setInfor({ ...infor, [name]: e.target.value });
     };
   const setSenderInfo =
     (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      if (name === 'password') {
+      if (name === 'password' || name === 'confirmPassword') {
         setInfor({
           ...infor,
           [name]: event.target.value,
@@ -83,7 +86,6 @@ export const LabelProvider = (props: IProps) => {
         });
       }
     };
-  console.log('inFor', infor);
   return (
     <LabelContext.Provider
       value={{

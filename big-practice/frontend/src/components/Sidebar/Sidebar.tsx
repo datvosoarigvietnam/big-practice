@@ -32,7 +32,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="hidden md:block w-[240px] h-[100vh] bg-[#152259]">
+    <div className="hidden lg:block w-[240px] h-[100vh] bg-[#152259]">
       <div className="pt-[26px] ">
         {/* Header */}
         <div className="border-b-[0.5px] border-[#BDBDBD] flex flex-col justify-center items-center mb-4">
@@ -84,9 +84,6 @@ export default function Sidebar() {
             New
           </span>
         </div>
-      </div>
-      <div className="pt-[26px] md:hidden">
-        <SidebarMobile />
       </div>
     </div>
   );

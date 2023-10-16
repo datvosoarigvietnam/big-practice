@@ -1,9 +1,12 @@
+import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { Control, FieldValues, useForm } from 'react-hook-form';
 
-import InputField from '@/components/InputField';
+import adminApi from '@/apis/admin.api';
 import Button from '@/components/Button';
+import InputField from '@/components/InputField';
+import Spinner from '@/components/Spinner';
 import { LabelContext } from '@/store/StepperDataContenxt';
 export interface IFormValues extends FieldValues {
   adminName: string;
@@ -33,6 +36,9 @@ export default function CreateAccount() {
     valueContenxt.infor.name.emailSchool,
     valueContenxt.infor.name.schoolName,
   ]);
+  const checkEmail = useMutation({
+    mutationFn: (email: string) => adminApi.checkEmail(email),
+  });
 
   const {
     control,
@@ -49,7 +55,7 @@ export default function CreateAccount() {
   //     value.infor.name.schoolName.length > 0
   //   );
   // }, [valueContenxt]);
-  const onSubmit = (values: IFormValues) => {
+  const onSubmit = async (values: IFormValues) => {
     if (values.adminName === '') {
       setError('adminName', {
         type: 'required',
@@ -65,9 +71,31 @@ export default function CreateAccount() {
         type: 'required',
         message: 'This field is required',
       });
-    } else {
-      valueContenxt.nextPage();
     }
+    valueContenxt.nextPage();
+    // try {
+    //   // const checkEmail = await axios.post(
+    //   //   'http://localhost:8080/admin/checkemail',
+    //   //   { emailSchool: valueContenxt.infor.name.emailSchool },
+    //   // );
+    //   // if (checkEmail.status === 200) {
+    //   //   valueContenxt.nextPage();
+    //   // }
+    //   checkEmail.mutate(values.emailSchool, {
+    //     onSuccess: () => {
+    //       valueContenxt.nextPage();
+    //     },
+    //     onError: () => {
+    //       setError('emailSchool', {
+    //         message: 'Email already exists',
+    //       });
+    //     },
+    //   });
+    // } catch (error) {
+    //   // setError('emailSchool', {
+    //   //   message: 'Email already exists',
+    //   // });
+    // }
   };
   return (
     <div className="pt-[100px] flex justify-center items-center flex-col">
@@ -88,6 +116,7 @@ export default function CreateAccount() {
                   placeholder="Enter the name of admin(*)"
                   type="text"
                   value={valueContenxt.infor.name.adminName}
+                  fullWith="w-full"
                 />{' '}
                 {errors.adminName?.message && (
                   <p className="text-red-500 text-center">
@@ -103,9 +132,10 @@ export default function CreateAccount() {
                   placeholder="Enter the name of school"
                   type="text"
                   value={valueContenxt.infor.name.schoolName}
+                  fullWith="w-full"
                 />
                 {errors.schoolName?.message && (
-                  <p className="text-red-500 text-center">
+                  <p className="text-red-500 text-center ">
                     {errors.schoolName?.message}
                   </p>
                 )}
@@ -117,6 +147,7 @@ export default function CreateAccount() {
                   placeholder="Enter the school email"
                   type="text"
                   value={valueContenxt.infor.name.emailSchool}
+                  fullWith="w-full"
                 />
                 {errors.emailSchool?.message && (
                   <p className="text-red-500 text-center">
@@ -143,6 +174,7 @@ export default function CreateAccount() {
           </p>
         </div>
       </div>
+      {checkEmail.isLoading && <Spinner />}
     </div>
   );
 }

@@ -7,6 +7,7 @@ export interface IAdmin {
   password: string
   number_staff?: number
   school_address?: string
+  role?: string
 }
 
 class Admin {
@@ -17,6 +18,7 @@ class Admin {
   password: string
   number_staff: number
   school_address: string
+  role: string
   constructor(admin: IAdmin) {
     this._id = admin._id || new ObjectId()
     this.admin_name = admin.admin_name || ''
@@ -25,6 +27,7 @@ class Admin {
     this.password = admin.password
     this.number_staff = admin.number_staff || 0
     this.school_address = admin.school_address || ''
+    this.role = 'ADMIN'
   }
 }
 

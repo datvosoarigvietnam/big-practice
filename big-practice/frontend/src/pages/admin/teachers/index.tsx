@@ -1,113 +1,134 @@
 import Image from 'next/image';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
 
-import { NextPageWithLayout } from '@/models/common';
-import { MainLayout } from '@/components/layout';
-import Button from '@/components/Button';
+import { Column } from '@/@types/Table.type';
+import adminApi from '@/apis/admin.api';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
-import AddTeacherPopup from './AddTeacherPopup';
-import TableV2 from '@/components/Table/TableV2';
+import Button from '@/components/Button';
 import NotData from '@/components/NotData';
-import { Column } from '@/@types/Table.type';
-
-export interface User {
-  id: number;
-  name: string;
-  subject: string;
-  email: string;
-  class: string;
-  gender: 'Male' | 'Female';
-}
+import TableV2 from '@/components/Table/TableV2';
+import { MainLayout } from '@/components/layout';
+import { NextPageWithLayout } from '@/models/common';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import AddTeacherPopup from './AddTeacherPopup';
+import Spinner from '@/components/Spinner';
+import { ITeacher } from '@/@types/teacher.type';
+import Pagination from '@/components/Pagination';
+import { toast } from 'react-toastify';
+import { queryClient } from '@/pages/_app';
+import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
+// export interface ITeacher {
+//   _id: number;
+//   name: string;
+//   subject: string;
+//   email: string;
+//   class: string;
+//   gender: 'Male' | 'Female' | 'Other';
+// }
 
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'class', header: 'Class' },
-  { key: 'subject', header: 'Jubject' },
+  { key: 'subjects', header: 'Subjects' },
   { key: 'email', header: 'Email' },
   { key: 'gender', header: 'Gender' },
 ];
 
-const users: User[] = [
-  {
-    id: 1,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 2,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 3,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 4,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 5,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 6,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 7,
-    name: 'Alice',
-    class: 'J20',
-    subject: 'Math',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-];
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
+  const [detailTeacher, setDetailTeacher] = useState<ITeacher | null>();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [idDelete, setIdDelete] = useState('');
   const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
   };
   const handleClosePopup = () => {
     setShowTeacherPopup(false);
+    setDetailTeacher(null);
   };
-  const handleRowClick = (id: number) => {
-    router.push(`/${router.pathname}/${id}`);
+
+  const { data: teacherList, isLoading } = useQuery({
+    queryKey: ['teachers'],
+    queryFn: () => adminApi.getTeachers(),
+  });
+
+  const teacherData: ITeacher[] = useMemo(() => {
+    return teacherList?.data?.map((item: any) => ({
+      id: item._id,
+      name: item.fullName,
+      class: item.classSchool.name,
+      subject: item.subjects,
+      email: item.email,
+      gender: item.gender,
+    }));
+  }, [teacherList]);
+
+  const { data: classList } = useQuery({
+    queryKey: ['classes'],
+    queryFn: () => adminApi.getClasses(),
+  });
+  const { data: subjectList } = useQuery({
+    queryKey: ['subjects'],
+    queryFn: () => adminApi.getSubjects(),
+  });
+  const deleteTeacherMutation = useMutation({
+    mutationFn: (id: string) => adminApi.deleteTeacher(id),
+  });
+  const handleRowClick = (id: string) => {
+    // router.push(`/${router.pathname}/${id}`);
   };
+  const handleEdit = (id: string) => {
+    const teacher = teacherList?.data.find(
+      (teacher: ITeacher) => teacher._id === id,
+    );
+    setDetailTeacher(teacher);
+    setShowTeacherPopup(true);
+  };
+
+  const deleteClick = (teacherId: string) => {
+    setIdDelete(teacherId);
+    setIsDeleteModalOpen(true);
+  };
+  const handleDelete = () => {
+    deleteTeacherMutation.mutate(idDelete, {
+      onSuccess: () => {
+        toast.success('Delete teacher success');
+        queryClient.invalidateQueries({
+          queryKey: ['teachers'],
+        });
+      },
+    });
+  };
+  const classOption = classList?.data?.map(
+    (className: { name: string }) => className.name,
+  );
+  const subjectOption = subjectList?.data.map(
+    (subjectName: { name: string }) => subjectName.name,
+  );
+  const recordsPerPage = 10;
+  const nPage = Math.ceil(teacherData?.length / recordsPerPage);
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records: ITeacher[] = teacherData?.slice(firstIndex, lastIndex);
+
   return (
-    <div className="container mx-auto md:px-4 lg:px-20 flex-1">
+    <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
       <div className="pt-5">
         <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
           <Image src={bellIcon} alt="" />
           <Button
-            title="Log out"
+            title="Logout"
             className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
+            onClick={() => {
+              localStorage.removeItem('access_token');
+              toast.success('Logout Success');
+              router.push('/signin');
+            }}
           />
         </div>
       </div>
@@ -127,7 +148,7 @@ const TeacherPage: NextPageWithLayout = () => {
           />
         </div>
       </div>
-      <div className="flex mt-7 md:pl-10">
+      <div className="flex mt-7  lg:pl-8">
         {/* Fillter */}
         <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row">
           <select
@@ -145,24 +166,40 @@ const TeacherPage: NextPageWithLayout = () => {
           </div>
         </div>
       </div>
-      {/* No data table */}
-      {/* <div className="md:pl-10 mt-8">
-        <div className="w-full h-[420px] bg-gray-200 flex flex-col justify-end items-center gap-1 px-4">
-          <h1 className="text-[#4F4F4F] font-kumbh-sans text-3xl font-semibold">
-            No Teachers at this time
-          </h1>
-          <p className="pb-20 text-sm font-normal">
-            Teachers will appear here after they enroll in your school.
-          </p>
-        </div>
-      </div> */}
-      {/* <TableV2 columns={columns} data={users} /> */}
-      {users.length ? (
-        <TableV2 columns={columns} data={users} onRowClick={handleRowClick} />
+      {isLoading && <Spinner />}
+      {records?.length ? (
+        <TableV2
+          columns={columns}
+          data={records}
+          onRowClick={handleRowClick}
+          isLoading={isLoading}
+          handleEdit={handleEdit}
+          onDeleteClick={deleteClick}
+        />
       ) : (
         <NotData />
       )}
-      {showTeacherPopup && <AddTeacherPopup onClose={handleClosePopup} />}
+      {showTeacherPopup && (
+        <AddTeacherPopup
+          onClose={handleClosePopup}
+          classOption={classOption}
+          subjectOption={subjectOption}
+          teacherDetail={detailTeacher}
+        />
+      )}
+      <div className="">
+        <Pagination
+          page={nPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this item?"
+      />
     </div>
   );
 };
