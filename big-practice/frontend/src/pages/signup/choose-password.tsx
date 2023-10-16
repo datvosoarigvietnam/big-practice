@@ -62,6 +62,7 @@ export default function ChoosePassword() {
                     type="password"
                     label="Choose a password"
                     value={infor.password}
+                    fullWith="w-full"
                   />
                 </div>
                 <div className="pl-[10px] pr-[10px] md:p-0">
@@ -72,6 +73,7 @@ export default function ChoosePassword() {
                     type="password"
                     label="Confirm password"
                     value={infor.confirmPassword}
+                    fullWith="w-full"
                   />
                 </div>
                 {errors.confirmPassword && (

@@ -11,12 +11,14 @@ import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import AddTeacherPopup from './AddTeacherPopup';
 import Spinner from '@/components/Spinner';
 import { ITeacher } from '@/@types/teacher.type';
 import Pagination from '@/components/Pagination';
-
+import { toast } from 'react-toastify';
+import { queryClient } from '@/pages/_app';
+import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 // export interface ITeacher {
 //   _id: number;
 //   name: string;
@@ -38,6 +40,8 @@ const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
   const [detailTeacher, setDetailTeacher] = useState<ITeacher | null>();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [idDelete, setIdDelete] = useState('');
   const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
@@ -71,6 +75,9 @@ const TeacherPage: NextPageWithLayout = () => {
     queryKey: ['subjects'],
     queryFn: () => adminApi.getSubjects(),
   });
+  const deleteTeacherMutation = useMutation({
+    mutationFn: (id: string) => adminApi.deleteTeacher(id),
+  });
   const handleRowClick = (id: string) => {
     // router.push(`/${router.pathname}/${id}`);
   };
@@ -79,8 +86,22 @@ const TeacherPage: NextPageWithLayout = () => {
       (teacher: ITeacher) => teacher._id === id,
     );
     setDetailTeacher(teacher);
-    console.log('teacher in edit', teacher);
     setShowTeacherPopup(true);
+  };
+
+  const deleteClick = (teacherId: string) => {
+    setIdDelete(teacherId);
+    setIsDeleteModalOpen(true);
+  };
+  const handleDelete = () => {
+    deleteTeacherMutation.mutate(idDelete, {
+      onSuccess: () => {
+        toast.success('Delete teacher success');
+        queryClient.invalidateQueries({
+          queryKey: ['teachers'],
+        });
+      },
+    });
   };
   const classOption = classList?.data?.map(
     (className: { name: string }) => className.name,
@@ -103,6 +124,11 @@ const TeacherPage: NextPageWithLayout = () => {
           <Button
             title="Logout"
             className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
+            onClick={() => {
+              localStorage.removeItem('access_token');
+              toast.success('Logout Success');
+              router.push('/signin');
+            }}
           />
         </div>
       </div>
@@ -148,6 +174,7 @@ const TeacherPage: NextPageWithLayout = () => {
           onRowClick={handleRowClick}
           isLoading={isLoading}
           handleEdit={handleEdit}
+          onDeleteClick={deleteClick}
         />
       ) : (
         <NotData />
@@ -167,6 +194,12 @@ const TeacherPage: NextPageWithLayout = () => {
           setCurrentPage={setCurrentPage}
         />
       </div>
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this item?"
+      />
     </div>
   );
 };

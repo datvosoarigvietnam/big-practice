@@ -68,6 +68,9 @@ const adminApi = {
       ...newTeacher,
     });
   },
+  deleteTeacher(teacherId: string) {
+    return http.delete(`/api/teachers/${teacherId}`);
+  },
 };
 
 export default adminApi;

@@ -17,9 +17,6 @@ import SidebarMobile from '@/components/Sidebar';
 const DashBoard: NextPageWithLayout = () => {
   const [showSidebarMenu, setShowSidebarMenu] = useState(false);
   const router = useRouter();
-
-  console.log(showSidebarMenu);
-
   const handleShowSidebar = () => {
     setShowSidebarMenu((prev) => !prev);
   };
@@ -60,7 +57,7 @@ const DashBoard: NextPageWithLayout = () => {
                   <Button
                     title="Log out"
                     className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
-                    onClick={async () => {
+                    onClick={() => {
                       localStorage.removeItem('access_token');
                       toast.success('Logout Success');
                       router.push('/signin');

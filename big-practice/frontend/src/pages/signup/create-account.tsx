@@ -116,6 +116,7 @@ export default function CreateAccount() {
                   placeholder="Enter the name of admin(*)"
                   type="text"
                   value={valueContenxt.infor.name.adminName}
+                  fullWith="w-full"
                 />{' '}
                 {errors.adminName?.message && (
                   <p className="text-red-500 text-center">
@@ -131,6 +132,7 @@ export default function CreateAccount() {
                   placeholder="Enter the name of school"
                   type="text"
                   value={valueContenxt.infor.name.schoolName}
+                  fullWith="w-full"
                 />
                 {errors.schoolName?.message && (
                   <p className="text-red-500 text-center ">
@@ -145,6 +147,7 @@ export default function CreateAccount() {
                   placeholder="Enter the school email"
                   type="text"
                   value={valueContenxt.infor.name.emailSchool}
+                  fullWith="w-full"
                 />
                 {errors.emailSchool?.message && (
                   <p className="text-red-500 text-center">

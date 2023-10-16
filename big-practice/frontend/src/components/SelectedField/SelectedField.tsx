@@ -1,4 +1,9 @@
-import React, { ChangeEvent, SelectHTMLAttributes, useContext, useState } from 'react';
+import React, {
+  ChangeEvent,
+  SelectHTMLAttributes,
+  useContext,
+  useState,
+} from 'react';
 import { Controller, Control, FieldValues } from 'react-hook-form';
 
 import { LabelContext } from '@/store/StepperDataContenxt';
@@ -32,13 +37,17 @@ export default function SelectedField({
           {...field}
           {...rest}
           // multiple
-          className={`${isFullWith ? 'w-full' : 'w-[250px]'
-            } outline-none rounded border-[0.5px] py-2 pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans md:w-[250px] `}
-
+          className={`${
+            isFullWith ? 'w-full' : 'w-[250px]'
+          } outline-none rounded border-[0.5px] py-[12px] pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans md:w-[250px] `}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+            const selectedOptions = Array.from(
+              e.target.selectedOptions,
+              (option) => option.value,
+            );
             setSelectedSubjects(selectedOptions);
-            onUpdateSelectedSubjects && onUpdateSelectedSubjects(selectedOptions);
+            onUpdateSelectedSubjects &&
+              onUpdateSelectedSubjects(selectedOptions);
             field.onChange(e);
             value.handleChange(name)(e);
           }}

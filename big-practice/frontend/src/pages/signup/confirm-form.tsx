@@ -13,7 +13,12 @@ import adminApi from '@/apis/admin.api';
 import Spinner from '@/components/Spinner';
 
 export default function ConfirmForm() {
-  const { control, handleSubmit, setError, formState: { errors } } = useForm<IInfor>();
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<IInfor>();
   const { infor } = useContext(LabelContext);
   const router = useRouter();
   const registerMutation = useMutation({
@@ -28,8 +33,10 @@ export default function ConfirmForm() {
       onError: (error: any) => {
         setError('password', {
           type: 'validate',
-          message: error.response.data.messages || 'An error occurred during register.'
-        })
+          message:
+            error.response.data.messages ||
+            'An error occurred during register.',
+        });
         toast.error(error.response.data.message);
       },
     });
@@ -101,6 +108,7 @@ export default function ConfirmForm() {
                   value={infor.password}
                   disabled
                   placeholder=""
+                  fullWith="w-full"
                 />
               </div>
               <div className="pl-[10px] pr-[10px] md:p-0">
@@ -133,7 +141,11 @@ export default function ConfirmForm() {
               </div>
             </div>
 
-            {errors.password && <p className='text-center text-red-500 mt-4'>{errors.password?.message}</p>}
+            {errors.password && (
+              <p className="text-center text-red-500 mt-4">
+                {errors.password?.message}
+              </p>
+            )}
             <div className="text-center pt-[14px] pb-[58px]">
               <p className="font-normal text-xs text-[#667085] font-sans leading-6">
                 Already have an account?{' '}

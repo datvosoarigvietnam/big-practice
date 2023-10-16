@@ -13,7 +13,6 @@ interface DataTableProps<T> {
   data: T[];
   columns: Column[];
   onRowClick?: (id: string) => void;
-  onEditClick?: (id: string) => void;
   onDeleteClick?: (id: string) => void;
   isLoading?: boolean;
   handleEdit: (id: string) => void;
@@ -23,7 +22,6 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   data,
   columns,
   onRowClick,
-  onEditClick,
   onDeleteClick,
   isLoading,
   handleEdit,
@@ -34,9 +32,7 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
     }
   };
   const handleDeleteClick = (id: number) => {
-    if (onDeleteClick) {
-      onDeleteClick(id);
-    }
+    onDeleteClick && onDeleteClick(id);
   };
   const handleEditClick = (id: string) => {
     handleEdit && handleEdit(id);
