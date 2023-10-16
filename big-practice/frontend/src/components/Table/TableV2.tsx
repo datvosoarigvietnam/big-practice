@@ -15,7 +15,7 @@ interface DataTableProps<T> {
   onRowClick?: (id: string) => void;
   onEditClick?: (id: string) => void;
   onDeleteClick?: (id: string) => void;
-  isLoading?: boolean
+  isLoading?: boolean;
 }
 
 const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
@@ -24,7 +24,7 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   onRowClick,
   onEditClick,
   onDeleteClick,
-  isLoading
+  isLoading,
 }) => {
   const handleClickRow = (id: number) => {
     if (onRowClick) {
@@ -55,7 +55,7 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
     return ''; // Return an empty string if the array is empty or not valid
   };
   return (
-    <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[50px]">
+    <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[20px]">
       {data && (
         <table className=" w-full">
           <thead className="">
@@ -63,8 +63,9 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className={`p-2 text-left ${column.header === 'Name' && ' bg-white sm:bg-inherit'
-                    }`}
+                  className={`p-2 text-left ${
+                    column.header === 'Name' && ' bg-white sm:bg-inherit'
+                  }`}
                 >
                   {column.header}
                 </th>
@@ -79,8 +80,9 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
               return (
                 <tr
                   key={row.id}
-                  className={`${index % 2 === 0 ? 'bg-[#f0f8ff]' : 'bg-white'
-                    } py-6 px-4 hover:bg-[#81afd7] transition duration-150 hover:rounded`}
+                  className={`${
+                    index % 2 === 0 ? 'bg-[#f0f8ff]' : 'bg-white'
+                  } py-6 px-4 hover:bg-[#81afd7] transition duration-150 hover:rounded`}
                   onClick={() => handleClickRow(row.id)}
                 >
                   {columns.map((column) => {
@@ -90,12 +92,12 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
                         className="py-4 px-4  text-[#4F4F4F] font-medium"
                       >
                         {column.key === 'subjects' && isUser(row)
-                          ? formatSubjectArrayToString(row.subject) // Format subject array to string
+                          ? formatSubjectArrayToString(row.subject)
                           : isUser(row)
-                            ? (row as User)[column.key]
-                            : (row as IStudent)[column.key]}
+                          ? (row as User)[column.key]
+                          : (row as IStudent)[column.key]}
                       </td>
-                    )
+                    );
                   })}
                   {/* Edit button */}
                   <td

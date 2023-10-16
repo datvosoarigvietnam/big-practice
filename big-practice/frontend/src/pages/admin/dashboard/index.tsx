@@ -15,21 +15,22 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 import SidebarMobile from '@/components/Sidebar';
 // import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 const DashBoard: NextPageWithLayout = () => {
-  const [showSidebarMenu, setShowSidebarMenu] = useState(false)
+  const [showSidebarMenu, setShowSidebarMenu] = useState(false);
   const router = useRouter();
 
   console.log(showSidebarMenu);
 
   const handleShowSidebar = () => {
-    setShowSidebarMenu(prev => !prev)
-  }
+    setShowSidebarMenu((prev) => !prev);
+  };
   const onClose = () => {
-    setShowSidebarMenu(false)
-  }
+    setShowSidebarMenu(false);
+  };
   return (
-
-    <div className="flex">
-      {showSidebarMenu && <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />}
+    <div className="flex flex-1 md:flex-auto">
+      {showSidebarMenu && (
+        <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
+      )}
 
       <div className="flex-1 ">
         <div className="bg-[#FCFAFA]   ">
@@ -47,9 +48,14 @@ const DashBoard: NextPageWithLayout = () => {
               </div>
               <div className="flex justify-around items-center gap-12 pb-[12px]">
                 <div className="">
-                  <Image src={menuIcon} alt="" className='sm:hidden' onClick={handleShowSidebar} />
+                  <Image
+                    src={menuIcon}
+                    alt=""
+                    className="sm:hidden"
+                    onClick={handleShowSidebar}
+                  />
                 </div>
-                <div className='flex flex-1 justify-evenly sm:gap-4'>
+                <div className="flex flex-1 justify-evenly sm:gap-4">
                   <Image src={bellIcon} alt="" />
                   <Button
                     title="Log out"
@@ -83,8 +89,8 @@ const DashBoard: NextPageWithLayout = () => {
                   </p>
                   <p className="hidden md:block">
                     Create rich course content and coaching products for your
-                    students. When you give them a pricing plan, they’ll appear on
-                    your site!
+                    students. When you give them a pricing plan, they’ll appear
+                    on your site!
                   </p>
                 </div>
               </div>
@@ -96,8 +102,8 @@ const DashBoard: NextPageWithLayout = () => {
                   </p>
                   <p className="hidden md:block">
                     Create rich course content and coaching products for your
-                    students. When you give them a pricing plan, they’ll appear on
-                    your site!
+                    students. When you give them a pricing plan, they’ll appear
+                    on your site!
                   </p>
                 </div>
               </div>
@@ -109,8 +115,8 @@ const DashBoard: NextPageWithLayout = () => {
                   </p>
                   <p className="hidden md:block">
                     Create rich course content and coaching products for your
-                    students. When you give them a pricing plan, they’ll appear on
-                    your site!
+                    students. When you give them a pricing plan, they’ll appear
+                    on your site!
                   </p>
                 </div>
               </div>

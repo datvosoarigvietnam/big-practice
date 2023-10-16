@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import AddTeacherPopup from './AddTeacherPopup';
 import Spinner from '@/components/Spinner';
 import { ITeacher } from '@/@types/teacher.type';
+import Pagination from '@/components/Pagination';
 
 // export interface ITeacher {
 //   _id: number;
@@ -35,7 +36,8 @@ const columns: Column[] = [
 
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
-  const [detailTeacher, setDetailTeacher] = useState<ITeacher>()
+  const [detailTeacher, setDetailTeacher] = useState<ITeacher>();
+  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
@@ -69,11 +71,11 @@ const TeacherPage: NextPageWithLayout = () => {
   });
   const handleRowClick = (id: string) => {
     // router.push(`/${router.pathname}/${id}`);
-    console.log("Teacher iD", id);
-    const teacher = teacherList?.data.find((teacher: ITeacher) => teacher._id === id)
-    console.log("teacher", teacher);
-
-
+    console.log('Teacher iD', id);
+    const teacher = teacherList?.data.find(
+      (teacher: ITeacher) => teacher._id === id,
+    );
+    console.log('teacher', teacher);
   };
   const classOption = classList?.data?.map(
     (className: { name: string }) => className.name,
@@ -81,9 +83,14 @@ const TeacherPage: NextPageWithLayout = () => {
   const subjectOption = subjectList?.data.map(
     (subjectName: { name: string }) => subjectName.name,
   );
+  const recordsPerPage = 10;
+  const nPage = Math.ceil(teacherData?.length / recordsPerPage);
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records: ITeacher[] = teacherData?.slice(firstIndex, lastIndex);
 
   return (
-    <div className="container mx-auto md:px-4 lg:px-10 flex-1">
+    <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
       <div className="pt-5">
         <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
@@ -129,10 +136,10 @@ const TeacherPage: NextPageWithLayout = () => {
         </div>
       </div>
       {isLoading && <Spinner />}
-      {teacherData?.length ? (
+      {records?.length ? (
         <TableV2
           columns={columns}
-          data={teacherData}
+          data={records}
           onRowClick={handleRowClick}
           isLoading={isLoading}
         />
@@ -147,6 +154,13 @@ const TeacherPage: NextPageWithLayout = () => {
           teacherDetail={detailTeacher}
         />
       )}
+      <div className="">
+        <Pagination
+          page={nPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
     </div>
   );
 };
