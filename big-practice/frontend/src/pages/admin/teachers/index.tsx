@@ -19,15 +19,8 @@ import Pagination from '@/components/Pagination';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/pages/_app';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
-// export interface ITeacher {
-//   _id: number;
-//   name: string;
-//   subject: string;
-//   email: string;
-//   class: string;
-//   gender: 'Male' | 'Female' | 'Other';
-// }
-
+import SidebarMobile from '@/components/Sidebar';
+import menuIcon from "@/common/icons/menuIcon.svg"
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'class', header: 'Class' },
@@ -38,6 +31,7 @@ const columns: Column[] = [
 
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
+  const [showSidebarMenu, setShowSidebarMenu] = useState(false);
   const [detailTeacher, setDetailTeacher] = useState<ITeacher | null>();
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -50,7 +44,9 @@ const TeacherPage: NextPageWithLayout = () => {
     setShowTeacherPopup(false);
     setDetailTeacher(null);
   };
-
+  const onClose = () => {
+    setShowSidebarMenu(false);
+  };
   const { data: teacherList, isLoading } = useQuery({
     queryKey: ['teachers'],
     queryFn: () => adminApi.getTeachers(),
@@ -109,27 +105,42 @@ const TeacherPage: NextPageWithLayout = () => {
   const subjectOption = subjectList?.data.map(
     (subjectName: { name: string }) => subjectName.name,
   );
-  const recordsPerPage = 10;
+  const recordsPerPage = 8;
   const nPage = Math.ceil(teacherData?.length / recordsPerPage);
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records: ITeacher[] = teacherData?.slice(firstIndex, lastIndex);
-
+  const handleShowSidebar = () => {
+    setShowSidebarMenu((prev) => !prev);
+  };
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
-      <div className="pt-5">
-        <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
-          <Image src={bellIcon} alt="" />
-          <Button
-            title="Logout"
-            className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
-            onClick={() => {
-              localStorage.removeItem('access_token');
-              toast.success('Logout Success');
-              router.push('/signin');
-            }}
-          />
+      {showSidebarMenu && (
+        <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
+      )}
+      <div className="pt-5 px-7">
+        <div className="flex justify-between items-center gap-4 pb-[12px] ">
+          <div className="">
+            <Image
+              src={menuIcon}
+              alt=""
+              className="lg:hidden w-8 h-8"
+              onClick={handleShowSidebar}
+            />
+          </div>
+          <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
+            <Image src={bellIcon} alt="" />
+            <Button
+              title="Logout"
+              className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
+              onClick={() => {
+                localStorage.removeItem('access_token');
+                toast.success('Logout Success');
+                router.push('/signin');
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-5 justify-center items-center mt-4 md:justify-between md:flex-row">
