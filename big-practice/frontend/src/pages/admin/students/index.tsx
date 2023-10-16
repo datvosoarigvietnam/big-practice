@@ -13,7 +13,7 @@ import { NextPageWithLayout } from '@/models/common';
 import AddStudentPopup from './AddStudentPopup';
 
 export interface IStudent {
-  id: number;
+  id: string;
   name: string;
   email: string;
   class: string;
@@ -26,57 +26,57 @@ const columns: Column[] = [
   { key: 'gender', header: 'Gender' },
 ];
 // const students: IStudent[] = [];
-const students: IStudent[] = [
-  {
-    id: 1,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 2,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 3,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 4,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 5,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 6,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 7,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-];
+// const students: IStudent[] = [
+//   {
+//     id: 1,
+//     name: 'Alice',
+//     class: 'J20',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 2,
+//     name: 'Alice',
+//     class: 'J20',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 3,
+//     name: 'Alice',
+//     class: 'J20',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 4,
+//     name: 'Alice',
+//     class: 'J20',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 5,
+//     name: 'Alice',
+//     class: 'J20',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 6,
+//     name: 'Alice',
+//     class: 'J20',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+//   {
+//     id: 7,
+//     name: 'Alice',
+//     class: 'J20',
+//     email: 'alice@example.com',
+//     gender: 'Female',
+//   },
+// ];
 const StudentPage: NextPageWithLayout = () => {
   const [showStudentPopup, setShowStudentPopup] = useState(false);
 
@@ -137,17 +137,17 @@ const StudentPage: NextPageWithLayout = () => {
           </div>
         </div>
       </div>
-      {/* <NotData /> */}
+      <NotData />
       {/* <TableV2 columns={columns} data={students} onRowClick={handleRowClick} /> */}
-      {students.length ? (
+      {/* {students.length ? (
         <TableV2
           columns={columns}
           data={students}
-          onRowClick={handleRowClick}
+          // onRowClick={handleRowClick}
         />
       ) : (
         <NotData />
-      )}
+      )} */}
       {showStudentPopup && <AddStudentPopup onClose={handleClosePopup} />}
     </div>
   );

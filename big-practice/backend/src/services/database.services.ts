@@ -1,7 +1,7 @@
 import { MongoClient, Db, Collection } from 'mongodb'
 import { IAdmin } from '~/models/schemas/Admin.schema'
 import { IRefreshToken } from '~/models/schemas/RefreshToken.schema'
-import { ITeacher } from '~/models/schemas/Teacher.schema'
+// import { ITeacher } from '~/models/schemas/Teacher.schema'
 const uri = 'mongodb+srv://datvodat288:chamlohochanh123@bigpractice.ywve0xf.mongodb.net/?retryWrites=true&w=majority'
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version

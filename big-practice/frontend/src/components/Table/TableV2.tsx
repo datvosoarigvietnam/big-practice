@@ -15,7 +15,7 @@ interface DataTableProps<T> {
   onRowClick?: (id: string) => void;
   onDeleteClick?: (id: string) => void;
   isLoading?: boolean;
-  handleEdit: (id: string) => void;
+  handleEdit?: (id: string) => void;
 }
 
 const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({

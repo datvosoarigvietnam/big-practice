@@ -14,7 +14,7 @@ interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   control: Control<FieldValues>;
   defaultOption?: string | number;
   isFullWith?: boolean;
-  onUpdateSelectedSubjects?: (selectedSubjects: string[]) => void;
+  onUpdateSelectedSubjects?: (selectedSubjects: string) => void;
 }
 
 export default function SelectedField({
@@ -47,7 +47,8 @@ export default function SelectedField({
             );
             setSelectedSubjects(selectedOptions);
             onUpdateSelectedSubjects &&
-              onUpdateSelectedSubjects(selectedOptions);
+              // onUpdateSelectedSubjects(selectedOptions);
+              onUpdateSelectedSubjects(e.target.value);
             field.onChange(e);
             value.handleChange(name)(e);
           }}

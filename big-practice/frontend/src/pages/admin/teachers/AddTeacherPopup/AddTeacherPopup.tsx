@@ -1,5 +1,5 @@
 import React, { useState, useMemo, ChangeEvent } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 import adminApi from '@/apis/admin.api';
 import InputField from '@/components/InputField';
@@ -67,21 +67,25 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     selectedClass: Yup.string().required('Class is required'),
     selectedGender: Yup.string().required('Gender is required'),
   });
-
+  const [tempSubjectOption, setTempSelectOption] = useState(subjectOption);
   const {
     control,
     handleSubmit,
     setError,
-    clearErrors,
-    reset,
+    register,
     formState: { errors },
   } = useForm<ITeacher | any>({
     defaultValues,
     resolver: yupResolver(validationSchema),
   });
-  console.log('Error by yup', errors);
 
+  const { fields, append } = useFieldArray({
+    control,
+    name: 'subjects',
+  });
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedArray, setSelectedArray] = useState<string[]>([]);
+
   const addTeacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) => adminApi.addTeacher(teacherInfor),
   });
@@ -140,6 +144,24 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const handleClose = () => {
     onClose();
   };
+
+  // test array field
+  const addSubjectField = () => {
+    append({}); // Append an empty object to the subjects array
+  };
+  const handleChange = (value: string) => {
+    // setSelectedSubjects([...selectedArray, ...selectedSubjects, value]);
+    // const newSelectOption = tempSubjectOption.filter(
+    //   (option) => option !== value,
+    // );
+    // setTempSelectOption(newSelectOption);
+    // console.log(newSelectOption);
+    setSelectedSubjects([...selectedArray, value]);
+    setTempSelectOption((prevOptions) =>
+      prevOptions.filter((option) => option !== value),
+    );
+  };
+
   const optionGender = ['Male', 'Female', 'Other'];
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
@@ -275,16 +297,39 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               defaultOption={teacherDetail?.subjects[0]?.name || 'Subject'}
               options={subjectOption}
               onUpdateSelectedSubjects={(selectedSubjects) => {
-                setSelectedSubjects(selectedSubjects);
+                handleChange(selectedSubjects);
               }}
             />
           </div>
           {/* <p></p> */}
-
-          <div className="mt-10 pb-4">
-            <Button
-              title={teacherDetail?._id ? 'Eidt Teacher' : 'Add Teacher'}
-            />
+          {fields.map((field, index) => (
+            <div className="flex flex-col ">
+              <select
+                key={field.id}
+                {...register(`subjects[${index}].name`)}
+                className={`outline-none rounded border-[0.5px] py-[12px] pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans md:w-[250px] `}
+                onChange={(e) => handleChange(e.target.value)}
+              >
+                <option value="">Subject</option>
+                {tempSubjectOption.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+          <div className="mt-10 pb-4 flex flex-row">
+            <div className="">
+              <button type="button" className="" onClick={addSubjectField}>
+                Add other
+              </button>
+            </div>
+            <div className="">
+              <Button
+                title={teacherDetail?._id ? 'Eidt Teacher' : 'Add Teacher'}
+              />
+            </div>
           </div>
         </form>
       </div>

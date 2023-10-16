@@ -9,8 +9,7 @@ interface AddStudentPopupProps {
 }
 
 const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({ onClose }) => {
-  const { control, watch } = useForm();
-  console.log('Data', watch());
+  const { control, watch, handleSubmit } = useForm();
 
   const [formData] = useState({
     fullName: '',
@@ -22,10 +21,8 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({ onClose }) => {
     subject: '',
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+  // const onSubmit = (values: IStudent) => {};
+
   const handleClose = () => {
     onClose();
   };
@@ -38,7 +35,7 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({ onClose }) => {
         >
           &times;
         </span>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F] text-center">
             Add Student
           </h2>
