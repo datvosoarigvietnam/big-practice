@@ -93,6 +93,8 @@ const StudentPage: NextPageWithLayout = () => {
     const student = studentList?.data.find(
       (student: IStudent) => student._id === id,
     );
+    console.log('student', student);
+
     setDetailStudent(student);
     setShowStudentPopup(true);
   };

@@ -21,7 +21,7 @@ const studentApi = {
   }) {
     return http.patch(`${URL}/${id}`, {
       ...studentInfor,
-      classSchool: studentInfor.classSchool?.name,
+      classSchool: studentInfor.classSchool?.name || studentInfor.classSchool,
     });
   },
   deleteStudent(id: string) {

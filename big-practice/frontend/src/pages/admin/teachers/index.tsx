@@ -47,9 +47,10 @@ const TeacherPage: NextPageWithLayout = () => {
   const onClose = () => {
     setShowSidebarMenu(false);
   };
+  const [search, setSearch] = useState('');
   const { data: teacherList, isLoading } = useQuery({
-    queryKey: ['teachers'],
-    queryFn: () => adminApi.getTeachers(),
+    queryKey: ['teachers', search],
+    queryFn: () => adminApi.getTeachers(search),
   });
 
   const teacherData: ITeacher[] = useMemo(() => {
@@ -115,6 +116,8 @@ const TeacherPage: NextPageWithLayout = () => {
   const handleShowSidebar = () => {
     setShowSidebarMenu((prev) => !prev);
   };
+  console.log('search', search);
+
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
@@ -175,6 +178,7 @@ const TeacherPage: NextPageWithLayout = () => {
             <input
               placeholder="Search for a teacher by name or email "
               className="text-[#8A8A8A] w-full bg-inherit outline-none"
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
