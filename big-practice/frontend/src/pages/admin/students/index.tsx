@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Column } from '@/@types/Table.type';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
@@ -10,90 +10,104 @@ import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import AddStudentPopup from './AddStudentPopup';
+import AddStudentPopup from './StudentPopup';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import studentApi from '@/apis/student.api';
+import { IStudent } from '@/@types/student.type';
+import Pagination from '@/components/Pagination';
+import Spinner from '@/components/Spinner';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import ConfirmForm from '@/components/ConfirmModal';
+import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
+import { queryClient } from '@/pages/_app';
 
-export interface IStudent {
-  id: number;
-  name: string;
-  email: string;
-  class: string;
-  gender: 'Male' | 'Female';
-}
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
-  { key: 'class', header: 'Class' },
+  { key: '_id', header: 'Student ID' },
   { key: 'email', header: 'Email' },
+  { key: 'class', header: 'Class' },
   { key: 'gender', header: 'Gender' },
 ];
-// const students: IStudent[] = [];
-const students: IStudent[] = [
-  {
-    id: 1,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 2,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 3,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 4,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 5,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 6,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-  {
-    id: 7,
-    name: 'Alice',
-    class: 'J20',
-    email: 'alice@example.com',
-    gender: 'Female',
-  },
-];
-const StudentPage: NextPageWithLayout = () => {
-  const [showStudentPopup, setShowStudentPopup] = useState(false);
 
+const StudentPage: NextPageWithLayout = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showStudentPopup, setShowStudentPopup] = useState(false);
+  const [detailStudent, setDetailStudent] = useState<IStudent | null>();
+  const [idStudent, setIdStudent] = useState<string>();
+  const [showModalConfirm, setShowModalConfirm] = useState(false);
   const router = useRouter();
   const handleShowPopup = () => {
     setShowStudentPopup(true);
   };
   const handleClosePopup = () => {
+    setDetailStudent(null);
     setShowStudentPopup(false);
   };
-  const handleRowClick = (id: number) => {
-    router.push(`/${router.pathname}/${id}`);
-  };
+  // const handleRowClick = (id: number) => {
+  //   router.push(`/${router.pathname}/${id}`);
+  // };
+  const { data: studentList, isLoading } = useQuery({
+    queryKey: ['students'],
+    queryFn: () => studentApi.getStudents(),
+  });
+  const { data: classList } = useQuery({
+    queryKey: ['classes'],
+    queryFn: () => studentApi.getClass(),
+  });
+  const deleteStudent = useMutation({
+    mutationFn: (id: string) => studentApi.deleteStudent(id),
+    onSuccess: () => {
+      toast.success('Delete student success!');
+      queryClient.invalidateQueries({
+        queryKey: ['students'],
+      });
+    },
+    onError: (error: AxiosError) => {
+      // @ts-ignore
+      toast.error(error.response?.data.message);
+    },
+  });
+  const studentData: IStudent[] = useMemo(() => {
+    return studentList?.data.map((student: IStudent) => ({
+      name: student.fullName,
+      _id: student._id,
+      email: student.email,
+      class: student?.classSchool?.name,
+      gender: student.gender,
+    }));
+  }, [studentList]);
 
+  const classOption = classList?.data?.map(
+    (className: { name: string }) => className.name,
+  );
+
+  // Pagination
+  const recordsPerPage = 9;
+  const nPage = Math.ceil(studentData?.length / recordsPerPage);
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records: IStudent[] = studentData?.slice(firstIndex, lastIndex);
+
+  const handleEdit = (id: string) => {
+    const student = studentList?.data.find(
+      (student: IStudent) => student._id === id,
+    );
+    setDetailStudent(student);
+    setShowStudentPopup(true);
+  };
+  const onClickDelete = (id: string) => {
+    setIdStudent(id);
+    setShowModalConfirm(true);
+  };
+  const handleDeleteStudent = () => {
+    deleteStudent.mutate(idStudent as string);
+  };
   return (
     <div className="container mx-auto md:px-4 lg:px-20 flex-1">
       {/* Header */}
+      {isLoading && <Spinner />}
+      {deleteStudent.isLoading && <Spinner />}
       <div className="pt-5">
         <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
           <Image src={bellIcon} alt="" />
@@ -139,16 +153,39 @@ const StudentPage: NextPageWithLayout = () => {
       </div>
       {/* <NotData /> */}
       {/* <TableV2 columns={columns} data={students} onRowClick={handleRowClick} /> */}
-      {students.length ? (
-        <TableV2
-          columns={columns}
-          data={students}
-          onRowClick={handleRowClick}
-        />
+      {records?.length ? (
+        <>
+          <TableV2
+            columns={columns}
+            data={records}
+            // onRowClick={handleRowClick}
+            handleEdit={handleEdit}
+            onDeleteClick={onClickDelete}
+          />
+          <Pagination
+            page={nPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
       ) : (
         <NotData />
       )}
-      {showStudentPopup && <AddStudentPopup onClose={handleClosePopup} />}
+      {showStudentPopup && (
+        <AddStudentPopup
+          onClose={handleClosePopup}
+          classOption={classOption}
+          detailStudent={detailStudent}
+        />
+      )}
+      {showModalConfirm && (
+        <ConfirmationModal
+          isOpen={showModalConfirm}
+          onClose={() => setShowModalConfirm(false)}
+          onConfirm={handleDeleteStudent}
+          message="Do you want to delete this student?"
+        />
+      )}
     </div>
   );
 };

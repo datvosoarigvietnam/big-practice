@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { User } from '@/pages/admin/teachers';
-import { IStudent } from '@/pages/admin/students';
+import { IStudent } from '@/@types/student.type';
 import { Column } from '@/@types/Table.type';
 import { ITeacher } from '@/@types/teacher.type';
 
@@ -15,7 +15,7 @@ interface DataTableProps<T> {
   onRowClick?: (id: string) => void;
   onDeleteClick?: (id: string) => void;
   isLoading?: boolean;
-  handleEdit: (id: string) => void;
+  handleEdit?: (id: string) => void;
 }
 
 const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
@@ -43,9 +43,9 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   const formatSubjectArrayToString = (subjectArray) => {
     if (Array.isArray(subjectArray) && subjectArray.length > 0) {
       const subjectNames = subjectArray.map((subject) => subject.name);
-      return subjectNames.join(', '); // Join the subject names with a comma and space
+      return subjectNames.join(', ');
     }
-    return ''; // Return an empty string if the array is empty or not valid
+    return '';
   };
   return (
     <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[20px]">
@@ -97,7 +97,7 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
                     className="py-4 px-4  text-[#4F4F4F] font-medium cursor-pointer hover:text-blue-500"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleEditClick(row.id);
+                      handleEditClick(row._id);
                     }}
                   >
                     Edit
@@ -107,7 +107,7 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
                     className="py-4 px-4  text-[#4F4F4F] font-medium cursor-pointer hover:text-red-500"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteClick(row.id);
+                      handleDeleteClick(row._id);
                     }}
                   >
                     Delete

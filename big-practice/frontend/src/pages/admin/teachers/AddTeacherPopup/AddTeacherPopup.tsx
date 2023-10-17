@@ -79,8 +79,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     defaultValues,
     resolver: yupResolver(validationSchema),
   });
-  console.log('Error by yup', errors);
-
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const addTeacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) => adminApi.addTeacher(teacherInfor),

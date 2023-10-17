@@ -58,7 +58,7 @@ const TeacherPage: NextPageWithLayout = () => {
 
   const teacherData: ITeacher[] = useMemo(() => {
     return teacherList?.data?.map((item: any) => ({
-      id: item._id,
+      _id: item._id,
       name: item.fullName,
       class: item.classSchool.name,
       subject: item.subjects,
