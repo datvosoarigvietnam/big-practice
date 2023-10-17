@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
-
 import { Column } from '@/@types/Table.type';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
@@ -18,7 +17,6 @@ import Pagination from '@/components/Pagination';
 import Spinner from '@/components/Spinner';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import ConfirmForm from '@/components/ConfirmModal';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import { queryClient } from '@/pages/_app';
 
@@ -54,6 +52,7 @@ const StudentPage: NextPageWithLayout = () => {
   const { data: classList } = useQuery({
     queryKey: ['classes'],
     queryFn: () => studentApi.getClass(),
+    staleTime: 3000,
   });
   const deleteStudent = useMutation({
     mutationFn: (id: string) => studentApi.deleteStudent(id),
@@ -104,7 +103,7 @@ const StudentPage: NextPageWithLayout = () => {
     deleteStudent.mutate(idStudent as string);
   };
   return (
-    <div className="container mx-auto md:px-4 lg:px-20 flex-1">
+    <div className="container mx-auto md:px-4 lg:px-8 flex-1">
       {/* Header */}
       {isLoading && <Spinner />}
       {deleteStudent.isLoading && <Spinner />}
@@ -114,6 +113,11 @@ const StudentPage: NextPageWithLayout = () => {
           <Button
             title="Log out"
             className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
+            onClick={() => {
+              localStorage.removeItem('access_token');
+              toast.success('Logout Success');
+              router.push('/signin');
+            }}
           />
         </div>
       </div>
@@ -135,7 +139,7 @@ const StudentPage: NextPageWithLayout = () => {
       </div>
       <div className="flex mt-7 md:pl-10">
         {/* Fillter */}
-        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row">
+        <div className="flex flex-col justify-center flex-1  gap-4 px-4 md:flex-row">
           <select
             className="flex justify-between items-center px-4 py-4 text-[#C4C4C4] border-gray-400 border outline-none rounded sm:border-none"
             property=""
@@ -152,7 +156,6 @@ const StudentPage: NextPageWithLayout = () => {
         </div>
       </div>
       {/* <NotData /> */}
-      {/* <TableV2 columns={columns} data={students} onRowClick={handleRowClick} /> */}
       {records?.length ? (
         <>
           <TableV2

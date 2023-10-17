@@ -175,7 +175,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             </div> */}
           </div>
 
-          <div className="mt-12 sm:mt-[75px] flex items-center justify-center md:block">
+          <div className="mt-12 sm:mt-[75px] flex flex-1 items-center justify-center md:block w-full">
             <InputField
               name="name"
               control={control}
@@ -192,13 +192,14 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             )}
           </div>
           <div className="mt-8 flex gap-5 md:gap-7  lg:gap-12 flex-col items-center md:items-start lg:flex-row lg:items-end">
-            <div className="">
+            <div className="w-full">
               <InputField
                 name="email"
                 control={control}
                 label="Email Address"
                 placeholder=""
                 type="text"
+                fullWith="w-full"
                 // className="w-full"
               />
               <div className=" ">
@@ -254,6 +255,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 label="Password"
                 placeholder=""
                 type="password"
+                fullWith="w-full"
               />
             )}
             <InputField
@@ -263,6 +265,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               placeholder=""
               type="tel"
               value={teacherDetail?.phoneNumber}
+              fullWith="w-full"
             />
           </div>
           <div className="mt-10">
