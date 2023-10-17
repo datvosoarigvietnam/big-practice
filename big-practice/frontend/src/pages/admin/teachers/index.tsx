@@ -54,7 +54,7 @@ const TeacherPage: NextPageWithLayout = () => {
 
   const teacherData: ITeacher[] = useMemo(() => {
     return teacherList?.data?.map((item: any) => ({
-      id: item._id,
+      _id: item._id,
       name: item.fullName,
       class: item.classSchool.name,
       subject: item.subjects,
@@ -161,7 +161,7 @@ const TeacherPage: NextPageWithLayout = () => {
       </div>
       <div className="flex mt-7  lg:pl-8">
         {/* Fillter */}
-        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row">
+        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row px-4">
           <select
             className="flex justify-between items-center px-4 py-4 text-[#C4C4C4] border-gray-400 border outline-none rounded sm:border-none"
             property=""

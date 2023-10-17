@@ -45,7 +45,7 @@ export default function InputField({
       control={control}
       name={name}
       render={({ field }) => (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           {label && (
             <label
               htmlFor={name}
@@ -61,7 +61,7 @@ export default function InputField({
               {...field}
               placeholder={placeholder}
               className={`outline-none rounded border-[0.5px] py-3 sm:p-2 pl-[13px] font-medium text-[#8A8A8A] font-[Kumbh Sans]  ${
-                fullWith ? 'w-full' : 'lg:w-[250px]'
+                fullWith ? 'w-full' : 'w-[250px]'
               }`}
               type={
                 type === 'password'

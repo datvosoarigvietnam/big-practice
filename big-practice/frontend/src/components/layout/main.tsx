@@ -18,9 +18,7 @@ export function MainLayout({ children }: ILayoutProps) {
       setIsLoading(false); // Set loading to false once authentication is verified
     }
   }, [isAuthenticated]);
-  useEffect(() => {
-    console.log(localStorage.getItem('access_token'));
-  }, []);
+
   // if (isLoading) {
   //   return (
   //     <div>

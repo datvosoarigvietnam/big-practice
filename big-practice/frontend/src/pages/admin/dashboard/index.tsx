@@ -21,7 +21,7 @@ const DashBoard: NextPageWithLayout = () => {
     setShowSidebarMenu(false);
   };
   return (
-    <div className="flex flex-1 md:flex-auto">
+    <div className="flex flex-1 ">
       {showSidebarMenu && (
         <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
       )}
