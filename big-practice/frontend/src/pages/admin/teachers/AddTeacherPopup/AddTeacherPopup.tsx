@@ -1,18 +1,19 @@
-import React, { useState, useMemo, ChangeEvent } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import adminApi from '@/apis/admin.api';
 import InputField from '@/components/InputField';
 import SelectedField from '@/components/SelectedField';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import Button from '@/components/Button';
-import { ITeacher } from '@/@types/teacher.type';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
+import { ITeacher } from '@/types/teacher.type';
 import { queryClient } from '@/pages/_app';
 import Spinner from '@/components/Spinner';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+
 interface AddTeacherPopupProps {
   onClose: () => void;
   classOption: string[];
@@ -72,8 +73,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     control,
     handleSubmit,
     setError,
-    clearErrors,
-    reset,
     formState: { errors },
   } = useForm<ITeacher | any>({
     defaultValues,

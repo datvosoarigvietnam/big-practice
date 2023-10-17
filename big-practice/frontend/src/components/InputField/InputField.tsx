@@ -26,7 +26,7 @@ export default function InputField({
   placeholder,
   type,
   label,
-  value,
+  // value,
   fullWith,
   ...props
 }: IProps) {

@@ -1,7 +1,12 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
-import { Column } from '@/@types/Table.type';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+
+import AddStudentPopup from './StudentPopup';
+import { Column } from '@/types/Table.type';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
 import Button from '@/components/Button';
@@ -9,14 +14,10 @@ import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import AddStudentPopup from './StudentPopup';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import studentApi from '@/apis/student.api';
-import { IStudent } from '@/@types/student.type';
+import { IStudent } from '@/types/student.type';
 import Pagination from '@/components/Pagination';
 import Spinner from '@/components/Spinner';
-import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import { queryClient } from '@/pages/_app';
 
@@ -24,7 +25,7 @@ const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: '_id', header: 'Student ID' },
   { key: 'email', header: 'Email' },
-  { key: 'class', header: 'Class' },
+  { key: 'classSchool', header: 'Class' },
   { key: 'gender', header: 'Gender' },
 ];
 
@@ -72,7 +73,7 @@ const StudentPage: NextPageWithLayout = () => {
       name: student.fullName,
       _id: student._id,
       email: student.email,
-      class: student?.classSchool?.name,
+      classSchool: student?.classSchool?.name,
       gender: student.gender,
     }));
   }, [studentList]);

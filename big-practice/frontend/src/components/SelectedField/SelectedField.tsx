@@ -27,7 +27,7 @@ export default function SelectedField({
   ...rest
 }: IProps) {
   const value = useContext(LabelContext);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [, setSelectedSubjects] = useState<string[]>([]);
   return (
     <Controller
       name={name}

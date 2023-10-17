@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 import addProfileIcon from '@/common/icons/addProfileIcon.svg';
 import addStudentIcon from '@/common/icons/addStudentIcon.svg';
@@ -10,7 +11,6 @@ import Button from '@/components/Button';
 import SidebarMobile from '@/components/Sidebar';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import { useState } from 'react';
 const DashBoard: NextPageWithLayout = () => {
   const [showSidebarMenu, setShowSidebarMenu] = useState(false);
   const router = useRouter();

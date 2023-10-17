@@ -1,5 +1,5 @@
 import http from '@/utils/http';
-import { IStudent } from '@/@types/student.type';
+import { IStudent } from '@/types/student.type';
 
 const URL = '/api/students';
 const studentApi = {

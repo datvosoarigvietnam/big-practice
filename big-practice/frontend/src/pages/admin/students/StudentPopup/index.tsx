@@ -1,17 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { toast } from 'react-toastify';
-import InputField from '@/components/InputField';
-import SelectedField from '@/components/SelectedField';
-import { IStudent } from '@/@types/student.type';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
-import studentApi from '@/apis/student.api';
-import Spinner from '@/components/Spinner';
 import { useRouter } from 'next/router';
 import { AxiosError } from 'axios';
+
+import InputField from '@/components/InputField';
+import SelectedField from '@/components/SelectedField';
+import { IStudent } from '@/types/student.type';
+import studentApi from '@/apis/student.api';
+import Spinner from '@/components/Spinner';
 import { queryClient } from '@/pages/_app';
 interface AddStudentPopupProps {
   onClose: () => void;
@@ -59,7 +59,7 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({
       }
     }
     return values;
-  }, []);
+  }, [detailStudent]);
 
   const {
     control,

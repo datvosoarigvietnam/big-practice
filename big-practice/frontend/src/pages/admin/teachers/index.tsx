@@ -1,8 +1,11 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
-import { Column } from '@/@types/Table.type';
+import AddTeacherPopup from './AddTeacherPopup';
+import { Column } from '@/types/Table.type';
 import adminApi from '@/apis/admin.api';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
@@ -11,19 +14,16 @@ import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import AddTeacherPopup from './AddTeacherPopup';
 import Spinner from '@/components/Spinner';
-import { ITeacher } from '@/@types/teacher.type';
+import { ITeacher } from '@/types/teacher.type';
 import Pagination from '@/components/Pagination';
-import { toast } from 'react-toastify';
 import { queryClient } from '@/pages/_app';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import SidebarMobile from '@/components/Sidebar';
-import menuIcon from "@/common/icons/menuIcon.svg"
+import menuIcon from '@/common/icons/menuIcon.svg';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
-  { key: 'class', header: 'Class' },
+  { key: 'classSchool', header: 'Class' },
   { key: 'subjects', header: 'Subjects' },
   { key: 'email', header: 'Email' },
   { key: 'gender', header: 'Gender' },
@@ -56,7 +56,7 @@ const TeacherPage: NextPageWithLayout = () => {
     return teacherList?.data?.map((item: any) => ({
       _id: item._id,
       name: item.fullName,
-      class: item.classSchool.name,
+      classSchool: item.classSchool.name,
       subject: item.subjects,
       email: item.email,
       gender: item.gender,
@@ -75,6 +75,8 @@ const TeacherPage: NextPageWithLayout = () => {
     mutationFn: (id: string) => adminApi.deleteTeacher(id),
   });
   const handleRowClick = (id: string) => {
+    console.log(id);
+
     // router.push(`/${router.pathname}/${id}`);
   };
   const handleEdit = (id: string) => {

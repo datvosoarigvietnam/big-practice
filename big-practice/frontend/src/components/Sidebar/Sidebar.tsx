@@ -10,7 +10,6 @@ import homeIcon from '@/common/icons/home-2.svg';
 import settingIcon from '@/common/icons/settingIcon.svg';
 import studentIcon from '@/common/icons/studentIcon.svg';
 import avatar from '@/common/imgs/avatar.svg';
-import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 export default function Sidebar() {
   const { pathname } = useRouter();
   const lastPathSegment = pathname.split('/').pop();

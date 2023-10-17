@@ -3,9 +3,9 @@
 import React from 'react';
 
 import { User } from '@/pages/admin/teachers';
-import { IStudent } from '@/@types/student.type';
-import { Column } from '@/@types/Table.type';
-import { ITeacher } from '@/@types/teacher.type';
+import { IStudent } from '@/types/student.type';
+import { Column } from '@/types/Table.type';
+import { ITeacher } from '@/types/teacher.type';
 
 export type UserData = IStudent | ITeacher;
 
@@ -23,7 +23,6 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   columns,
   onRowClick,
   onDeleteClick,
-  isLoading,
   handleEdit,
 }) => {
   const handleClickRow = (id: number) => {
