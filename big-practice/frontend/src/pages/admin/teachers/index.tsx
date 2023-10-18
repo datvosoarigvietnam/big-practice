@@ -1,27 +1,28 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { CSVLink } from 'react-csv';
 import { toast } from 'react-toastify';
 
-import AddTeacherPopup from './AddTeacherPopup';
-import { Column } from '@/types/Table.type';
 import adminApi from '@/apis/admin.api';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
+import menuIcon from '@/common/icons/menuIcon.svg';
 import Button from '@/components/Button';
+import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import NotData from '@/components/NotData';
+import Pagination from '@/components/Pagination';
+import SidebarMobile from '@/components/Sidebar';
+import Spinner from '@/components/Spinner';
 import TableV2 from '@/components/Table/TableV2';
 import { MainLayout } from '@/components/layout';
-import { NextPageWithLayout } from '@/models/common';
-import Spinner from '@/components/Spinner';
-import { ITeacher } from '@/types/teacher.type';
-import Pagination from '@/components/Pagination';
-import { queryClient } from '@/pages/_app';
-import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
-import SidebarMobile from '@/components/Sidebar';
-import menuIcon from '@/common/icons/menuIcon.svg';
 import useDebounce from '@/hooks/useDebouce';
+import { NextPageWithLayout } from '@/models/common';
+import { queryClient } from '@/pages/_app';
+import { Column } from '@/types/Table.type';
+import { ITeacher } from '@/types/teacher.type';
+import AddTeacherPopup from './AddTeacherPopup';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'classSchool', header: 'Class' },
@@ -55,6 +56,8 @@ const TeacherPage: NextPageWithLayout = () => {
   const { data: teacherList, isLoading } = useQuery({
     queryKey: ['teachers', debouncedSearchTerm],
     queryFn: () => adminApi.getTeachers(search),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const teacherData: ITeacher[] = useMemo(() => {
@@ -71,12 +74,14 @@ const TeacherPage: NextPageWithLayout = () => {
   const { data: classList } = useQuery({
     queryKey: ['classes'],
     queryFn: () => adminApi.getClasses(),
-    staleTime: 3000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
   const { data: subjectList } = useQuery({
     queryKey: ['subjects'],
     queryFn: () => adminApi.getSubjects(),
-    staleTime: 3000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
   const deleteTeacherMutation = useMutation({
     mutationFn: (id: string) => adminApi.deleteTeacher(id),
@@ -122,6 +127,17 @@ const TeacherPage: NextPageWithLayout = () => {
   const handleShowSidebar = () => {
     setShowSidebarMenu((prev) => !prev);
   };
+
+  const csvData = teacherData?.map((teacher: any) => {
+    return {
+      ...teacher,
+      subject: teacher?.subject
+        ?.map((item: { name: string }) => item.name)
+        .join(','),
+    };
+  });
+  console.log('csvdata', csvData);
+
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
@@ -157,10 +173,15 @@ const TeacherPage: NextPageWithLayout = () => {
           Teachers
         </p>
         <div className="flex justify-center items-center gap-4">
-          <Button
-            title="Export CSV"
-            className="w-32 h-10 rounded-lg font-kumbh-sans"
-          />
+          <div className="text-[#2671B1] font-kumbh-sans font-semibold px-3 py-2 hover:opacity-75">
+            <CSVLink
+              data={(csvData && csvData) || ''}
+              target="_blank"
+              filename="teacherdata.csv"
+            >
+              Export CSV
+            </CSVLink>
+          </div>
           <Button
             title="Add Teachers"
             className="w-32 h-10 rounded-lg font-kumbh-sans"
