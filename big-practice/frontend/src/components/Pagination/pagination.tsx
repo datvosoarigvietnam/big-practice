@@ -81,7 +81,7 @@ const Pagination: React.FC<IProps> = ({
         return (
           <button
             key={index}
-            className={`mx-2 cursor-pointer rounded bg-white px-3 py-2 shadow-sm ${
+            className={`mx-2 cursor-pointer rounded  px-3 py-2 shadow-sm ${
               currentPage === pageNumber ? 'bg-[#81afd7]' : ''
             }`}
             onClick={() => setCurrentPage(pageNumber)}

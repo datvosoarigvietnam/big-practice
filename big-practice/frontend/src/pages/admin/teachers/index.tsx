@@ -21,6 +21,7 @@ import { queryClient } from '@/pages/_app';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import SidebarMobile from '@/components/Sidebar';
 import menuIcon from '@/common/icons/menuIcon.svg';
+import useDebounce from '@/hooks/useDebouce';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'classSchool', header: 'Class' },
@@ -36,6 +37,10 @@ const TeacherPage: NextPageWithLayout = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idDelete, setIdDelete] = useState('');
+  // Search with debouce
+  const [search, setSearch] = useState('');
+  const debouncedSearchTerm = useDebounce(search, 800);
+
   const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
@@ -48,8 +53,8 @@ const TeacherPage: NextPageWithLayout = () => {
     setShowSidebarMenu(false);
   };
   const { data: teacherList, isLoading } = useQuery({
-    queryKey: ['teachers'],
-    queryFn: () => adminApi.getTeachers(),
+    queryKey: ['teachers', debouncedSearchTerm],
+    queryFn: () => adminApi.getTeachers(search),
   });
 
   const teacherData: ITeacher[] = useMemo(() => {
@@ -66,10 +71,12 @@ const TeacherPage: NextPageWithLayout = () => {
   const { data: classList } = useQuery({
     queryKey: ['classes'],
     queryFn: () => adminApi.getClasses(),
+    staleTime: 3000,
   });
   const { data: subjectList } = useQuery({
     queryKey: ['subjects'],
     queryFn: () => adminApi.getSubjects(),
+    staleTime: 3000,
   });
   const deleteTeacherMutation = useMutation({
     mutationFn: (id: string) => adminApi.deleteTeacher(id),
@@ -121,7 +128,7 @@ const TeacherPage: NextPageWithLayout = () => {
       {showSidebarMenu && (
         <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
       )}
-      <div className="pt-5 px-7">
+      <div className="pt-5 pl-4 pr-4 md:pr-0">
         <div className="flex justify-between items-center gap-4 pb-[12px] ">
           <div className="">
             <Image
@@ -163,7 +170,7 @@ const TeacherPage: NextPageWithLayout = () => {
       </div>
       <div className="flex mt-7  lg:pl-8">
         {/* Fillter */}
-        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row px-4">
+        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row pl-4 pr-4 md:pr-0">
           <select
             className="flex justify-between items-center px-4 py-4 text-[#C4C4C4] border-gray-400 border outline-none rounded sm:border-none"
             property=""
@@ -175,6 +182,7 @@ const TeacherPage: NextPageWithLayout = () => {
             <input
               placeholder="Search for a teacher by name or email "
               className="text-[#8A8A8A] w-full bg-inherit outline-none"
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>

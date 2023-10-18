@@ -29,8 +29,8 @@ const adminApi = {
       password,
     });
   },
-  getTeachers() {
-    return http.get('/api/teachers');
+  getTeachers(kw?: string) {
+    return http.get(`/api/teachers?q=${kw}`);
   },
   getClasses() {
     return http.get('/api/classes');

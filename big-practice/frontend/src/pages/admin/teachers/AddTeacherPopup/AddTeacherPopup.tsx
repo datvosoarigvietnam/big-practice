@@ -247,25 +247,43 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             </div>
           </div>
           <div className="flex flex-col md:flex-row sm:items-end gap-5 lg:gap-12 justify-between mt-8  lg:justify-start ">
-            {!teacherDetail?._id && (
+            <div className="w-full">
+              {!teacherDetail?._id && (
+                <InputField
+                  name="password"
+                  control={control}
+                  label="Password"
+                  placeholder=""
+                  type="password"
+                  fullWith="w-full"
+                />
+              )}
+              <div style={{ minHeight: '20px' }}>
+                {errors.phoneNumber && (
+                  <p className="text-center text-red-600">
+                    {errors.phoneNumber.message as string}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="w-full">
               <InputField
-                name="password"
+                name="phoneNumber"
                 control={control}
-                label="Password"
+                label="Phone number"
                 placeholder=""
-                type="password"
+                type="tel"
+                value={teacherDetail?.phoneNumber}
                 fullWith="w-full"
               />
-            )}
-            <InputField
-              name="phoneNumber"
-              control={control}
-              label="Phone number"
-              placeholder=""
-              type="tel"
-              value={teacherDetail?.phoneNumber}
-              fullWith="w-full"
-            />
+              <div style={{ minHeight: '20px' }}>
+                {errors.phoneNumber && (
+                  <p className="text-center text-red-600">
+                    {errors.phoneNumber.message as string}
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
           <div className="mt-10">
             <SelectedField

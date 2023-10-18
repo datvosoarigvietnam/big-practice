@@ -3,8 +3,8 @@ import { IStudent } from '@/types/student.type';
 
 const URL = '/api/students';
 const studentApi = {
-  getStudents() {
-    return http.get(URL);
+  getStudents(kw?: string) {
+    return http.get(`${URL}?q=${kw}`);
   },
   getClass() {
     return http.get('api/classes');
@@ -21,7 +21,7 @@ const studentApi = {
   }) {
     return http.patch(`${URL}/${id}`, {
       ...studentInfor,
-      classSchool: studentInfor.classSchool?.name,
+      classSchool: studentInfor.classSchool?.name || studentInfor.classSchool,
     });
   },
   deleteStudent(id: string) {
