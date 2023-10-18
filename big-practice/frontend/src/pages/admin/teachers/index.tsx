@@ -71,10 +71,12 @@ const TeacherPage: NextPageWithLayout = () => {
   const { data: classList } = useQuery({
     queryKey: ['classes'],
     queryFn: () => adminApi.getClasses(),
+    staleTime: 3000,
   });
   const { data: subjectList } = useQuery({
     queryKey: ['subjects'],
     queryFn: () => adminApi.getSubjects(),
+    staleTime: 3000,
   });
   const deleteTeacherMutation = useMutation({
     mutationFn: (id: string) => adminApi.deleteTeacher(id),
@@ -120,15 +122,13 @@ const TeacherPage: NextPageWithLayout = () => {
   const handleShowSidebar = () => {
     setShowSidebarMenu((prev) => !prev);
   };
-  console.log('search', search);
-
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
       {showSidebarMenu && (
         <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
       )}
-      <div className="pt-5 px-7">
+      <div className="pt-5 pl-4 pr-4 md:pr-0">
         <div className="flex justify-between items-center gap-4 pb-[12px] ">
           <div className="">
             <Image
@@ -170,7 +170,7 @@ const TeacherPage: NextPageWithLayout = () => {
       </div>
       <div className="flex mt-7  lg:pl-8">
         {/* Fillter */}
-        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row px-4">
+        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row pl-4 pr-4 md:pr-0">
           <select
             className="flex justify-between items-center px-4 py-4 text-[#C4C4C4] border-gray-400 border outline-none rounded sm:border-none"
             property=""
