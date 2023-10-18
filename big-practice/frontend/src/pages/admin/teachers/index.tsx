@@ -1,8 +1,11 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
-import { Column } from '@/@types/Table.type';
+import AddTeacherPopup from './AddTeacherPopup';
+import { Column } from '@/types/Table.type';
 import adminApi from '@/apis/admin.api';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
@@ -11,26 +14,16 @@ import NotData from '@/components/NotData';
 import TableV2 from '@/components/Table/TableV2';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import AddTeacherPopup from './AddTeacherPopup';
 import Spinner from '@/components/Spinner';
-import { ITeacher } from '@/@types/teacher.type';
+import { ITeacher } from '@/types/teacher.type';
 import Pagination from '@/components/Pagination';
-import { toast } from 'react-toastify';
 import { queryClient } from '@/pages/_app';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
-// export interface ITeacher {
-//   _id: number;
-//   name: string;
-//   subject: string;
-//   email: string;
-//   class: string;
-//   gender: 'Male' | 'Female' | 'Other';
-// }
-
+import SidebarMobile from '@/components/Sidebar';
+import menuIcon from '@/common/icons/menuIcon.svg';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
-  { key: 'class', header: 'Class' },
+  { key: 'classSchool', header: 'Class' },
   { key: 'subjects', header: 'Subjects' },
   { key: 'email', header: 'Email' },
   { key: 'gender', header: 'Gender' },
@@ -38,6 +31,7 @@ const columns: Column[] = [
 
 const TeacherPage: NextPageWithLayout = () => {
   const [showTeacherPopup, setShowTeacherPopup] = useState(false);
+  const [showSidebarMenu, setShowSidebarMenu] = useState(false);
   const [detailTeacher, setDetailTeacher] = useState<ITeacher | null>();
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -50,7 +44,9 @@ const TeacherPage: NextPageWithLayout = () => {
     setShowTeacherPopup(false);
     setDetailTeacher(null);
   };
-
+  const onClose = () => {
+    setShowSidebarMenu(false);
+  };
   const { data: teacherList, isLoading } = useQuery({
     queryKey: ['teachers'],
     queryFn: () => adminApi.getTeachers(),
@@ -58,9 +54,9 @@ const TeacherPage: NextPageWithLayout = () => {
 
   const teacherData: ITeacher[] = useMemo(() => {
     return teacherList?.data?.map((item: any) => ({
-      id: item._id,
+      _id: item._id,
       name: item.fullName,
-      class: item.classSchool.name,
+      classSchool: item.classSchool.name,
       subject: item.subjects,
       email: item.email,
       gender: item.gender,
@@ -79,6 +75,8 @@ const TeacherPage: NextPageWithLayout = () => {
     mutationFn: (id: string) => adminApi.deleteTeacher(id),
   });
   const handleRowClick = (id: string) => {
+    console.log(id);
+
     // router.push(`/${router.pathname}/${id}`);
   };
   const handleEdit = (id: string) => {
@@ -109,27 +107,42 @@ const TeacherPage: NextPageWithLayout = () => {
   const subjectOption = subjectList?.data.map(
     (subjectName: { name: string }) => subjectName.name,
   );
-  const recordsPerPage = 10;
+  const recordsPerPage = 8;
   const nPage = Math.ceil(teacherData?.length / recordsPerPage);
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records: ITeacher[] = teacherData?.slice(firstIndex, lastIndex);
-
+  const handleShowSidebar = () => {
+    setShowSidebarMenu((prev) => !prev);
+  };
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
-      <div className="pt-5">
-        <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
-          <Image src={bellIcon} alt="" />
-          <Button
-            title="Logout"
-            className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
-            onClick={() => {
-              localStorage.removeItem('access_token');
-              toast.success('Logout Success');
-              router.push('/signin');
-            }}
-          />
+      {showSidebarMenu && (
+        <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
+      )}
+      <div className="pt-5 px-7">
+        <div className="flex justify-between items-center gap-4 pb-[12px] ">
+          <div className="">
+            <Image
+              src={menuIcon}
+              alt=""
+              className="lg:hidden w-8 h-8"
+              onClick={handleShowSidebar}
+            />
+          </div>
+          <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
+            <Image src={bellIcon} alt="" />
+            <Button
+              title="Logout"
+              className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
+              onClick={() => {
+                localStorage.removeItem('access_token');
+                toast.success('Logout Success');
+                router.push('/signin');
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-5 justify-center items-center mt-4 md:justify-between md:flex-row">
@@ -150,7 +163,7 @@ const TeacherPage: NextPageWithLayout = () => {
       </div>
       <div className="flex mt-7  lg:pl-8">
         {/* Fillter */}
-        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row">
+        <div className="flex flex-col justify-center flex-1  gap-4 md:flex-row px-4">
           <select
             className="flex justify-between items-center px-4 py-4 text-[#C4C4C4] border-gray-400 border outline-none rounded sm:border-none"
             property=""

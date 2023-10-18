@@ -1,6 +1,6 @@
 import { IInfor } from '@/store/StepperDataContenxt';
 import http from '@/utils/http';
-import { ITeacher } from '@/@types/teacher.type';
+import { ITeacher } from '@/types/teacher.type';
 
 const URL = 'admin';
 const adminApi = {

@@ -1,19 +1,16 @@
 import Image from 'next/image';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 import addProfileIcon from '@/common/icons/addProfileIcon.svg';
 import addStudentIcon from '@/common/icons/addStudentIcon.svg';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
+import menuIcon from '@/common/icons/menuIcon.svg';
 import Button from '@/components/Button';
+import SidebarMobile from '@/components/Sidebar';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
-import menuIcon from '@/common/icons/menuIcon.svg';
-import { useState } from 'react';
-import Sidebar from '@/components/Sidebar/Sidebar';
-import SidebarMobile from '@/components/Sidebar';
-// import SidebarMobile from '@/components/Sidebar/SidebarMobile';
 const DashBoard: NextPageWithLayout = () => {
   const [showSidebarMenu, setShowSidebarMenu] = useState(false);
   const router = useRouter();
@@ -24,7 +21,7 @@ const DashBoard: NextPageWithLayout = () => {
     setShowSidebarMenu(false);
   };
   return (
-    <div className="flex flex-1 md:flex-auto">
+    <div className="flex flex-1 ">
       {showSidebarMenu && (
         <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
       )}

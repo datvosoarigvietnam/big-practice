@@ -1,15 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { AppContext } from '@/store/AppContext';
 import { ILayoutProps } from '../../models/common';
 import Sidebar from '../Sidebar/Sidebar';
-import Spinner from '../Spinner';
+import { AppContext } from '@/store/AppContext';
 
 export function MainLayout({ children }: ILayoutProps) {
   const { isAuthenticated } = useContext(AppContext);
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(!isAuthenticated); // Track loading state
+  const [, setIsLoading] = useState(!isAuthenticated); // Track loading state
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -18,9 +17,7 @@ export function MainLayout({ children }: ILayoutProps) {
       setIsLoading(false); // Set loading to false once authentication is verified
     }
   }, [isAuthenticated]);
-  useEffect(() => {
-    console.log(localStorage.getItem('access_token'));
-  }, []);
+
   // if (isLoading) {
   //   return (
   //     <div>

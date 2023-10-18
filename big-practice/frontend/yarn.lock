@@ -2365,7 +2365,15 @@ queue-microtask@^1.2.2:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+<<<<<<< HEAD
 react-hook-form@^7.0.0, react-hook-form@^7.47.0:
+=======
+<<<<<<< Updated upstream
+react-hook-form@^7.46.2:
+=======
+react-hook-form@^7.0.0, react-hook-form@^7.46.2:
+>>>>>>> Stashed changes
+>>>>>>> 2e4e36a3c6aa66f874ac96b96d5230b3403d75d2
   version "7.47.0"
   resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.47.0.tgz"
   integrity sha512-F/TroLjTICipmHeFlMrLtNLceO2xr1jU3CyiNla5zdwsGUGu2UOxxR4UyJgLlhMwLW/Wzp4cpJ7CPfgJIeKdSg==
@@ -2798,16 +2806,25 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> 2e4e36a3c6aa66f874ac96b96d5230b3403d75d2
 tiny-case@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/tiny-case/-/tiny-case-1.0.3.tgz"
   integrity sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==
 
+<<<<<<< HEAD
 titleize@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/titleize/-/titleize-3.0.0.tgz"
   integrity sha512-KxVu8EYHDPBdUYdKZdKtU2aj2XfEx9AfjXxE/Aj0vT06w2icA09Vus1rh6eSu1y01akYg6BjIK/hxyLJINoMLQ==
 
+=======
+>>>>>>> Stashed changes
+>>>>>>> 2e4e36a3c6aa66f874ac96b96d5230b3403d75d2
 to-regex-range@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz"

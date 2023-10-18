@@ -38,12 +38,11 @@ export default function SidebarMobile({
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full w-full bg-[#83848b] bg-opacity-80 transform transition-transform ${
-        showSidebarMenu ? 'translateX(0)' : 'translateX(-100%)'
-      }`}
+      className={`lg:hidden fixed top-0 left-0 h-full w-full bg-[#83848b] bg-opacity-80 transform transition-transform ${showSidebarMenu ? 'translateX(0)' : 'translateX(-100%)'
+        }`}
     >
-      <div className=" md:hidden w-[240px] h-[100vh] bg-[#152259]">
-        <button className="absolute top-4 right-4 text-white" onClick={onClose}>
+      <div className=" lg:hidden w-[240px] h-[100vh] bg-[#152259]">
+        <button className="absolute top-4 right-4 text-red-600" onClick={onClose}>
           Close
         </button>
         <div className="pt-[26px] ">
@@ -64,11 +63,10 @@ export default function SidebarMobile({
                   <li
                     key={menuItem.title}
                     // className="hover:bg-[#509CDB] hover:rounded px-2 transition duration-150 "
-                    className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${
-                      activeTab.toLowerCase() === menuItem.title.toLowerCase()
-                        ? 'bg-[#509CDB]'
-                        : ''
-                    }`}
+                    className={`hover:bg-[#509CDB] hover:rounded px-2 rounded transition duration-150 ${activeTab.toLowerCase() === menuItem.title.toLowerCase()
+                      ? 'bg-[#509CDB]'
+                      : ''
+                      }`}
                   >
                     <Link
                       href={menuItem.href}

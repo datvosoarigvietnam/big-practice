@@ -1,18 +1,19 @@
-import React, { useState, useMemo, ChangeEvent } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import React, { useState, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import adminApi from '@/apis/admin.api';
 import InputField from '@/components/InputField';
 import SelectedField from '@/components/SelectedField';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import Button from '@/components/Button';
-import { ITeacher } from '@/@types/teacher.type';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
+import { ITeacher } from '@/types/teacher.type';
 import { queryClient } from '@/pages/_app';
 import Spinner from '@/components/Spinner';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+
 interface AddTeacherPopupProps {
   onClose: () => void;
   classOption: string[];
@@ -72,17 +73,15 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     control,
     handleSubmit,
     setError,
-    register,
+    clearErrors,
+    reset,
     formState: { errors },
   } = useForm<ITeacher | any>({
     defaultValues,
     resolver: yupResolver(validationSchema),
   });
+  console.log('Error by yup', errors);
 
-  const { fields, append } = useFieldArray({
-    control,
-    name: 'subjects',
-  });
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedArray, setSelectedArray] = useState<string[]>([]);
 
@@ -199,7 +198,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             </div> */}
           </div>
 
-          <div className="mt-12 sm:mt-[75px] flex items-center justify-center md:block">
+          <div className="mt-12 sm:mt-[75px] flex flex-1 items-center justify-center md:block w-full">
             <InputField
               name="name"
               control={control}
@@ -216,13 +215,14 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             )}
           </div>
           <div className="mt-8 flex gap-5 md:gap-7  lg:gap-12 flex-col items-center md:items-start lg:flex-row lg:items-end">
-            <div className="">
+            <div className="w-full">
               <InputField
                 name="email"
                 control={control}
                 label="Email Address"
                 placeholder=""
                 type="text"
+                fullWith="w-full"
                 // className="w-full"
               />
               <div className=" ">
@@ -278,6 +278,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 label="Password"
                 placeholder=""
                 type="password"
+                fullWith="w-full"
               />
             )}
             <InputField
@@ -287,6 +288,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               placeholder=""
               type="tel"
               value={teacherDetail?.phoneNumber}
+              fullWith="w-full"
             />
           </div>
           <div className="mt-10">

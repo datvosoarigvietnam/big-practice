@@ -11,7 +11,7 @@ import { LabelContext } from '@/store/StepperDataContenxt';
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   options?: any[];
-  control: Control<FieldValues>;
+  control: Control<FieldValues | any>;
   defaultOption?: string | number;
   isFullWith?: boolean;
   onUpdateSelectedSubjects?: (selectedSubjects: string) => void;
@@ -27,7 +27,7 @@ export default function SelectedField({
   ...rest
 }: IProps) {
   const value = useContext(LabelContext);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [, setSelectedSubjects] = useState<string[]>([]);
   return (
     <Controller
       name={name}

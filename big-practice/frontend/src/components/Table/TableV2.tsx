@@ -3,9 +3,9 @@
 import React from 'react';
 
 import { User } from '@/pages/admin/teachers';
-import { IStudent } from '@/pages/admin/students';
-import { Column } from '@/@types/Table.type';
-import { ITeacher } from '@/@types/teacher.type';
+import { IStudent } from '@/types/student.type';
+import { Column } from '@/types/Table.type';
+import { ITeacher } from '@/types/teacher.type';
 
 export type UserData = IStudent | ITeacher;
 
@@ -23,7 +23,6 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   columns,
   onRowClick,
   onDeleteClick,
-  isLoading,
   handleEdit,
 }) => {
   const handleClickRow = (id: number) => {
@@ -43,26 +42,28 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   const formatSubjectArrayToString = (subjectArray) => {
     if (Array.isArray(subjectArray) && subjectArray.length > 0) {
       const subjectNames = subjectArray.map((subject) => subject.name);
-      return subjectNames.join(', '); // Join the subject names with a comma and space
+      return subjectNames.join(', ');
     }
-    return ''; // Return an empty string if the array is empty or not valid
+    return '';
   };
   return (
-    <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[20px]">
+    <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[10px]">
       {data && (
         <table className=" w-full">
           <thead className="">
             <tr>
-              {columns.map((column) => (
-                <th
-                  key={column.key}
-                  className={`p-2 text-left ${
-                    column.header === 'Name' && ' bg-white sm:bg-inherit'
-                  }`}
-                >
-                  {column.header}
-                </th>
-              ))}
+              {columns.map((column) => {
+                return (
+                  <th
+                    key={column.key}
+                    className={`p-2 text-left ${
+                      column.header === 'Student ID' && 'hidden xl:table-cell'
+                    }`}
+                  >
+                    {column.header}
+                  </th>
+                );
+              })}
               {/* Add Edit and Delete headers */}
               <th className="p-2 text-left  bg-white sm:bg-inherit">Edit</th>
               <th className="p-2 text-left  bg-white sm:bg-inherit">Delete</th>
@@ -82,7 +83,11 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
                     return (
                       <td
                         key={column.key as string}
-                        className="py-4 px-4  text-[#4F4F4F] font-medium"
+                        // className="py-4 px-4  text-[#4F4F4F] font-medium"
+                        className={`p-2 text-left ${
+                          column.header === 'Student ID' &&
+                          'hidden xl:table-cell'
+                        } `}
                       >
                         {column.key === 'subjects' && isUser(row)
                           ? formatSubjectArrayToString(row.subject)
@@ -92,22 +97,20 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
                       </td>
                     );
                   })}
-                  {/* Edit button */}
                   <td
                     className="py-4 px-4  text-[#4F4F4F] font-medium cursor-pointer hover:text-blue-500"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleEditClick(row.id);
+                      handleEditClick(row._id);
                     }}
                   >
                     Edit
                   </td>
-                  {/* Delete button */}
                   <td
                     className="py-4 px-4  text-[#4F4F4F] font-medium cursor-pointer hover:text-red-500"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteClick(row.id);
+                      handleDeleteClick(row._id);
                     }}
                   >
                     Delete

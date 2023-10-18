@@ -3,10 +3,10 @@ import { useContext } from 'react';
 import CreateAccount from './create-account';
 import ChoosePassword from './choose-password';
 import ChooseStaffs from './choose-staffs';
+import ConfirmForm from './confirm-form';
 import { SignupLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
 import { LabelContext } from '@/store/StepperDataContenxt';
-import ConfirmForm from './confirm-form';
 
 const Signup: NextPageWithLayout = () => {
   const value = useContext(LabelContext);
