@@ -134,7 +134,7 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({
           &times;
         </p>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F] text-center">
+          <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F] text-center md:text-left">
             {detailStudent?._id ? 'Edit Student' : 'Add Student'}
           </h2>
           <div className="mt-6 flex gap-11 justify-center md:justify-start">
@@ -224,13 +224,14 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({
               </div>
             </div>
             {!detailStudent?._id && (
-              <div className="flex flex-col gap-4 mt-5 lg:items-start">
+              <div className="flex flex-col gap-4 mt-5 ">
                 <InputField
                   control={control}
                   name="password"
                   placeholder=""
                   label="Password"
                   type="password"
+                  fullWith="w-full"
                 />
                 <div style={{ minHeight: '20px' }}>
                   {errors.password && (

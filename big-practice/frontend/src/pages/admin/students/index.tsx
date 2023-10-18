@@ -21,6 +21,8 @@ import Spinner from '@/components/Spinner';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import { queryClient } from '@/pages/_app';
 import useDebounce from '@/hooks/useDebouce';
+import SidebarMobile from '@/components/Sidebar';
+import menuIcon from '@/common/icons/menuIcon.svg';
 
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
@@ -37,6 +39,7 @@ const StudentPage: NextPageWithLayout = () => {
   const [detailStudent, setDetailStudent] = useState<IStudent | null>();
   const [idStudent, setIdStudent] = useState<string>();
   const [showModalConfirm, setShowModalConfirm] = useState(false);
+  const [showSidebarMenu, setShowSidebarMenu] = useState(false);
 
   const [search, setSearch] = useState('');
   const debouncedSearchTerm = useDebounce(search, 800);
@@ -98,8 +101,6 @@ const StudentPage: NextPageWithLayout = () => {
     const student = studentList?.data.find(
       (student: IStudent) => student._id === id,
     );
-    console.log('student', student);
-
     setDetailStudent(student);
     setShowStudentPopup(true);
   };
@@ -110,23 +111,41 @@ const StudentPage: NextPageWithLayout = () => {
   const handleDeleteStudent = () => {
     deleteStudent.mutate(idStudent as string);
   };
+  const onClose = () => {
+    setShowSidebarMenu(false);
+  };
+  const handleShowSidebar = () => {
+    setShowSidebarMenu((prev) => !prev);
+  };
+  // const filterOption = ['Name', 'Email', 'Class'];
   return (
-    <div className="container mx-auto md:px-4 lg:px-8 flex-1">
+    <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
-      {isLoading && <Spinner />}
-      {deleteStudent.isLoading && <Spinner />}
+      {showSidebarMenu && (
+        <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
+      )}
       <div className="pt-5">
-        <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
-          <Image src={bellIcon} alt="" />
-          <Button
-            title="Log out"
-            className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
-            onClick={() => {
-              localStorage.removeItem('access_token');
-              toast.success('Logout Success');
-              router.push('/signin');
-            }}
-          />
+        <div className="flex justify-between items-center gap-4 pb-[12px] px-4 md:pr-0">
+          <div className="">
+            <Image
+              src={menuIcon}
+              alt=""
+              className="lg:hidden w-8 h-8"
+              onClick={handleShowSidebar}
+            />
+          </div>
+          <div className="flex justify-center items-center gap-4 pb-[12px] md:justify-end">
+            <Image src={bellIcon} alt="" />
+            <Button
+              title="Log out"
+              className="w-32 h-10 rounded-lg font-kumbh-sans text-white"
+              onClick={() => {
+                localStorage.removeItem('access_token');
+                toast.success('Logout Success');
+                router.push('/signin');
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-5 justify-center items-center mt-4 md:justify-between md:flex-row">
@@ -147,7 +166,7 @@ const StudentPage: NextPageWithLayout = () => {
       </div>
       <div className="flex mt-7 md:pl-10">
         {/* Fillter */}
-        <div className="flex flex-col justify-center flex-1  gap-4 px-4 md:flex-row">
+        <div className="flex flex-col justify-center flex-1  gap-4 pl-4 pr-4 md:pr-0 md:flex-row">
           <select
             className="flex justify-between items-center px-4 py-4 text-[#C4C4C4] border-gray-400 border outline-none rounded sm:border-none"
             property=""
@@ -198,6 +217,8 @@ const StudentPage: NextPageWithLayout = () => {
           message="Do you want to delete this student?"
         />
       )}
+      {isLoading && <Spinner />}
+      {deleteStudent.isLoading && <Spinner />}
     </div>
   );
 };
