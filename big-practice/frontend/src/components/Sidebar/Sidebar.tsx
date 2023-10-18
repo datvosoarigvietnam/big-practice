@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import billIcon from '@/common/icons/billIcon.svg';
 import examIcon from '@/common/icons/examIcon.svg';
@@ -12,6 +12,7 @@ import studentIcon from '@/common/icons/studentIcon.svg';
 import avatar from '@/common/imgs/avatar.svg';
 export default function Sidebar() {
   const { pathname } = useRouter();
+
   const lastPathSegment = pathname.split('/').pop();
   const [activeTab, setActiveTab] = useState(lastPathSegment || 'Dashboard');
   const menuList = [
@@ -29,7 +30,9 @@ export default function Sidebar() {
   const handleActiveTab = (title: string) => {
     setActiveTab(title);
   };
-
+  useEffect(() => {
+    setActiveTab(lastPathSegment as string);
+  }, [pathname]);
   return (
     <div className="hidden lg:block w-[240px] h-[100vh] bg-[#152259]">
       <div className="pt-[26px] ">
