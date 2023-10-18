@@ -8,7 +8,6 @@ function useDebounce<T>(value: T, delay: number): T {
       setDebouncedValue(value);
     }, delay);
 
-    // Cleanup the timeout on every value change or component unmount
     return () => {
       clearTimeout(handler);
     };

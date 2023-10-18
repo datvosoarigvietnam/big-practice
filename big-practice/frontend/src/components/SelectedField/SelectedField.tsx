@@ -14,7 +14,7 @@ interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   control: Control<FieldValues | any>;
   defaultOption?: string | number;
   isFullWith?: boolean;
-  onUpdateSelectedSubjects?: (selectedSubjects: string[]) => void;
+  onUpdateSelectedSubjects?: (selectedSubjects: { name: string }[]) => void;
 }
 
 export default function SelectedField({
@@ -27,7 +27,7 @@ export default function SelectedField({
   ...rest
 }: IProps) {
   const value = useContext(LabelContext);
-  const [, setSelectedSubjects] = useState<string[]>([]);
+  const [, setSelectedSubjects] = useState<{ name: string }[]>([]);
   return (
     <Controller
       name={name}
@@ -45,14 +45,16 @@ export default function SelectedField({
               e.target.selectedOptions,
               (option) => option.value,
             );
-            setSelectedSubjects(selectedOptions);
+            // setSelectedSubjects(selectedOptions);
             onUpdateSelectedSubjects &&
-              onUpdateSelectedSubjects(selectedOptions);
+              onUpdateSelectedSubjects(
+                selectedOptions.map((item) => ({ name: item })),
+              );
             field.onChange(e);
             value.handleChange(name)(e);
           }}
         >
-          <option value="">{defaultOption}</option>
+          <option value={defaultOption}>{defaultOption}</option>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}

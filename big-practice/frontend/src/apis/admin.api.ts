@@ -57,13 +57,17 @@ const adminApi = {
     const newTeacher = {
       // avatar: '',
       fullName: teacherInfor.name,
-      subjects: teacherInfor.subjects,
+      subjects: teacherInfor.subjects.map((item) => ({
+        name: item.name,
+      })),
       classSchool: teacherInfor.selectedClass,
       email: teacherInfor.email,
       password: teacherInfor.password,
       phone: teacherInfor.phoneNumber,
       gender: teacherInfor.selectedGender,
     };
+    console.log('newTeacher in api ', newTeacher);
+
     return http.patch(`/api/teachers/${id}`, {
       ...newTeacher,
     });

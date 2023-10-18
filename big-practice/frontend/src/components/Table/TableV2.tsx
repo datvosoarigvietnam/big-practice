@@ -39,12 +39,12 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
   const isUser = (data: User | IStudent): data is User => {
     return 'subject' in data;
   };
-  const formatSubjectArrayToString = (subjectArray) => {
-    if (Array.isArray(subjectArray) && subjectArray.length > 0) {
-      const subjectNames = subjectArray.map((subject) => subject.name);
-      return subjectNames.join(', ');
-    }
-    return '';
+  const formatSubjectArrayToString = (subjectArray: []) => {
+    // if (Array.isArray(subjectArray) && subjectArray.length > 0) {
+    const subjectNames = subjectArray.map((subject) => subject.name);
+    return subjectNames.join(', ');
+    // }
+    // return '';
   };
   return (
     <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[10px]">
@@ -77,7 +77,7 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
                   className={`${
                     index % 2 === 0 ? 'bg-[#f0f8ff]' : 'bg-white'
                   } py-6 px-4 hover:bg-[#81afd7] transition duration-150 hover:rounded`}
-                  onClick={() => handleClickRow(row.id)}
+                  onClick={() => handleClickRow(row._id)}
                 >
                   {columns.map((column) => {
                     return (

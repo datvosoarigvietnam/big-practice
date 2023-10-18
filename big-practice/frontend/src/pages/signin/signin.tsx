@@ -30,8 +30,6 @@ export default function SignIn() {
   const onSubmit = (values: ILoginForm) => {
     signinMutation.mutate(values, {
       onSuccess: (value) => {
-        console.log(value);
-
         localStorage.setItem('access_token', value.data?.data.accessToken);
         setAuthenticated(value.data?.data.accessToken);
         toast.success(value.data.message);
