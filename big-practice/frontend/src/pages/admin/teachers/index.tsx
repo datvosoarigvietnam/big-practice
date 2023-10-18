@@ -21,6 +21,7 @@ import { queryClient } from '@/pages/_app';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import SidebarMobile from '@/components/Sidebar';
 import menuIcon from '@/common/icons/menuIcon.svg';
+import useDebounce from '@/hooks/useDebouce';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'classSchool', header: 'Class' },
@@ -36,6 +37,10 @@ const TeacherPage: NextPageWithLayout = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [idDelete, setIdDelete] = useState('');
+  // Search with debouce
+  const [search, setSearch] = useState('');
+  const debouncedSearchTerm = useDebounce(search, 800);
+
   const router = useRouter();
   const handleShowPopup = () => {
     setShowTeacherPopup(true);
@@ -47,9 +52,8 @@ const TeacherPage: NextPageWithLayout = () => {
   const onClose = () => {
     setShowSidebarMenu(false);
   };
-  const [search, setSearch] = useState('');
   const { data: teacherList, isLoading } = useQuery({
-    queryKey: ['teachers', search],
+    queryKey: ['teachers', debouncedSearchTerm],
     queryFn: () => adminApi.getTeachers(search),
   });
 

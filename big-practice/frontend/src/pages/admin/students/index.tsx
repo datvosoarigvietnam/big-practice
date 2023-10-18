@@ -20,6 +20,7 @@ import Pagination from '@/components/Pagination';
 import Spinner from '@/components/Spinner';
 import ConfirmationModal from '@/components/ConfirmModal/ConfirmModal';
 import { queryClient } from '@/pages/_app';
+import useDebounce from '@/hooks/useDebouce';
 
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
@@ -30,12 +31,16 @@ const columns: Column[] = [
 ];
 
 const StudentPage: NextPageWithLayout = () => {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [showStudentPopup, setShowStudentPopup] = useState(false);
   const [detailStudent, setDetailStudent] = useState<IStudent | null>();
   const [idStudent, setIdStudent] = useState<string>();
   const [showModalConfirm, setShowModalConfirm] = useState(false);
-  const router = useRouter();
+
+  const [search, setSearch] = useState('');
+  const debouncedSearchTerm = useDebounce(search, 800);
+
   const handleShowPopup = () => {
     setShowStudentPopup(true);
   };
@@ -47,8 +52,8 @@ const StudentPage: NextPageWithLayout = () => {
   //   router.push(`/${router.pathname}/${id}`);
   // };
   const { data: studentList, isLoading } = useQuery({
-    queryKey: ['students'],
-    queryFn: () => studentApi.getStudents(),
+    queryKey: ['students', debouncedSearchTerm],
+    queryFn: () => studentApi.getStudents(debouncedSearchTerm),
   });
   const { data: classList } = useQuery({
     queryKey: ['classes'],
@@ -154,6 +159,7 @@ const StudentPage: NextPageWithLayout = () => {
             <input
               placeholder="Search for a student by name or email "
               className="text-[#8A8A8A] w-full bg-inherit outline-none"
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
