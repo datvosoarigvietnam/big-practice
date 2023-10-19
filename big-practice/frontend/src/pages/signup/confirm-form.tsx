@@ -41,6 +41,7 @@ export default function ConfirmForm() {
       },
     });
   };
+  console.log('infor', infor);
 
   return (
     <div className="pt-[50px] flex justify-center items-center flex-col">
