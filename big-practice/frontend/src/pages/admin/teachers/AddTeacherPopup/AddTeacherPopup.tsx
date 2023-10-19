@@ -67,6 +67,9 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     phoneNumber: Yup.string().required('Phone number is required'),
     selectedClass: Yup.string().required('Class is required'),
     selectedGender: Yup.string().required('Gender is required'),
+    password: teacherDetail
+      ? Yup.string()
+      : Yup.string().required('Password is required'),
   });
 
   const {
@@ -78,7 +81,10 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     defaultValues,
     resolver: yupResolver(validationSchema),
   });
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<{ name: string }[]>(
+    teacherDetail?.subjects,
+  );
+
   const addTeacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) => adminApi.addTeacher(teacherInfor),
   });
@@ -91,14 +97,18 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     const teacherInfo = {
       ...values,
       // _id: teacherDetail._id,
-      subjects: selectedSubjects.map((selected) => ({ name: selected })),
+      subjects: selectedSubjects.map((selected) => ({ name: selected.name })),
     };
+
     if (teacherDetail) {
       const teacherInfo = {
         ...values,
         _id: teacherDetail._id,
-        subjects: selectedSubjects.map((selected) => ({ name: selected })),
+        subjects: selectedSubjects.map((selected) => {
+          return { name: selected.name };
+        }),
       };
+
       editTeacherMutate.mutate(teacherInfo as ITeacher, {
         onSuccess: () => {
           toast.success('Add new teacher success');
@@ -247,26 +257,29 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             </div>
           </div>
           <div className="flex flex-col md:flex-row sm:items-end gap-5 lg:gap-12 justify-between mt-8  lg:justify-start ">
-            <div className="w-full">
-              {!teacherDetail?._id && (
-                <InputField
-                  name="password"
-                  control={control}
-                  label="Password"
-                  placeholder=""
-                  type="password"
-                  fullWith="w-full"
-                />
-              )}
-              <div style={{ minHeight: '20px' }}>
-                {errors.phoneNumber && (
-                  <p className="text-center text-red-600">
-                    {errors.phoneNumber.message as string}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="w-full">
+            {!teacherDetail?._id && (
+              <>
+                <div className="w-full">
+                  <InputField
+                    name="password"
+                    control={control}
+                    label="Password"
+                    placeholder=""
+                    type="password"
+                    fullWith="w-full"
+                  />
+
+                  <div style={{ minHeight: '20px' }}>
+                    {errors.password && (
+                      <p className="text-center text-red-600">
+                        {errors.password.message as string}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+            <div className={`${!teacherDetail?._id ? 'w-full' : 'w-[250px]'}`}>
               <InputField
                 name="phoneNumber"
                 control={control}

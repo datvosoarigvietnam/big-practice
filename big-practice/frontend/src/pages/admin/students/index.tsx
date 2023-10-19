@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
+import { CSVLink } from 'react-csv';
 
 import AddStudentPopup from './StudentPopup';
 import { Column } from '@/types/Table.type';
@@ -57,11 +58,14 @@ const StudentPage: NextPageWithLayout = () => {
   const { data: studentList, isLoading } = useQuery({
     queryKey: ['students', debouncedSearchTerm],
     queryFn: () => studentApi.getStudents(debouncedSearchTerm),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
   const { data: classList } = useQuery({
     queryKey: ['classes'],
     queryFn: () => studentApi.getClass(),
-    staleTime: 3000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
   const deleteStudent = useMutation({
     mutationFn: (id: string) => studentApi.deleteStudent(id),
@@ -153,10 +157,15 @@ const StudentPage: NextPageWithLayout = () => {
           Students
         </p>
         <div className="flex justify-center items-center gap-4">
-          <Button
-            title="Export CSV"
-            className="w-32 h-10 rounded-lg font-kumbh-sans"
-          />
+          <div className="text-[#2671B1] font-kumbh-sans font-semibold px-3 py-2 hover:opacity-75">
+            <CSVLink
+              data={(studentData && studentData) || ''}
+              target="_blank"
+              filename="studentdata"
+            >
+              Export CSV
+            </CSVLink>
+          </div>
           <Button
             title="Add Students"
             className="w-32 h-10 rounded-lg font-kumbh-sans"

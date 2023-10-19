@@ -95,8 +95,6 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({
       studentInfor: Omit<IStudent, '_id'>;
       id: string;
     }) => {
-      console.log('🚀 ~ file: index.tsx:98 ~ studentInfor:', studentInfor);
-
       return studentApi.editStudent({ studentInfor, id });
     },
     onSuccess: () => {

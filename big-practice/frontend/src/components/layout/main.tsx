@@ -4,27 +4,24 @@ import { useRouter } from 'next/router';
 import { ILayoutProps } from '../../models/common';
 import Sidebar from '../Sidebar/Sidebar';
 import { AppContext } from '@/store/AppContext';
+import Spinner from '../Spinner';
 
 export function MainLayout({ children }: ILayoutProps) {
   const { isAuthenticated } = useContext(AppContext);
   const router = useRouter();
-  const [, setIsLoading] = useState(!isAuthenticated); // Track loading state
+  const [isLoading, setIsLoading] = useState(!isAuthenticated);
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.replace('/signin');
     } else {
-      setIsLoading(false); // Set loading to false once authentication is verified
+      setIsLoading(false);
     }
   }, [isAuthenticated]);
 
-  // if (isLoading) {
-  //   return (
-  //     <div>
-  //       <Spinner />
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   // if (!isAuthenticated) {
   //   // Redirect logic should have already happened, but in case of unexpected situations
