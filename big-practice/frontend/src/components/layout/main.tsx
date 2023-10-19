@@ -9,7 +9,7 @@ import Spinner from '../Spinner';
 export function MainLayout({ children }: ILayoutProps) {
   const { isAuthenticated } = useContext(AppContext);
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(!isAuthenticated);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -22,11 +22,6 @@ export function MainLayout({ children }: ILayoutProps) {
   if (isLoading) {
     return <Spinner />;
   }
-
-  // if (!isAuthenticated) {
-  //   // Redirect logic should have already happened, but in case of unexpected situations
-  //   return null;
-  // }
 
   return (
     <div className="flex">

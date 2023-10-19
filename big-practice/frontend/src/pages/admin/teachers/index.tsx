@@ -22,7 +22,7 @@ import { NextPageWithLayout } from '@/models/common';
 import { queryClient } from '@/pages/_app';
 import { Column } from '@/types/Table.type';
 import { ITeacher } from '@/types/teacher.type';
-import AddTeacherPopup from './AddTeacherPopup';
+import AddTeacherPopup from './TeacherPopup';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'classSchool', header: 'Class' },
@@ -136,7 +136,6 @@ const TeacherPage: NextPageWithLayout = () => {
         .join(','),
     };
   });
-  console.log('csvdata', csvData);
 
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
