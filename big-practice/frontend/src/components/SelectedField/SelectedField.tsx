@@ -1,10 +1,5 @@
-import React, {
-  ChangeEvent,
-  SelectHTMLAttributes,
-  useContext,
-  useState,
-} from 'react';
-import { Controller, Control, FieldValues } from 'react-hook-form';
+import { ChangeEvent, SelectHTMLAttributes, useContext } from 'react';
+import { Control, Controller, FieldValues } from 'react-hook-form';
 
 import { LabelContext } from '@/store/StepperDataContenxt';
 
@@ -27,7 +22,6 @@ export default function SelectedField({
   ...rest
 }: IProps) {
   const value = useContext(LabelContext);
-  const [, setSelectedSubjects] = useState<{ name: string }[]>([]);
   return (
     <Controller
       name={name}
