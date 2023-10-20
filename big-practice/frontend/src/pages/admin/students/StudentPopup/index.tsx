@@ -122,9 +122,9 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({
     onClose();
   };
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
       {addStudentMutate.isLoading && <Spinner />}
-      <div className="bg-white rounded shadow-lg pt-10 pb-5 px-3 sm:p-6 md:px-28 lg:py-20 relative">
+      <div className="bg-white rounded shadow-lg pt-10 pb-5 px-3 sm:p-6 md:px-28 lg:py-20 relative h-[80vh] overflow-y-scroll">
         <p
           className="text-gray-600 text-2xl cursor-pointer absolute top-2 right-2"
           onClick={handleClose}
@@ -136,8 +136,12 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({
             {detailStudent?._id ? 'Edit Student' : 'Add Student'}
           </h2>
           <div className="mt-6 flex gap-11 justify-center md:justify-start">
-            <p className="text-lg text-[#4F4F4F]">Manually</p>
-            <p className="text-lg text-[#4F4F4F]">Import CSV</p>
+            <p className="text-lg text-[#4F4F4F] bg-slate-400 px-3 py-2 rounded-md hover:cursor-pointer">
+              Manually
+            </p>
+            <p className="text-lg text-[#4F4F4F] px-3 py-2 hover:cursor-pointer">
+              Import CSV
+            </p>
           </div>
           {/* Add other form fields similarly */}
           {/* Input Field */}

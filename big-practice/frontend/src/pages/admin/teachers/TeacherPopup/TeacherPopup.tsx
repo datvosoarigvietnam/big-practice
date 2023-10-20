@@ -15,6 +15,8 @@ import { queryClient } from '@/pages/_app';
 import Spinner from '@/components/Spinner';
 import addIcon from '@/common/icons/plusIcon.svg';
 import SelectedSubject from '@/components/SelectedField/SelectedSubject';
+import phoneSchema from './validation';
+import { AxiosError } from 'axios';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
@@ -66,7 +68,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     email: Yup.string()
       .email('Invalid email address')
       .required('Email is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
+    phoneNumber: phoneSchema,
     selectedClass: Yup.string().required('Class is required'),
     selectedGender: Yup.string().required('Gender is required'),
     password: teacherDetail
@@ -101,6 +103,10 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const editTeacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) =>
       adminApi.editTeacher(teacherInfor, teacherInfor?._id),
+    onError: (error: AxiosError) => {
+      // @ts-ignore
+      toast.error(error.response?.data.message as string);
+    },
   });
   const onSubmit = (values: ITeacher) => {
     const teacherInfo = {
@@ -119,7 +125,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
 
       editTeacherMutate.mutate(teacherInfo as ITeacher, {
         onSuccess: () => {
-          toast.success('Add new teacher success');
+          toast.success('Edit new teacher success');
           queryClient.invalidateQueries({
             queryKey: ['teachers'],
           });
@@ -161,9 +167,9 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
       {addTeacherMutate.isLoading && <Spinner />}
       {editTeacherMutate.isLoading && <Spinner />}
-      <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-20 overflow-y-scroll h-[80vh] relative">
+      <div className="bg-white rounded shadow-lg  pb-5 px-3 sm:p-6 md:px-20 h-[80vh] relative overflow-y-scroll">
         <span
-          className="text-gray-600 text-2xl cursor-pointer absolute top-2 right-2"
+          className="text-gray-600  cursor-pointer absolute top-2 right-2 text-3xl"
           onClick={handleClose}
         >
           &times;
@@ -171,31 +177,37 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between">
             <div className="flex justify-center items-start flex-col ">
-              <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F]">
+              <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F] pt-3">
                 {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
               </h2>
-              <div className="mt-6 flex gap-11 justify-center ">
-                <p className="text-lg text-[#4F4F4F]">Manually</p>
-                <p className="text-lg text-[#4F4F4F]">Import CSV</p>
+              <div className="mt-6 flex gap-10 justify-center ">
+                <p className="text-lg text-[#4F4F4F] bg-slate-400 px-3 py-2 rounded-md hover:cursor-pointer">
+                  Manually
+                </p>
+                <p className="text-lg text-[#4F4F4F] px-3 py-2 hover:cursor-pointer">
+                  Import CSV
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-12 sm:mt-[75px] flex flex-1 items-center justify-center md:block w-full">
+          <div className="mt-12 sm:mt-[75px] flex flex-col flex-1 items-center justify-center md:block w-full">
             <InputField
               name="name"
               control={control}
               label="Full Name"
               placeholder=""
               type="text"
-              value={teacherDetail?.fullName}
+              // value={teacherDetail?.fullName}
               fullWith="w-full"
             />
-            {errors.name && (
-              <p className="text-center text-red-700 mt-2">
-                {errors?.name.message + ''}
-              </p>
-            )}
+            <div className="min-h-[33px] pt-2">
+              {errors.name && (
+                <p className="text-center text-red-700 mt-2">
+                  {errors?.name.message + ''}
+                </p>
+              )}
+            </div>
           </div>
           <div className="mt-8 flex gap-5 md:gap-7  lg:gap-12 flex-col items-center md:items-start lg:flex-row lg:items-end">
             <div className="w-full">
@@ -207,7 +219,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 type="text"
                 fullWith="w-full"
               />
-              <div className=" ">
+              <div className="min-h-[33px] pt-2 ">
                 {errors.email && (
                   <p className="text-center text-red-700">
                     {errors?.email.message + ''}
@@ -225,10 +237,10 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                   defaultOption={teacherDetail?.classSchool?.name || 'Class'}
                   options={classOption}
                 />
-                <div className=" ">
-                  {errors.email && (
+                <div className="min-h-[33px] pt-2 ">
+                  {errors.selectedClass && (
                     <p className="text-center text-red-700">
-                      {errors?.email.message + ''}
+                      {errors?.selectedClass.message + ''}
                     </p>
                   )}
                 </div>
@@ -242,10 +254,10 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                   defaultOption="Gender"
                   options={optionGender}
                 />
-                <div className=" ">
-                  {errors.email && (
+                <div className=" min-h-[33px] pt-2">
+                  {errors.selectedGender && (
                     <p className="text-center text-red-700">
-                      {errors?.email.message + ''}
+                      {errors?.selectedGender.message + ''}
                     </p>
                   )}
                 </div>
@@ -265,7 +277,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                     fullWith="w-full"
                   />
 
-                  <div style={{ minHeight: '20px' }}>
+                  <div className="min-h-[33px] pt-2">
                     {errors.password && (
                       <p className="text-center text-red-600">
                         {errors.password.message as string}
@@ -285,7 +297,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 value={teacherDetail?.phoneNumber}
                 fullWith="w-full"
               />
-              <div style={{ minHeight: '20px' }}>
+              <div className="min-h-[33px] pt-2">
                 {errors.phoneNumber && (
                   <p className="text-center text-red-600">
                     {errors.phoneNumber.message as string}
@@ -306,7 +318,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               }}
             /> */}
             {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-2 items-center mt-2">
+              <div key={field.id} className="flex gap-4 items-center mt-2">
                 <Controller
                   control={control}
                   name={`subjects[${index}].name`}
@@ -357,7 +369,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
           </div>
           <div className="mt-10 pb-4 flex gap-6">
             <div
-              className="flex gap-2 items-center hover:cursor-pointer hover:opacity-75"
+              className="flex gap-2 items-center hover:cursor-pointer hover:opacity-75 font-medium text-[#4F4F4F]"
               onClick={() => {
                 append({ name: 'Selected Subject' });
               }}
@@ -366,8 +378,8 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               <Image src={addIcon} alt="addicon" />
               Add another
             </div>
-            <button className=" text-black bg-[#F1F1F1] px-4 py-3 rounded-sm hover:opacity-80 hover:bg-[#3a88d2]">
-              {teacherDetail?._id ? 'Eidt Teacher' : 'Add Teacher'}
+            <button className=" text-black bg-[#F1F1F1] px-4 py-3 rounded-sm hover:opacity-80 hover:bg-[#3a88d2] font-semibold">
+              {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
             </button>
           </div>
         </form>

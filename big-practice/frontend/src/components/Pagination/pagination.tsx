@@ -93,7 +93,7 @@ const Pagination: React.FC<IProps> = ({
   };
 
   return (
-    <div className="mt-6 flex flex-wrap justify-center">
+    <div className="mt-6 flex flex-wrap justify-center pb-3">
       <button
         className={`mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm ${
           currentPage === 1 ? 'cursor-not-allowed disabled' : ''
