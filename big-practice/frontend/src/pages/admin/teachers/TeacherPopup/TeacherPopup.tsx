@@ -46,7 +46,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
       phoneNumber: '',
       selectedClass: '',
       selectedGender: '',
-      subjects: [{ name: subjectOption[0] }],
+      subjects: [],
     };
 
     if (teacherDetail) {
@@ -73,7 +73,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
       ? Yup.string()
       : Yup.string().required('Password is required'),
   });
-  console.log('default value', defaultValues.subjects);
 
   const {
     control,
@@ -88,14 +87,12 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     control,
     name: 'subjects',
   });
-  console.log('🚀 ~ file: TeacherPopup.tsx:90 ~ fields:', fields);
   useEffect(() => {
     subjectOption.shift();
   }, []);
   const [selectedSubjects, setSelectedSubjects] = useState<{ name: string }[]>(
     teacherDetail?.subjects || [{ name: '' }],
   );
-  console.log('subjectOption', subjectOption);
 
   const addTeacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) => adminApi.addTeacher(teacherInfor),
@@ -158,18 +155,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const handleClose = () => {
     onClose();
   };
-  // const handleAddNewSubject = () => {
-  //   setTempOption((prev) => {
-  //     const newOption = prev?.filter((item) => item !== tepmOption[0]);
-  //     return newOption;
-  //   });
-  //   append({ name: tepmOption[0] });
-  // };
-
-  // useEffect(() => {
-  //   console.log('????');
-  //   append({ name: tepmOption[0] });
-  // }, []);
   const optionGender = ['Male', 'Female', 'Other'];
   const [tepmOption, setTempOption] = useState(subjectOption);
   return (

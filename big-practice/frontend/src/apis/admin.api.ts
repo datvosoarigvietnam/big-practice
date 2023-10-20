@@ -66,7 +66,6 @@ const adminApi = {
       phone: teacherInfor.phoneNumber,
       gender: teacherInfor.selectedGender,
     };
-    console.log('newTeacher in api ', newTeacher);
 
     return http.patch(`/api/teachers/${id}`, {
       ...newTeacher,

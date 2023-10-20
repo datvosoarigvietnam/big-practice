@@ -9,18 +9,13 @@ export interface AppContextInterface {
 }
 const initAppContext = {
   isAuthenticated: false,
-  setAuthenticated: () => { },
-  reset: () => { }
-}
+  setAuthenticated: () => {},
+  reset: () => {},
+};
 export const AppContext = createContext<AppContextInterface>(initAppContext);
 
-export default function AppProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function AppProvider({ children }: { children: ReactNode }) {
   const { isAuthenticated, setAuthenticated } = useAuth();
-  console.log(isAuthenticated);
 
   const reset = () => {
     setAuthenticated('');
