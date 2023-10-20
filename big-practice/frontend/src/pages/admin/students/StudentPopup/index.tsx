@@ -136,8 +136,12 @@ const AddTeacherPopup: React.FC<AddStudentPopupProps> = ({
             {detailStudent?._id ? 'Edit Student' : 'Add Student'}
           </h2>
           <div className="mt-6 flex gap-11 justify-center md:justify-start">
-            <p className="text-lg text-[#4F4F4F]">Manually</p>
-            <p className="text-lg text-[#4F4F4F]">Import CSV</p>
+            <p className="text-lg text-[#4F4F4F] bg-slate-400 px-3 py-2 rounded-md hover:cursor-pointer">
+              Manually
+            </p>
+            <p className="text-lg text-[#4F4F4F] px-3 py-2 hover:cursor-pointer">
+              Import CSV
+            </p>
           </div>
           {/* Add other form fields similarly */}
           {/* Input Field */}

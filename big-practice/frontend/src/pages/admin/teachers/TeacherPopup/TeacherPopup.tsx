@@ -16,6 +16,7 @@ import Spinner from '@/components/Spinner';
 import addIcon from '@/common/icons/plusIcon.svg';
 import SelectedSubject from '@/components/SelectedField/SelectedSubject';
 import phoneSchema from './validation';
+import { AxiosError } from 'axios';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
@@ -102,6 +103,10 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const editTeacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) =>
       adminApi.editTeacher(teacherInfor, teacherInfor?._id),
+    onError: (error: AxiosError) => {
+      // @ts-ignore
+      toast.error(error.response?.data.message as string);
+    },
   });
   const onSubmit = (values: ITeacher) => {
     const teacherInfo = {
@@ -120,7 +125,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
 
       editTeacherMutate.mutate(teacherInfo as ITeacher, {
         onSuccess: () => {
-          toast.success('Add new teacher success');
+          toast.success('Edit new teacher success');
           queryClient.invalidateQueries({
             queryKey: ['teachers'],
           });
@@ -176,10 +181,12 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
               </h2>
               <div className="mt-6 flex gap-10 justify-center ">
-                <p className="text-lg text-[#4F4F4F] bg-slate-400 px-3 py-2 rounded-md">
+                <p className="text-lg text-[#4F4F4F] bg-slate-400 px-3 py-2 rounded-md hover:cursor-pointer">
                   Manually
                 </p>
-                <p className="text-lg text-[#4F4F4F] px-3 py-2">Import CSV</p>
+                <p className="text-lg text-[#4F4F4F] px-3 py-2 hover:cursor-pointer">
+                  Import CSV
+                </p>
               </div>
             </div>
           </div>
