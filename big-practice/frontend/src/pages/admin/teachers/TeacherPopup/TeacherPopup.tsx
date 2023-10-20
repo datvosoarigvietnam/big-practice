@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import Image from 'next/image';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
@@ -9,10 +10,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import adminApi from '@/apis/admin.api';
 import InputField from '@/components/InputField';
 import SelectedField from '@/components/SelectedField';
-import Button from '@/components/Button';
 import { ITeacher } from '@/types/teacher.type';
 import { queryClient } from '@/pages/_app';
 import Spinner from '@/components/Spinner';
+import addIcon from '@/common/icons/plusIcon.svg';
+import SelectedSubject from '@/components/SelectedField/SelectedSubject';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
@@ -44,7 +46,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
       phoneNumber: '',
       selectedClass: '',
       selectedGender: '',
-      subjects: [],
+      subjects: [{ name: subjectOption[0] }],
     };
 
     if (teacherDetail) {
@@ -71,6 +73,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
       ? Yup.string()
       : Yup.string().required('Password is required'),
   });
+  console.log('default value', defaultValues.subjects);
 
   const {
     control,
@@ -81,9 +84,18 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     defaultValues,
     resolver: yupResolver(validationSchema),
   });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'subjects',
+  });
+  console.log('🚀 ~ file: TeacherPopup.tsx:90 ~ fields:', fields);
+  useEffect(() => {
+    subjectOption.shift();
+  }, []);
   const [selectedSubjects, setSelectedSubjects] = useState<{ name: string }[]>(
-    teacherDetail?.subjects,
+    teacherDetail?.subjects || [{ name: '' }],
   );
+  console.log('subjectOption', subjectOption);
 
   const addTeacherMutate = useMutation({
     mutationFn: (teacherInfor: ITeacher) => adminApi.addTeacher(teacherInfor),
@@ -96,15 +108,14 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const onSubmit = (values: ITeacher) => {
     const teacherInfo = {
       ...values,
-      // _id: teacherDetail._id,
-      subjects: selectedSubjects.map((selected) => ({ name: selected.name })),
+      subjects: selectedSubjects?.map((selected) => ({ name: selected.name })),
     };
 
     if (teacherDetail) {
       const teacherInfo = {
         ...values,
         _id: teacherDetail._id,
-        subjects: selectedSubjects.map((selected) => {
+        subjects: selectedSubjects?.map((selected) => {
           return { name: selected.name };
         }),
       };
@@ -147,7 +158,20 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const handleClose = () => {
     onClose();
   };
+  // const handleAddNewSubject = () => {
+  //   setTempOption((prev) => {
+  //     const newOption = prev?.filter((item) => item !== tepmOption[0]);
+  //     return newOption;
+  //   });
+  //   append({ name: tepmOption[0] });
+  // };
+
+  // useEffect(() => {
+  //   console.log('????');
+  //   append({ name: tepmOption[0] });
+  // }, []);
   const optionGender = ['Male', 'Female', 'Other'];
+  const [tepmOption, setTempOption] = useState(subjectOption);
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
       {addTeacherMutate.isLoading && <Spinner />}
@@ -160,7 +184,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
           &times;
         </span>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* <div className="flex justify-center items-center flex-col sm:flex-row sm:gap-36"> */}
           <div className="flex flex-row justify-between">
             <div className="flex justify-center items-start flex-col ">
               <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F]">
@@ -171,17 +194,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 <p className="text-lg text-[#4F4F4F]">Import CSV</p>
               </div>
             </div>
-            {/* <div className="">
-              <InputField
-                name="name"
-                control={control}
-                label="Full Name"
-                placeholder=""
-                type="text"
-                value={teacherDetail?.fullName}
-                fullWith="w-full"
-              />
-            </div> */}
           </div>
 
           <div className="mt-12 sm:mt-[75px] flex flex-1 items-center justify-center md:block w-full">
@@ -209,7 +221,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 placeholder=""
                 type="text"
                 fullWith="w-full"
-                // className="w-full"
               />
               <div className=" ">
                 {errors.email && (
@@ -299,7 +310,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
             </div>
           </div>
           <div className="mt-10">
-            <SelectedField
+            {/* <SelectedSubject
               name="subjects"
               control={control}
               placeholder=""
@@ -308,14 +319,71 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
               onUpdateSelectedSubjects={(selectedSubjects) => {
                 setSelectedSubjects(selectedSubjects);
               }}
-            />
+            /> */}
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex gap-2 items-center mt-2">
+                <Controller
+                  control={control}
+                  name={`subjects[${index}].name`}
+                  render={({ field }) => {
+                    return (
+                      <SelectedSubject
+                        name={`subjects[${index}].name`}
+                        value={field.value}
+                        onChange={field.onChange}
+                        control={control}
+                        options={subjectOption}
+                        tempOptions={tepmOption}
+                        onUpdateSelectedSubjects={(selectedSubjects) => {
+                          const indexToReplace = index;
+                          setTempOption((prev) => {
+                            const newOption = prev?.filter(
+                              (item) => item !== selectedSubjects[0].name,
+                            );
+                            return newOption;
+                          });
+                          setSelectedSubjects((prev) => {
+                            const updatedSubjects = [...prev];
+                            updatedSubjects[indexToReplace] =
+                              selectedSubjects[0];
+                            return updatedSubjects;
+                          });
+                        }}
+                      />
+                    );
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    remove(index);
+                    setSelectedSubjects((prev) => {
+                      const updatedSubjects = [...prev];
+                      updatedSubjects.splice(index, 1);
+                      return updatedSubjects;
+                    });
+                  }}
+                  className="text-red-600 cursor-pointer"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
           </div>
-          {/* <p></p> */}
-
-          <div className="mt-10 pb-4">
-            <Button
-              title={teacherDetail?._id ? 'Eidt Teacher' : 'Add Teacher'}
-            />
+          <div className="mt-10 pb-4 flex gap-6">
+            <div
+              className="flex gap-2 items-center hover:cursor-pointer hover:opacity-75"
+              onClick={() => {
+                append({ name: 'Selected Subject' });
+              }}
+              // onClick={handleAddNewSubject}
+            >
+              <Image src={addIcon} alt="addicon" />
+              Add another
+            </div>
+            <button className=" text-black bg-[#F1F1F1] px-4 py-3 rounded-sm hover:opacity-80 hover:bg-[#3a88d2]">
+              {teacherDetail?._id ? 'Eidt Teacher' : 'Add Teacher'}
+            </button>
           </div>
         </form>
       </div>

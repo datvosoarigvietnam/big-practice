@@ -1,5 +1,11 @@
-import { ChangeEvent, SelectHTMLAttributes, useContext } from 'react';
-import { Control, Controller, FieldValues } from 'react-hook-form';
+import React, {
+  ChangeEvent,
+  SelectHTMLAttributes,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { Controller, Control, FieldValues } from 'react-hook-form';
 
 import { LabelContext } from '@/store/StepperDataContenxt';
 
@@ -8,20 +14,28 @@ interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   options?: any[];
   control: Control<FieldValues | any>;
   defaultOption?: string | number;
-  isFullWith?: boolean;
+  isFullWidth?: boolean;
   onUpdateSelectedSubjects?: (selectedSubjects: { name: string }[]) => void;
+  tempOptions?: any[];
+  value?: string;
 }
 
-export default function SelectedField({
+export default function SelectedSubject({
   name,
   control,
   options = [],
-  defaultOption,
-  isFullWith,
+  defaultOption = 'Select Subject',
+  isFullWidth,
   onUpdateSelectedSubjects,
+  tempOptions,
+  value,
   ...rest
 }: IProps) {
-  const value = useContext(LabelContext);
+  const valueContext = useContext(LabelContext);
+  //   const [, setSelectedSubjects] = useState<{ name: string }[]>([]);
+  //   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  console.log('Value', value);
+
   return (
     <Controller
       name={name}
@@ -30,25 +44,27 @@ export default function SelectedField({
         <select
           {...field}
           {...rest}
+          value={value}
+          //   value={field.value}
           // multiple
           className={`${
-            isFullWith ? 'w-full' : 'w-[250px]'
+            isFullWidth ? 'w-full' : 'w-[250px]'
           } outline-none rounded border-[0.5px] py-[12px] pl-[13px]  font-medium text-[#8A8A8A] font-kumbh-sans md:w-[250px] `}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
             const selectedOptions = Array.from(
               e.target.selectedOptions,
               (option) => option.value,
             );
+            // setSelectedSubjects(selectedOptions);
             onUpdateSelectedSubjects &&
               onUpdateSelectedSubjects(
                 selectedOptions.map((item) => ({ name: item })),
               );
             field.onChange(e);
-            value.handleChange(name)(e);
           }}
         >
-          <option value={defaultOption}>{defaultOption}</option>
-          {options.map((option) => (
+          <option value={defaultOption}>{value}</option>
+          {(tempOptions as string[])?.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>

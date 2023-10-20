@@ -26,7 +26,7 @@ export default function InputField({
   placeholder,
   type,
   label,
-  // value,
+  value,
   fullWith,
   ...props
 }: IProps) {
@@ -70,7 +70,7 @@ export default function InputField({
                     : 'password'
                   : type
               }
-              value={field.value}
+              value={field.value || value}
               onChange={(e) => {
                 field.onChange(e);
                 customOnChange(e);
