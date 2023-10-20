@@ -134,7 +134,7 @@ const StudentPage: NextPageWithLayout = () => {
             <Image
               src={menuIcon}
               alt=""
-              className="lg:hidden w-8 h-8"
+              className="lg:hidden w-6 h-6"
               onClick={handleShowSidebar}
             />
           </div>

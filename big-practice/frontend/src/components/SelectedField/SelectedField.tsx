@@ -47,7 +47,7 @@ export default function SelectedField({
             value.handleChange(name)(e);
           }}
         >
-          <option value={defaultOption}>{defaultOption}</option>
+          <option value={''}>{defaultOption}</option>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}
