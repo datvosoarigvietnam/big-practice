@@ -29,7 +29,7 @@ const DashBoard: NextPageWithLayout = () => {
       <div className="flex-1 ">
         <div className="bg-[#FCFAFA]   ">
           <div className="flex-1 ">
-            {/* HEader */}
+            {/* Header */}
             <div className="flex justify-between pt-9 flex-col gap-5  md:flex-row pl-10 pr-10  lg:pl-12 lg:pr-12 xl:pl-32 xl:pr-32">
               <div className=" ">
                 <p className="font-kumbh-sans text-center font-semibold text-[#424242] leading-5 md:text-left">
@@ -41,11 +41,11 @@ const DashBoard: NextPageWithLayout = () => {
                 </p>
               </div>
               <div className="flex justify-around items-center gap-12 pb-[12px]">
-                <div className="">
+                <div className="lg:hidden">
                   <Image
                     src={menuIcon}
                     alt=""
-                    className="sm:hidden"
+                    className=""
                     onClick={handleShowSidebar}
                   />
                 </div>

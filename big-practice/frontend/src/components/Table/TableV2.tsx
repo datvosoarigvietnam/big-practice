@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import React from 'react';
 
@@ -40,11 +39,8 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
     return 'subject' in data;
   };
   const formatSubjectArrayToString = (subjectArray: []) => {
-    // if (Array.isArray(subjectArray) && subjectArray.length > 0) {
     const subjectNames = subjectArray.map((subject) => subject.name);
     return subjectNames.join(', ');
-    // }
-    // return '';
   };
   return (
     <div className="p-4 mt-6 overflow-x-auto w-full md:pl-[10px]">
@@ -73,7 +69,7 @@ const DataTable: React.FC<DataTableProps<ITeacher | IStudent>> = ({
             {data.map((row, index) => {
               return (
                 <tr
-                  key={row.id}
+                  key={row._id}
                   className={`${
                     index % 2 === 0 ? 'bg-[#f0f8ff]' : 'bg-white'
                   } py-6 px-4 hover:bg-[#81afd7] transition duration-150 hover:rounded`}

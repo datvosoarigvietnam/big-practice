@@ -36,8 +36,6 @@ export default function SignIn() {
         router.replace('/admin/dashboard');
       },
       onError: (error: any) => {
-        console.log(error.response.data.message);
-
         setError('emailSchool', {
           type: 'validate',
           message:

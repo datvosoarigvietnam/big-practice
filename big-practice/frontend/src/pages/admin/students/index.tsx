@@ -52,9 +52,9 @@ const StudentPage: NextPageWithLayout = () => {
     setDetailStudent(null);
     setShowStudentPopup(false);
   };
-  // const handleRowClick = (id: number) => {
-  //   router.push(`/${router.pathname}/${id}`);
-  // };
+  const handleRowClick = (id: string) => {
+    router.push(`${router.pathname}/${id}`);
+  };
   const { data: studentList, isLoading } = useQuery({
     queryKey: ['students', debouncedSearchTerm],
     queryFn: () => studentApi.getStudents(debouncedSearchTerm),
@@ -198,7 +198,7 @@ const StudentPage: NextPageWithLayout = () => {
           <TableV2
             columns={columns}
             data={records}
-            // onRowClick={handleRowClick}
+            onRowClick={handleRowClick}
             handleEdit={handleEdit}
             onDeleteClick={onClickDelete}
           />

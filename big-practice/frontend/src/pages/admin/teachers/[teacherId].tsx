@@ -12,7 +12,6 @@ import studentIcon from '@/common/icons/studentIcon.svg';
 import AvatarList from '@/components/AvatarList';
 const TeacherDetail: NextPageWithLayout = () => {
   const router = useRouter();
-  console.log('Teacher Id', router.query.teacherId);
   return (
     <div className="w-full px-5 md:px-10 flex-1">
       <div className="pt-5 flex flex-col-reverse justify-between items-center md:flex-row">

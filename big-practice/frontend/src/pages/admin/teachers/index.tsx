@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { toast } from 'react-toastify';
 
+import AddTeacherPopup from './TeacherPopup';
 import adminApi from '@/apis/admin.api';
 import bellIcon from '@/common/icons/bell-notifi-icon.svg';
 import finIcon from '@/common/icons/findIcon.svg';
@@ -22,7 +23,6 @@ import { NextPageWithLayout } from '@/models/common';
 import { queryClient } from '@/pages/_app';
 import { Column } from '@/types/Table.type';
 import { ITeacher } from '@/types/teacher.type';
-import AddTeacherPopup from './TeacherPopup';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'classSchool', header: 'Class' },
@@ -87,9 +87,7 @@ const TeacherPage: NextPageWithLayout = () => {
     mutationFn: (id: string) => adminApi.deleteTeacher(id),
   });
   const handleRowClick = (id: string) => {
-    console.log(id);
-
-    // router.push(`/${router.pathname}/${id}`);
+    router.push(`${router.pathname}/${id}`);
   };
   const handleEdit = (id: string) => {
     const teacher = teacherList?.data.find(
