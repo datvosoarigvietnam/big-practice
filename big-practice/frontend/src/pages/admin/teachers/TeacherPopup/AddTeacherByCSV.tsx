@@ -1,14 +1,12 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 
 import TableV2 from '@/components/Table/TableV2';
 import { Column } from '@/types/Table.type';
+import NotData from '@/components/NotData';
 export default function AddTeacherByCSV() {
   const [file, setFile] = useState();
   const [array, setArray] = useState([]);
-  console.log(
-    '🚀 ~ file: AddTeacherByCSV.tsx:6 ~ AddTeacherByCSV ~ array:',
-    // JSON.parse(array),
-  );
 
   const fileReader = new FileReader();
 
@@ -44,15 +42,7 @@ export default function AddTeacherByCSV() {
       fileReader.readAsText(file);
     }
   };
-  /*
-    const columns: Column[] = [
-  { key: 'name', header: 'Name' },
-  { key: 'classSchool', header: 'Class' },
-  { key: 'subjects', header: 'Subjects' },
-  { key: 'email', header: 'Email' },
-  { key: 'gender', header: 'Gender' },
-];
-  */
+
   const header = Object.keys(Object.assign({}, ...array));
   const headerKeys: Column = header.map((item) => ({
     key: item,
@@ -61,46 +51,41 @@ export default function AddTeacherByCSV() {
 
   return (
     <div>
-      <div style={{ textAlign: 'center' }}>
-        <h1>REACTJS CSV IMPORT EXAMPLE </h1>
-        <form>
-          <input
-            type={'file'}
-            id={'csvFileInput'}
-            accept={'.csv'}
-            onChange={handleOnChange}
-          />
+      <div className="text-center mt-5">
+        <form className="mt-5">
+          <div className="md:pl-10 flex gap-2">
+            <input
+              type={'file'}
+              id={'csvFileInput'}
+              accept={'.csv'}
+              onChange={handleOnChange}
+              className="border border-gray-300 p-2 rounded-md "
+            />
 
-          <button
-            onClick={(e) => {
-              handleOnSubmit(e);
-            }}
-          >
-            IMPORT CSV
-          </button>
+            <button
+              onClick={(e) => {
+                handleOnSubmit(e);
+              }}
+              className={`bg-cyan-500 px-3 py-2 rounded-md text-white ${
+                !file && 'cursor-not-allowed bg-slate-300 text-white'
+              }`}
+            >
+              IMPORT CSV
+            </button>
+          </div>
         </form>
 
         <br />
-        {/* <table>
-          <thead>
-            <tr key={'header'}>
-              {headerKeys.map((key) => (
-                <th>{key}</th>
-              ))}
-            </tr>
-          </thead>
 
-          <tbody>
-            {array.map((item) => (
-              <tr key={item.id}>
-                {Object.values(item).map((val) => (
-                  <td>{val}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
-        <TableV2 columns={headerKeys} data={array} />
+        {array.length !== 0 && <TableV2 columns={headerKeys} data={array} />}
+        {array.length === 0 && <NotData />}
+        {array.length !== 0 && (
+          <div className="">
+            <button className="bg-sky-600 text-white px-3 py-3 w-36 rounded-lg font-kumbh-sans ">
+              Add Teachers
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
