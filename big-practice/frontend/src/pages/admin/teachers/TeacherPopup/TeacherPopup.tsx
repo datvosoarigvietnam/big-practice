@@ -15,7 +15,7 @@ import { queryClient } from '@/pages/_app';
 import Spinner from '@/components/Spinner';
 import addIcon from '@/common/icons/plusIcon.svg';
 import SelectedSubject from '@/components/SelectedField/SelectedSubject';
-import phoneSchema from './validation';
+import phoneSchema from '@/constants/validation';
 import { AxiosError } from 'axios';
 
 interface AddTeacherPopupProps {
