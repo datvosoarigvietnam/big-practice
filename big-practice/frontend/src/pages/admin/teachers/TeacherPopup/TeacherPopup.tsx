@@ -17,6 +17,7 @@ import addIcon from '@/common/icons/plusIcon.svg';
 import SelectedSubject from '@/components/SelectedField/SelectedSubject';
 import phoneSchema from './validation';
 import { AxiosError } from 'axios';
+import AddTeacherByCSV from './AddTeacherByCSV';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
@@ -40,6 +41,9 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   teacherDetail,
 }) => {
   const router = useRouter();
+  const [addTeacherType, setAddTeacherType] = useState<
+    'Manually' | 'Import CSV'
+  >('Manually');
   const defaultValues = useMemo<IForm>(() => {
     const values: IForm = {
       email: '',
@@ -90,7 +94,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     name: 'subjects',
   });
   useEffect(() => {
-    subjectOption.shift();
+    subjectOption?.shift();
   }, []);
   const [selectedSubjects, setSelectedSubjects] = useState<{ name: string }[]>(
     teacherDetail?.subjects || [{ name: '' }],
@@ -174,140 +178,162 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
         >
           &times;
         </span>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-row justify-between">
-            <div className="flex justify-center items-start flex-col ">
-              <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F] pt-3">
-                {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
-              </h2>
-              <div className="mt-6 flex gap-10 justify-center ">
-                <p className="text-lg text-[#4F4F4F] bg-slate-400 px-3 py-2 rounded-md hover:cursor-pointer">
-                  Manually
-                </p>
-                <p className="text-lg text-[#4F4F4F] px-3 py-2 hover:cursor-pointer">
-                  Import CSV
-                </p>
+        {addTeacherType === 'Manually' ? (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-row justify-between">
+              <div className="flex justify-center items-start flex-col ">
+                <h2 className="text-2xl font-bold mb-4 leading-9 text-[#4F4F4F] pt-3">
+                  {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
+                </h2>
+                <div className="mt-6 flex gap-5 justify-center ">
+                  <div
+                    className=""
+                    onClick={() => setAddTeacherType('Manually')}
+                  >
+                    <p
+                      className={`text-lg text-[#4F4F4F]  px-3 py-2 rounded-md hover:cursor-pointer ${
+                        addTeacherType === 'Manually' && 'bg-slate-400'
+                      }`}
+                    >
+                      Manually
+                    </p>
+                  </div>
+                  <div
+                    className=""
+                    onClick={() => setAddTeacherType('Import CSV')}
+                  >
+                    <p
+                      className={`text-lg text-[#4F4F4F]  px-3 py-2 rounded-md hover:cursor-pointer ${
+                        // @ts-ignore
+                        addTeacherType === 'Import CSV' && 'bg-slate-400'
+                      }`}
+                    >
+                      Import CSV
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-12 sm:mt-[75px] flex flex-col flex-1 items-center justify-center md:block w-full">
-            <InputField
-              name="name"
-              control={control}
-              label="Full Name"
-              placeholder=""
-              type="text"
-              // value={teacherDetail?.fullName}
-              fullWith="w-full"
-            />
-            <div className="min-h-[33px] pt-2">
-              {errors.name && (
-                <p className="text-center text-red-700 mt-2">
-                  {errors?.name.message + ''}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="mt-8 flex gap-5 md:gap-7  lg:gap-12 flex-col items-center md:items-start lg:flex-row lg:items-end">
-            <div className="w-full">
+            <div className="mt-12 sm:mt-[75px] flex flex-col flex-1 items-center justify-center md:block w-full">
               <InputField
-                name="email"
+                name="name"
                 control={control}
-                label="Email Address"
+                label="Full Name"
                 placeholder=""
                 type="text"
+                // value={teacherDetail?.fullName}
                 fullWith="w-full"
               />
-              <div className="min-h-[33px] pt-2 ">
-                {errors.email && (
-                  <p className="text-center text-red-700">
-                    {errors?.email.message + ''}
+              <div className="min-h-[33px] pt-2">
+                {errors.name && (
+                  <p className="text-center text-red-700 mt-2">
+                    {errors?.name.message + ''}
                   </p>
                 )}
               </div>
             </div>
-            <div className="flex flex-col flex-1 gap-5  md:gap-2 md:flex-row md:items-stretch lg:gap-7">
-              <div className="">
-                <SelectedField
-                  name="selectedClass"
+            <div className="mt-8 flex gap-5 md:gap-7  lg:gap-12 flex-col items-center md:items-start lg:flex-row lg:items-end">
+              <div className="w-full">
+                <InputField
+                  name="email"
                   control={control}
+                  label="Email Address"
                   placeholder=""
-                  isFullWith={false}
-                  defaultOption={teacherDetail?.classSchool?.name || 'Class'}
-                  options={classOption}
+                  type="text"
+                  fullWith="w-full"
                 />
                 <div className="min-h-[33px] pt-2 ">
-                  {errors.selectedClass && (
+                  {errors.email && (
                     <p className="text-center text-red-700">
-                      {errors?.selectedClass.message + ''}
+                      {errors?.email.message + ''}
                     </p>
                   )}
                 </div>
               </div>
-              <div className="">
-                <SelectedField
-                  name="selectedGender"
-                  control={control}
-                  placeholder=""
-                  isFullWith={false}
-                  defaultOption="Gender"
-                  options={optionGender}
-                />
-                <div className=" min-h-[33px] pt-2">
-                  {errors.selectedGender && (
-                    <p className="text-center text-red-700">
-                      {errors?.selectedGender.message + ''}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row sm:items-end gap-5 lg:gap-12 justify-between mt-8  lg:justify-start ">
-            {!teacherDetail?._id && (
-              <>
-                <div className="w-full">
-                  <InputField
-                    name="password"
+              <div className="flex flex-col flex-1 gap-5  md:gap-2 md:flex-row md:items-stretch lg:gap-7">
+                <div className="">
+                  <SelectedField
+                    name="selectedClass"
                     control={control}
-                    label="Password"
                     placeholder=""
-                    type="password"
-                    fullWith="w-full"
+                    isFullWith={false}
+                    defaultOption={teacherDetail?.classSchool?.name || 'Class'}
+                    options={classOption}
                   />
-
-                  <div className="min-h-[33px] pt-2">
-                    {errors.password && (
-                      <p className="text-center text-red-600">
-                        {errors.password.message as string}
+                  <div className="min-h-[33px] pt-2 ">
+                    {errors.selectedClass && (
+                      <p className="text-center text-red-700">
+                        {errors?.selectedClass.message + ''}
                       </p>
                     )}
                   </div>
                 </div>
-              </>
-            )}
-            <div className={`${!teacherDetail?._id ? 'w-full' : 'w-[250px]'}`}>
-              <InputField
-                name="phoneNumber"
-                control={control}
-                label="Phone number"
-                placeholder=""
-                type="tel"
-                value={teacherDetail?.phoneNumber}
-                fullWith="w-full"
-              />
-              <div className="min-h-[33px] pt-2">
-                {errors.phoneNumber && (
-                  <p className="text-center text-red-600">
-                    {errors.phoneNumber.message as string}
-                  </p>
-                )}
+                <div className="">
+                  <SelectedField
+                    name="selectedGender"
+                    control={control}
+                    placeholder=""
+                    isFullWith={false}
+                    defaultOption="Gender"
+                    options={optionGender}
+                  />
+                  <div className=" min-h-[33px] pt-2">
+                    {errors.selectedGender && (
+                      <p className="text-center text-red-700">
+                        {errors?.selectedGender.message + ''}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="mt-10">
-            {/* <SelectedSubject
+            <div className="flex flex-col md:flex-row sm:items-end gap-5 lg:gap-12 justify-between mt-8  lg:justify-start ">
+              {!teacherDetail?._id && (
+                <>
+                  <div className="w-full">
+                    <InputField
+                      name="password"
+                      control={control}
+                      label="Password"
+                      placeholder=""
+                      type="password"
+                      fullWith="w-full"
+                    />
+
+                    <div className="min-h-[33px] pt-2">
+                      {errors.password && (
+                        <p className="text-center text-red-600">
+                          {errors.password.message as string}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+              <div
+                className={`${!teacherDetail?._id ? 'w-full' : 'w-[250px]'}`}
+              >
+                <InputField
+                  name="phoneNumber"
+                  control={control}
+                  label="Phone number"
+                  placeholder=""
+                  type="tel"
+                  value={teacherDetail?.phoneNumber}
+                  fullWith="w-full"
+                />
+                <div className="min-h-[33px] pt-2">
+                  {errors.phoneNumber && (
+                    <p className="text-center text-red-600">
+                      {errors.phoneNumber.message as string}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="mt-10">
+              {/* <SelectedSubject
               name="subjects"
               control={control}
               placeholder=""
@@ -317,72 +343,75 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 setSelectedSubjects(selectedSubjects);
               }}
             /> */}
-            {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-4 items-center mt-2">
-                <Controller
-                  control={control}
-                  name={`subjects[${index}].name`}
-                  render={({ field }) => {
-                    return (
-                      <SelectedSubject
-                        name={`subjects[${index}].name`}
-                        value={field.value}
-                        onChange={field.onChange}
-                        control={control}
-                        options={subjectOption}
-                        tempOptions={tepmOption}
-                        onUpdateSelectedSubjects={(selectedSubjects) => {
-                          const indexToReplace = index;
-                          setTempOption((prev) => {
-                            const newOption = prev?.filter(
-                              (item) => item !== selectedSubjects[0].name,
-                            );
-                            return newOption;
-                          });
-                          setSelectedSubjects((prev) => {
-                            const updatedSubjects = [...prev];
-                            updatedSubjects[indexToReplace] =
-                              selectedSubjects[0];
-                            return updatedSubjects;
-                          });
-                        }}
-                      />
-                    );
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    remove(index);
-                    setSelectedSubjects((prev) => {
-                      const updatedSubjects = [...prev];
-                      updatedSubjects.splice(index, 1);
-                      return updatedSubjects;
-                    });
-                  }}
-                  className="text-red-600 cursor-pointer"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-          <div className="mt-10 pb-4 flex gap-6">
-            <div
-              className="flex gap-2 items-center hover:cursor-pointer hover:opacity-75 font-medium text-[#4F4F4F]"
-              onClick={() => {
-                append({ name: 'Selected Subject' });
-              }}
-              // onClick={handleAddNewSubject}
-            >
-              <Image src={addIcon} alt="addicon" />
-              Add another
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex gap-4 items-center mt-2">
+                  <Controller
+                    control={control}
+                    name={`subjects[${index}].name`}
+                    render={({ field }) => {
+                      return (
+                        <SelectedSubject
+                          name={`subjects[${index}].name`}
+                          value={field.value}
+                          onChange={field.onChange}
+                          control={control}
+                          options={subjectOption}
+                          tempOptions={tepmOption}
+                          onUpdateSelectedSubjects={(selectedSubjects) => {
+                            const indexToReplace = index;
+                            setTempOption((prev) => {
+                              const newOption = prev?.filter(
+                                (item) => item !== selectedSubjects[0].name,
+                              );
+                              return newOption;
+                            });
+                            setSelectedSubjects((prev) => {
+                              const updatedSubjects = [...prev];
+                              updatedSubjects[indexToReplace] =
+                                selectedSubjects[0];
+                              return updatedSubjects;
+                            });
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      remove(index);
+                      setSelectedSubjects((prev) => {
+                        const updatedSubjects = [...prev];
+                        updatedSubjects.splice(index, 1);
+                        return updatedSubjects;
+                      });
+                    }}
+                    className="text-red-600 cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
             </div>
-            <button className=" text-black bg-[#F1F1F1] px-4 py-3 rounded-sm hover:opacity-80 hover:bg-[#3a88d2] font-semibold">
-              {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
-            </button>
-          </div>
-        </form>
+            <div className="mt-10 pb-4 flex gap-6">
+              <div
+                className="flex gap-2 items-center hover:cursor-pointer hover:opacity-75 font-medium text-[#4F4F4F]"
+                onClick={() => {
+                  append({ name: 'Selected Subject' });
+                }}
+                // onClick={handleAddNewSubject}
+              >
+                <Image src={addIcon} alt="addicon" />
+                Add another
+              </div>
+              <button className=" text-black bg-[#F1F1F1] px-4 py-3 rounded-sm hover:opacity-80 hover:bg-[#3a88d2] font-semibold">
+                {teacherDetail?._id ? 'Edit Teacher' : 'Add Teacher'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <AddTeacherByCSV />
+        )}
       </div>
     </div>
   );
