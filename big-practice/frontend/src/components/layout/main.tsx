@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 
 import { ILayoutProps } from '../../models/common';
 import Sidebar from '../Sidebar/Sidebar';
-import { AppContext } from '@/store/AppContext';
 import Spinner from '../Spinner';
+import { AppContext } from '@/store/AppContext';
 
 export function MainLayout({ children }: ILayoutProps) {
   const { isAuthenticated } = useContext(AppContext);

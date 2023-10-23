@@ -31,11 +31,6 @@ export default function SelectedSubject({
   value,
   ...rest
 }: IProps) {
-  const valueContext = useContext(LabelContext);
-  //   const [, setSelectedSubjects] = useState<{ name: string }[]>([]);
-  //   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  console.log('Value', value);
-
   return (
     <Controller
       name={name}
