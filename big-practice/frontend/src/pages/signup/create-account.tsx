@@ -156,11 +156,7 @@ export default function CreateAccount() {
                 )}
               </div>
               <div className="mt-[30px] px-[10px] md:px-[0]">
-                <Button
-                  title="Next"
-                  // disable={btnDisbaled}
-                  onClick={() => console.log('asdasdasdas')}
-                />
+                <Button title="Next" />
               </div>
             </div>
           </form>
