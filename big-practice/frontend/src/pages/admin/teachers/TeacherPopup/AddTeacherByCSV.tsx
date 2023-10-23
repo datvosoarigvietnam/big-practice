@@ -8,8 +8,6 @@ export default function AddTeacherByCSV() {
   const [file, setFile] = useState();
   const [array, setArray] = useState([]);
 
-  const fileReader = new FileReader();
-
   const handleOnChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -33,7 +31,9 @@ export default function AddTeacherByCSV() {
   const handleOnSubmit = (e) => {
     e.preventDefault();
 
-    if (file) {
+    if (file && typeof window !== 'undefined') {
+      const fileReader = new FileReader();
+
       fileReader.onload = function (event: ProgressEvent<FileReader>) {
         const text = event.target.result;
         csvFileToArray(text);
@@ -41,6 +41,22 @@ export default function AddTeacherByCSV() {
 
       fileReader.readAsText(file);
     }
+
+    // if (file && typeof window !== 'undefined') {
+    //   import('file-reader') // Import FileReader dynamically
+    //     .then(({ default: FileReader }) => {
+    //       const fileReader = new FileReader();
+    //       fileReader.onload = function (event: ProgressEvent<FileReader>) {
+    //         const text = event.target.result;
+    //         csvFileToArray(text);
+    //       };
+
+    //       fileReader.readAsText(file);
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // }
   };
 
   const header = Object.keys(Object.assign({}, ...array));
