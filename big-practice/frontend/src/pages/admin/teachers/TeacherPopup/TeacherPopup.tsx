@@ -77,7 +77,9 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     selectedGender: Yup.string().required('Gender is required'),
     password: teacherDetail
       ? Yup.string()
-      : Yup.string().required('Password is required'),
+      : Yup.string()
+          .required('Password is required')
+          .min(8, '8 characters minimum'),
   });
 
   const {
@@ -167,6 +169,10 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   };
   const optionGender = ['Male', 'Female', 'Other'];
   const [tepmOption, setTempOption] = useState(subjectOption);
+  const [temArray, setTempArray] = useState<{ name: string }[]>([]);
+  console.log('🚀 ~ file: TeacherPopup.tsx:173 ~ temArray:', temArray);
+  // console.log('temoption', tepmOption);
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
       {addTeacherMutate.isLoading && <Spinner />}
@@ -329,16 +335,6 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                 </div>
               </div>
               <div className="mt-10">
-                {/* <SelectedSubject
-              name="subjects"
-              control={control}
-              placeholder=""
-              defaultOption={teacherDetail?.subjects[0]?.name || 'Subject'}
-              options={subjectOption}
-              onUpdateSelectedSubjects={(selectedSubjects) => {
-                setSelectedSubjects(selectedSubjects);
-              }}
-            /> */}
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex gap-4 items-center mt-2">
                     <Controller
@@ -355,6 +351,20 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                             tempOptions={tepmOption}
                             onUpdateSelectedSubjects={(selectedSubjects) => {
                               const indexToReplace = index;
+                              // setTempArray((prev) => [
+                              //   ...prev,
+                              //   {
+                              //     name: selectedSubjects[indexToReplace]?.name,
+                              //   },
+                              // ]);
+                              // setTempArray((prev) => {
+                              //   return [];
+                              // });
+
+                              console.log(
+                                '🚀 ~ file: TeacherPopup.tsx:352 ~ selectedSubjects:',
+                                selectedSubjects,
+                              );
                               setTempOption((prev) => {
                                 const newOption = prev?.filter(
                                   (item) => item !== selectedSubjects[0].name,
@@ -381,6 +391,13 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                           updatedSubjects.splice(index, 1);
                           return updatedSubjects;
                         });
+                        setTempOption((prev) => [
+                          ...prev,
+                          temArray[index]?.name,
+                        ]);
+                        setTempArray((prev) =>
+                          prev.filter((_, indexItem) => indexItem !== index),
+                        );
                       }}
                       className="text-red-600 cursor-pointer"
                     >

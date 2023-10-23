@@ -40,7 +40,6 @@ export default function SelectedSubject({
           {...field}
           {...rest}
           value={value}
-          //   value={field.value}
           // multiple
           className={`${
             isFullWidth ? 'w-full' : 'w-[250px]'
