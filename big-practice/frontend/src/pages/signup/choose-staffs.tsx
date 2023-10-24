@@ -10,7 +10,7 @@ import { IInfor, LabelContext } from '@/store/StepperDataContenxt';
 export default function ChooseStaffs() {
   const { control, handleSubmit } = useForm({});
   const { infor, nextPage } = useContext(LabelContext);
-  const optionStaff = [10, 20, 30, 40];
+  const optionStaff = ['10', '20', '30', '40'];
   const [options, setOptions] = useState([]);
   const getCitys = async () => {
     try {
