@@ -1,23 +1,25 @@
-import Image from 'next/image';
-import React, { useState, useMemo, useEffect } from 'react';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
-import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
-import phoneSchema from '@/constants/validation';
 import AddTeacherByCSV from './AddTeacherByCSV';
+
 import adminApi from '@/apis/admin.api';
+import addIcon from '@/common/icons/plusIcon.svg';
 import InputField from '@/components/InputField';
 import SelectedField from '@/components/SelectedField';
-import { ITeacher } from '@/types/teacher.type';
-import { queryClient } from '@/pages/_app';
-import Spinner from '@/components/Spinner';
-import addIcon from '@/common/icons/plusIcon.svg';
 import SelectedSubject from '@/components/SelectedField/SelectedSubject';
+import Spinner from '@/components/Spinner';
+import phoneSchema from '@/constants/validation';
+import { queryClient } from '@/pages/_app';
+import { ITeacher } from '@/types/teacher.type';
+import { log } from 'console';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
@@ -34,6 +36,8 @@ interface IForm {
   selectedGender: string;
   subjects: { name: string }[];
 }
+const tempArray: string[] = [];
+
 const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   onClose,
   classOption,
@@ -44,6 +48,8 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const [addTeacherType, setAddTeacherType] = useState<
     'Manually' | 'Import CSV'
   >('Manually');
+  const optionGender = ['Male', 'Female', 'Other'];
+  const [tepmOption, setTempOption] = useState(subjectOption);
   const defaultValues = useMemo<IForm>(() => {
     const values: IForm = {
       email: '',
@@ -95,9 +101,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     control,
     name: 'subjects',
   });
-  useEffect(() => {
-    subjectOption?.shift();
-  }, []);
+
   const [selectedSubjects, setSelectedSubjects] = useState<{ name: string }[]>(
     teacherDetail?.subjects || [{ name: '' }],
   );
@@ -167,11 +171,24 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
   const handleClose = () => {
     onClose();
   };
-  const optionGender = ['Male', 'Female', 'Other'];
-  const [tepmOption, setTempOption] = useState(subjectOption);
-  const [temArray, setTempArray] = useState<{ name: string }[]>([]);
-  console.log('🚀 ~ file: TeacherPopup.tsx:173 ~ temArray:', temArray);
-  // console.log('temoption', tepmOption);
+
+  useEffect(() => {
+    if (teacherDetail?._id) {
+      const temp_Option = tepmOption?.filter((item: string) => {
+        return !teacherDetail?.subjects?.some(
+          (itemTeacher: { name: string }) => {
+            if (itemTeacher.name === item) {
+              tempArray.push(item);
+            }
+            return itemTeacher.name === item;
+          },
+        );
+      });
+      setTempOption(temp_Option);
+    }
+  }, []);
+  console.log('tempArray', tempArray);
+  console.log('option', tepmOption);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
@@ -351,20 +368,17 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                             tempOptions={tepmOption}
                             onUpdateSelectedSubjects={(selectedSubjects) => {
                               const indexToReplace = index;
-                              // setTempArray((prev) => [
-                              //   ...prev,
-                              //   {
-                              //     name: selectedSubjects[indexToReplace]?.name,
-                              //   },
-                              // ]);
-                              // setTempArray((prev) => {
-                              //   return [];
-                              // });
+                              // onChange second
+                              if (Boolean(tempArray[index])) {
+                                console.log('Ohehe');
+                                const arr = [...tempArray];
 
-                              console.log(
-                                '🚀 ~ file: TeacherPopup.tsx:352 ~ selectedSubjects:',
-                                selectedSubjects,
-                              );
+                                setTempOption((prev) => [...prev, arr[index]]);
+                                tempArray.splice(index, 1);
+                              }
+
+                              tempArray[index] = selectedSubjects[0]?.name;
+
                               setTempOption((prev) => {
                                 const newOption = prev?.filter(
                                   (item) => item !== selectedSubjects[0].name,
@@ -391,13 +405,19 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
                           updatedSubjects.splice(index, 1);
                           return updatedSubjects;
                         });
-                        setTempOption((prev) => [
-                          ...prev,
-                          temArray[index]?.name,
-                        ]);
-                        setTempArray((prev) =>
-                          prev.filter((_, indexItem) => indexItem !== index),
-                        );
+                        if (tempArray[index]) {
+                          const arr = [...tempArray];
+                          console.log(
+                            '🚀 ~ file: TeacherPopup.tsx:397 ~ arr:',
+                            arr,
+                          );
+                          setTempOption((prev) => [...prev, arr[index]]);
+                          tempArray.splice(index, 1);
+                          console.log(
+                            '🚀 ~ file: TeacherPopup.tsx:403 ~ tempArray:',
+                            tempArray,
+                          );
+                        }
                       }}
                       className="text-red-600 cursor-pointer"
                     >

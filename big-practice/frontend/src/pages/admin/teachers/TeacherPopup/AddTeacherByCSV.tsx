@@ -96,7 +96,7 @@ export default function AddTeacherByCSV() {
         {array.length !== 0 && <TableV2 columns={headerKeys} data={array} />}
         {array.length === 0 && <NotData />}
         {array.length !== 0 && (
-          <div className="">
+          <div className="pt-5">
             <button className="bg-sky-600 text-white px-3 py-3 w-36 rounded-lg font-kumbh-sans ">
               Add Teachers
             </button>

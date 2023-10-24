@@ -1,13 +1,5 @@
-import React, {
-  ChangeEvent,
-  SelectHTMLAttributes,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { Controller, Control, FieldValues } from 'react-hook-form';
-
-import { LabelContext } from '@/store/StepperDataContenxt';
+import { ChangeEvent, SelectHTMLAttributes } from 'react';
+import { Control, Controller, FieldValues } from 'react-hook-form';
 
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
