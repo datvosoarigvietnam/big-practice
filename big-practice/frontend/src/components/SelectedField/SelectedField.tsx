@@ -5,7 +5,7 @@ import { LabelContext } from '@/store/StepperDataContenxt';
 
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
-  options?: any[];
+  options?: string[];
   control: Control<FieldValues | any>;
   defaultOption?: string | number;
   isFullWith?: boolean;
