@@ -7,9 +7,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+import { log } from 'console';
 
 import AddTeacherByCSV from './AddTeacherByCSV';
-
 import adminApi from '@/apis/admin.api';
 import addIcon from '@/common/icons/plusIcon.svg';
 import InputField from '@/components/InputField';
@@ -19,7 +19,6 @@ import Spinner from '@/components/Spinner';
 import phoneSchema from '@/constants/validation';
 import { queryClient } from '@/pages/_app';
 import { ITeacher } from '@/types/teacher.type';
-import { log } from 'console';
 
 interface AddTeacherPopupProps {
   onClose: () => void;
@@ -187,8 +186,8 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
       setTempOption(temp_Option);
     }
   }, []);
-  console.log('tempArray', tempArray);
-  console.log('option', tepmOption);
+  // console.log('tempArray', tempArray);
+  // console.log('option', tepmOption);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">

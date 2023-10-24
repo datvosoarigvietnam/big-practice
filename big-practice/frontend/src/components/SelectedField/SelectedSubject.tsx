@@ -3,12 +3,12 @@ import { Control, Controller, FieldValues } from 'react-hook-form';
 
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
-  options?: any[];
+  options?: string[];
   control: Control<FieldValues | any>;
   defaultOption?: string | number;
   isFullWidth?: boolean;
   onUpdateSelectedSubjects?: (selectedSubjects: { name: string }[]) => void;
-  tempOptions?: any[];
+  tempOptions?: string[];
   value?: string;
 }
 
