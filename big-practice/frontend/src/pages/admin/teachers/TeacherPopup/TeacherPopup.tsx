@@ -48,7 +48,7 @@ const AddTeacherPopup: React.FC<AddTeacherPopupProps> = ({
     'Manually' | 'Import CSV'
   >('Manually');
   const optionGender = ['Male', 'Female', 'Other'];
-  const [tepmOption, setTempOption] = useState(subjectOption);
+  const [tepmOption, setTempOption] = useState(subjectOption.sort());
   const defaultValues = useMemo<IForm>(() => {
     const values: IForm = {
       email: '',
