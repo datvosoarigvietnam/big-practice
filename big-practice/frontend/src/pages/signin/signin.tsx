@@ -4,24 +4,33 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import * as Yup from 'yup';
 
 import InputField from '@/components/InputField';
 import Button from '@/components/Button';
 import adminApi from '@/apis/admin.api';
 import { AppContext } from '@/store/AppContext';
 import Spinner from '@/components/Spinner';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface ILoginForm {
   emailSchool: string;
   password: string;
 }
 export default function SignIn() {
+  const schema = Yup.object({
+    emailSchool: Yup.string().required('This field is required'),
+    password: Yup.string().required('This field is required'),
+  });
+
   const {
     control,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<ILoginForm>({});
+  } = useForm<ILoginForm>({
+    resolver: yupResolver(schema),
+  });
   const router = useRouter();
   const signinMutation = useMutation({
     mutationFn: (values: ILoginForm) => adminApi.login(values),
@@ -36,7 +45,7 @@ export default function SignIn() {
         router.replace('/admin/dashboard');
       },
       onError: (error: any) => {
-        setError('emailSchool', {
+        setError('password', {
           type: 'validate',
           message:
             error.response.data.message || 'An error occurred during login.',
@@ -56,7 +65,7 @@ export default function SignIn() {
               It is our great pleasure to have you on board!
             </h2>
             <div className="flex gap-[14px] flex-col ">
-              <div className="pl-[10px] pr-[10px] md:p-0">
+              <div className="pl-[10px] pr-[10px] md:p-0 flex flex-col gap-3">
                 <InputField
                   control={control}
                   name="emailSchool"
@@ -64,6 +73,15 @@ export default function SignIn() {
                   type="text"
                   fullWith="w-full"
                 />
+                {
+                  <div className="min-h-[24px]">
+                    {errors.emailSchool && (
+                      <p className="text-center text-red-500">
+                        {errors.emailSchool.message}
+                      </p>
+                    )}
+                  </div>
+                }
               </div>
               <div className="pl-[10px] pr-[10px] md:p-0">
                 <InputField
@@ -74,13 +92,17 @@ export default function SignIn() {
                   fullWith="w-full"
                 />
               </div>
-              {errors.emailSchool && (
-                <p className="text-red-400 text-center">
-                  {errors.emailSchool.message}
-                </p>
-              )}
+              {
+                <div className="min-h-[24px]">
+                  {errors.password && (
+                    <p className="text-center text-red-500">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+              }
               {/* {errors.password && <p className='text-red-400'>{errors.password.message}</p>} */}
-              <div className="mt-[30px] px-[10px] md:px-[0]">
+              <div className="mt-[10px] px-[10px] md:px-[0]">
                 <Button title="Login" />
               </div>
             </div>

@@ -1,13 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useContext, useMemo } from 'react';
 import { Control, FieldValues, useForm } from 'react-hook-form';
 
-import adminApi from '@/apis/admin.api';
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
-import Spinner from '@/components/Spinner';
 import { LabelContext } from '@/store/StepperDataContenxt';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Head from 'next/head';
+
 export interface IFormValues extends FieldValues {
   adminName: string;
   schoolName: string;
@@ -36,10 +37,14 @@ export default function CreateAccount() {
     valueContenxt.infor.name.emailSchool,
     valueContenxt.infor.name.schoolName,
   ]);
-  const checkEmail = useMutation({
-    mutationFn: (email: string) => adminApi.checkEmail(email),
-  });
 
+  const schema = Yup.object({
+    adminName: Yup.string().required('This field is required'),
+    schoolName: Yup.string().required('This field is required'),
+    emailSchool: Yup.string()
+      .required('This field is required')
+      .email('Invalid email'),
+  });
   const {
     control,
     handleSubmit,
@@ -47,55 +52,11 @@ export default function CreateAccount() {
     formState: { errors },
   } = useForm<IFormValues>({
     defaultValues,
+    resolver: yupResolver(schema),
   });
-  // const btnDisbaled = useMemo(() => {
-  //   return (
-  //     value.infor.name.adminName.length > 0 &&
-  //     value.infor.name.emailSchool.length > 0 &&
-  //     value.infor.name.schoolName.length > 0
-  //   );
-  // }, [valueContenxt]);
+
   const onSubmit = async (values: IFormValues) => {
-    if (values.adminName === '') {
-      setError('adminName', {
-        type: 'required',
-        message: 'This field is required',
-      });
-    } else if (values.schoolName === '') {
-      setError('schoolName', {
-        type: 'required',
-        message: 'This field is required',
-      });
-    } else if (values.emailSchool === '') {
-      setError('emailSchool', {
-        type: 'required',
-        message: 'This field is required',
-      });
-    }
     valueContenxt.nextPage();
-    // try {
-    //   // const checkEmail = await axios.post(
-    //   //   'http://localhost:8080/admin/checkemail',
-    //   //   { emailSchool: valueContenxt.infor.name.emailSchool },
-    //   // );
-    //   // if (checkEmail.status === 200) {
-    //   //   valueContenxt.nextPage();
-    //   // }
-    //   checkEmail.mutate(values.emailSchool, {
-    //     onSuccess: () => {
-    //       valueContenxt.nextPage();
-    //     },
-    //     onError: () => {
-    //       setError('emailSchool', {
-    //         message: 'Email already exists',
-    //       });
-    //     },
-    //   });
-    // } catch (error) {
-    //   // setError('emailSchool', {
-    //   //   message: 'Email already exists',
-    //   // });
-    // }
   };
   return (
     <div className="pt-[100px] flex justify-center items-center flex-col">
@@ -109,7 +70,7 @@ export default function CreateAccount() {
               It is our great pleasure to have you on board!
             </h2>
             <div className="flex gap-[14px] flex-col ">
-              <div className="pl-[10px] pr-[10px] md:p-0">
+              <div className="pl-[10px] pr-[10px] md:p-0 flex flex-col gap-2">
                 <InputField
                   control={control as Control<IFormValues>}
                   name="adminName"
@@ -118,14 +79,16 @@ export default function CreateAccount() {
                   value={valueContenxt.infor.name.adminName}
                   fullWith="w-full"
                 />{' '}
-                {errors.adminName?.message && (
-                  <p className="text-red-500 text-center">
-                    {errors.adminName?.message}
-                  </p>
-                )}
+                <div className="min-h-[24px]">
+                  {errors.adminName?.message && (
+                    <p className="text-red-500 text-center text-base">
+                      {errors.adminName?.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              <div className="pl-[10px] pr-[10px] md:p-0">
+              <div className="pl-[10px] pr-[10px] md:p-0 flex flex-col gap-2">
                 <InputField
                   control={control as Control<IFormValues>}
                   name="schoolName"
@@ -134,13 +97,15 @@ export default function CreateAccount() {
                   value={valueContenxt.infor.name.schoolName}
                   fullWith="w-full"
                 />
-                {errors.schoolName?.message && (
-                  <p className="text-red-500 text-center ">
-                    {errors.schoolName?.message}
-                  </p>
-                )}
+                <div className="min-h-[24px]">
+                  {errors.schoolName?.message && (
+                    <p className="text-red-500 text-center text-base">
+                      {errors.schoolName?.message}
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="pl-[10px] pr-[10px] md:p-0">
+              <div className="pl-[10px] pr-[10px] md:p-0 flex flex-col gap-2">
                 <InputField
                   control={control as Control<IFormValues>}
                   name="emailSchool"
@@ -149,11 +114,13 @@ export default function CreateAccount() {
                   value={valueContenxt.infor.name.emailSchool}
                   fullWith="w-full"
                 />
-                {errors.emailSchool?.message && (
-                  <p className="text-red-500 text-center">
-                    {errors.emailSchool?.message}
-                  </p>
-                )}
+                <div className="min-h-[2px]">
+                  {errors.emailSchool?.message && (
+                    <p className="text-red-500 text-center">
+                      {errors.emailSchool?.message}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="mt-[30px] px-[10px] md:px-[0]">
                 <Button title="Next" />
@@ -170,7 +137,6 @@ export default function CreateAccount() {
           </p>
         </div>
       </div>
-      {checkEmail.isLoading && <Spinner />}
     </div>
   );
 }

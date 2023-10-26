@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { useContext, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import StepperCustom from '@/components/Stepper';
 import { LabelContext } from '@/store/StepperDataContenxt';
+import { yupResolver } from '@hookform/resolvers/yup';
 export default function ChoosePassword() {
   const { infor, nextPage } = useContext(LabelContext);
 
@@ -24,13 +26,26 @@ export default function ChoosePassword() {
 
     return values;
   }, [infor.password, infor.confirmPassword]);
+
+  const schema = Yup.object({
+    password: Yup.string()
+      .required('Password field is required')
+      .min(8, 'Min length is 8')
+      .max(20, 'Max length is 20'),
+    confirmPassword: Yup.string()
+      .required('Confirm password field is required')
+      .min(8, 'Min length is 8')
+      .max(20, 'Max length is 20'),
+  });
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm({
+  } = useForm<{ password: string; confirmPassword: string }>({
     defaultValues,
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = () => {
@@ -54,7 +69,7 @@ export default function ChoosePassword() {
           <div className="pt-[20px] md:pt-[71px] md:px-[132px]">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex gap-[14px] flex-col ">
-                <div className="pl-[10px] pr-[10px] md:p-0">
+                <div className="pl-[10px] pr-[10px] md:p-0 flex flex-col gap-3">
                   <InputField
                     control={control}
                     name="password"
@@ -64,8 +79,15 @@ export default function ChoosePassword() {
                     value={infor.password}
                     fullWith="w-full"
                   />
+                  <div className="min-h-[24px]">
+                    {errors.password && (
+                      <p className="text-red-500 text-center">
+                        {errors.password.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div className="pl-[10px] pr-[10px] md:p-0">
+                <div className="pl-[10px] pr-[10px] md:p-0 flex flex-col gap-3">
                   <InputField
                     control={control}
                     name="confirmPassword"
@@ -75,13 +97,16 @@ export default function ChoosePassword() {
                     value={infor.confirmPassword}
                     fullWith="w-full"
                   />
+                  <div className="min-h-[24px]">
+                    {errors.confirmPassword && (
+                      <p className="text-red-500 text-center">
+                        {errors.confirmPassword.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                {errors.confirmPassword && (
-                  <span className="text-red-500">
-                    {errors.confirmPassword.message}
-                  </span>
-                )}
-                <div className="mt-[30px] px-[10px] md:px-[0]">
+
+                <div className="mt-[10px] px-[10px] md:px-[0]">
                   <Button title="Next" />
                 </div>
               </div>
