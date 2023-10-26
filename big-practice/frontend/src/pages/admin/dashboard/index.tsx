@@ -11,6 +11,7 @@ import Button from '@/components/Button';
 import SidebarMobile from '@/components/Sidebar';
 import { MainLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/models/common';
+import Head from 'next/head';
 const DashBoard: NextPageWithLayout = () => {
   const [showSidebarMenu, setShowSidebarMenu] = useState(false);
   const router = useRouter();
@@ -22,6 +23,10 @@ const DashBoard: NextPageWithLayout = () => {
   };
   return (
     <div className="flex flex-1 ">
+      <Head>
+        <title>Dash Board</title>
+        <meta content="My page title" key="title" />
+      </Head>
       {showSidebarMenu && (
         <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
       )}

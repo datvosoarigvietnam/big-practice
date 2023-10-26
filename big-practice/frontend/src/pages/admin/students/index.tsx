@@ -24,6 +24,7 @@ import { queryClient } from '@/pages/_app';
 import useDebounce from '@/hooks/useDebouce';
 import SidebarMobile from '@/components/Sidebar';
 import menuIcon from '@/common/icons/menuIcon.svg';
+import Head from 'next/head';
 
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
@@ -125,6 +126,10 @@ const StudentPage: NextPageWithLayout = () => {
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
+      <Head>
+        <title>Student Page</title>
+        <meta content="My page title" key="title" />
+      </Head>
       {showSidebarMenu && (
         <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
       )}
