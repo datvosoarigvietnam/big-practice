@@ -23,6 +23,7 @@ import { NextPageWithLayout } from '@/models/common';
 import { queryClient } from '@/pages/_app';
 import { Column } from '@/types/Table.type';
 import { ITeacher } from '@/types/teacher.type';
+import Head from 'next/head';
 const columns: Column[] = [
   { key: 'name', header: 'Name' },
   { key: 'classSchool', header: 'Class' },
@@ -55,7 +56,7 @@ const TeacherPage: NextPageWithLayout = () => {
   };
   const { data: teacherList, isLoading } = useQuery({
     queryKey: ['teachers', debouncedSearchTerm],
-    queryFn: () => adminApi.getTeachers(search),
+    queryFn: () => adminApi.getTeachers(debouncedSearchTerm),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
@@ -138,6 +139,10 @@ const TeacherPage: NextPageWithLayout = () => {
   return (
     <div className="container mx-auto md:px-4 lg:px-4 flex-1">
       {/* Header */}
+      <Head>
+        <title>Teacher Page</title>
+        <meta content="My page title" key="title" />
+      </Head>
       {showSidebarMenu && (
         <SidebarMobile showSidebarMenu={showSidebarMenu} onClose={onClose} />
       )}
